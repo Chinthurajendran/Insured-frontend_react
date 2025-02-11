@@ -1,0 +1,161 @@
+import React, { useEffect, useState } from "react"
+import loginpage from "../../assets/login_page_image.jpg"
+import { Link } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
+
+import axios from "axios"
+import { baseURL } from "../../baseUrls/Urls"
+import { useSelector,useDispatch } from "react-redux"
+import { login } from "../../store/slices/userAuthentication"
+import { jwtDecode } from "jwt-decode";
+
+
+const Login_page = () => {
+  const location = useLocation()
+  const message = location.state?.message // Get success message from Sign-up Page
+
+  const [formError, setFormError] = useState([])
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  })
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const authState = useSelector((state)=> state.userAuth)
+
+
+  useEffect(() => {
+    if (message) {
+      toast.success(message, { position: "top-center", autoClose: 3000 })
+    }
+  }, [message])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await axios.post(`${baseURL}/auth/login`, formData)
+      if (res.status == 200){
+        localStorage.setItem("access_token", res.data.access_token);
+        localStorage.setItem("refresh_token", res.data.refresh_token);
+        localStorage.setItem("user_id", res.data.user_id);
+        localStorage.setItem("user_name", res.data.user_name)
+        const decodedToken = jwtDecode(res.data.access_token);
+        dispatch(login({
+          userid: decodedToken.user.user_id,
+          username: res.data.user_name,
+          useremail: formData.email,
+          isAuthenticated: true,    
+        }))
+        navigate("/", { state: { message: "Login successful!" } });
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setFormError(error.response.data.message || "Login failed")
+      } else {
+        setFormError("An unexpected error occurred. Please try again.",error.message)
+      }
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col lg:flex-row-reverse items-center justify-center bg-white p-4">
+      {/* Login Form Section */}
+      <div className="w-full lg:w-1/2 max-w-md px-5 ml-30">
+        {/* Header Section */}
+        <div className="mb-8 w-full flex flex-col items-center">
+          <h1 className="text-3xl font-bold text-[#014751] mb-10">Insured+</h1>
+          <h2 className="text-xl font-medium text-gray-900">Log in</h2>
+        </div>
+        {formError && <p className="text-red-600 text-center mb-4">{formError}</p>}
+
+        {/* Buttons Section */}
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            {/* Email Input Field */}
+            <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-lg">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                className="w-full text-gray-700 focus:outline-none"
+              />
+            </div>
+
+            {/* Password Input Field */}
+            <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-lg mb-4">
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                className="w-full text-gray-700 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Login Button */}
+          <button className="w-full flex items-center justify-center gap-3 px-4 py-3 text-white bg-[#014751] hover:bg-[#013a41] rounded-lg font-bold">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 12h14M12 5l7 7-7 7"
+              />
+            </svg>
+            Login
+          </button>
+        </form>
+
+        {/* Forgot Password Link */}
+        <div className="mt-4 text-center">
+          <Link
+            to="/forgot-password"
+            className="text-sm text-blue-600 hover:text-blue-700"
+          >
+            Forgot my password?
+          </Link>
+        </div>
+
+        {/* Divider Line */}
+        <div className="my-4 border-t border-gray-300"></div>
+
+        {/* Signup Link */}
+        <div className="w-full flex justify-center">
+          <p className="text-sm text-gray-600">
+            Don&apos;t have an account?{" "}
+            <Link to="/Sign_up_pag">
+              <span className="text-emerald-700 hover:text-emerald-600 font-semibold">
+                Sign up
+              </span>
+            </Link>
+          </p>
+        </div>
+      </div>
+
+      {/* Image Section */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center ml-2">
+        <img
+          src={loginpage}
+          alt="Happy couple with insurance coverage"
+          className="object-cover w-full max-w-[120%] h-auto"
+        />
+      </div>
+    </div>
+  )
+}
+
+export default Login_page
