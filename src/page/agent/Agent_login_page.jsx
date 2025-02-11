@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { baseURL } from "../../baseUrls/Urls"
 import axios from "axios"
 import { useDispatch } from "react-redux"
-import { useNavigate, Link } from "react-router-dom" // ✅ Fix: Import Link
+import { useNavigate, Link } from "react-router-dom"
 import { jwtDecode } from "jwt-decode"
 import { agent_login } from "../../store/slices/agentAuthentication"
 import { toast } from "react-toastify"
@@ -14,7 +14,7 @@ const Agent_login_page = () => {
     password: "",
   })
 
-  const [formError, setFormError] = useState("") // ✅ Fix: Define error state
+  const [formError, setFormError] = useState("")
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -28,7 +28,6 @@ const Agent_login_page = () => {
       )
 
       if (res.status === 200) {
-        // ✅ Fix: Adjust status code check
         localStorage.setItem("access_token", res.data.access_token)
         localStorage.setItem("refresh_token", res.data.refresh_token)
         localStorage.setItem("user_id", res.data.user_id)
@@ -49,7 +48,7 @@ const Agent_login_page = () => {
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        setFormError(error.response.data.detail || "Login failed") // ✅ Fix: Adjust error message extraction
+        setFormError(error.response.data.detail || "Login failed") 
       } else {
         setFormError("An unexpected error occurred. Please try again.")
       }
@@ -65,10 +64,9 @@ const Agent_login_page = () => {
             Agent Login
           </h2>
         </div>
-       {/* Display error message with icon at the top of the form */}
        {formError && (
           <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4 text-sm flex items-center">
-            <FiAlertCircle className="mr-2" /> {/* Add error icon */}
+            <FiAlertCircle className="mr-2" />
             {formError}
           </div>
         )}
@@ -77,7 +75,7 @@ const Agent_login_page = () => {
             <label className="block text-gray-700 text-sm font-medium mb-1">
               Email ID
             </label>
-            {/* Email Input Field */}
+
             <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-lg">
               <input
                 type="email"
@@ -107,7 +105,6 @@ const Agent_login_page = () => {
             />
           </div>
 
-          {/* Forgot Password Link */}
           <div className="mt-4 text-center">
             <Link
               to="/forgot-password"
@@ -117,10 +114,8 @@ const Agent_login_page = () => {
             </Link>
           </div>
 
-          {/* Divider Line */}
           <div className="my-4 border-t border-gray-300"></div>
 
-          {/* Signup Link */}
           <div className="w-full flex justify-center">
             <p className="text-sm text-gray-600">
               Don&apos;t have an account?{" "}

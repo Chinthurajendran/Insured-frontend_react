@@ -1,16 +1,3 @@
-// import React from 'react'
-
-// function Admin_sidebar() {
-//   return (
-//     <div>
-      
-//     </div>
-//   )
-// }
-
-// export default Admin_sidebar
-
-// AdminSidebar.js
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {

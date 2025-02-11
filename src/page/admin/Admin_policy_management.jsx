@@ -12,10 +12,10 @@ const policyColumns = [
   { key: "age_group", label: "Age Group" },
   { key: "income_range", label: "Income Range" },
   { key: "description", label: "Description" },
-  { key: "id_proof", label: "ID Proof" },  // FIXED KEY NAME
-  { key: "passbook", label: "Passbook Copy" },  // FIXED KEY NAME
+  { key: "id_proof", label: "ID Proof" },
+  { key: "passbook", label: "Passbook Copy" },
   { key: "photo", label: "Photo" },
-  { key: "pan_card", label: "PAN" },  // FIXED KEY NAME
+  { key: "pan_card", label: "PAN" },
   { key: "income_proof", label: "Income Proof" },
   { key: "nominee_address_proof", label: "Nominee Address Proof" }
 ]

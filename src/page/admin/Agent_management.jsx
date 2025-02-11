@@ -10,7 +10,7 @@ const getStatusStyles = (status) => {
     case "approved":
       return "bg-green-500 text-white";
     case "processing":
-      return "bg-blue-400 text-white"; // Light Blue for "processing"
+      return "bg-blue-400 text-white";
     case "rejected":
       return "bg-red-500 text-white";
     default:

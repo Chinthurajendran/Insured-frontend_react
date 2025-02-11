@@ -6,28 +6,27 @@ import { Link } from "react-router-dom";
 
 const PolicyCreatePage = () => {
   const [formData, setFormData] = useState({
-    policy_id: "",              // Changed from Policy_ID
-    policy_name: "",            // Changed from Policy_Name
-    policy_type: "",            // Changed from Policy_Type
-    coverage: "",               // Changed from Coverage_Age
-    settlement: "",             // Changed from Settlement
-    premium_amount: "",         // Changed from Amount
-    age_group: "",              // Changed from Age_Group
-    income_range: "",           // Changed from Income_Range
-    id_proof: false,            // Changed from Id_Proof
-    passbook: false,            // Changed from Passbook_Copy
-    photo: false,               // Changed from Photo
-    pan_card: false,            // Changed from Pan_Card
-    income_proof: false,        // Changed from Income_Proof
-    nominee_address_proof: false, // Changed from Nominee_Address_Proof
-    description: "",            // Changed from Description
+    policy_id: "", 
+    policy_name: "",    
+    policy_type: "",    
+    coverage: "",            
+    settlement: "",            
+    premium_amount: "",        
+    age_group: "",              
+    income_range: "",           
+    id_proof: false,           
+    passbook: false,            
+    photo: false,             
+    pan_card: false,          
+    income_proof: false,      
+    nominee_address_proof: false, 
+    description: "",           
   });
 
   const [formError, setFormError] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
 
-  // Handle input change
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -36,7 +35,6 @@ const PolicyCreatePage = () => {
     }));
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form Submitted", formData);
@@ -57,9 +55,9 @@ const PolicyCreatePage = () => {
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        setFormError(error.response.data.detail); // Handle API error response
+        setFormError(error.response.data.detail);
       } else {
-        setFormError(["An unexpected error occurred. Please try again."]); // Default error message
+        setFormError(["An unexpected error occurred. Please try again."]);
       }
     }
   };
@@ -79,9 +77,9 @@ const PolicyCreatePage = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-3 gap-6">
           {[
-            { label: "Policy ID", name: "policy_id", type: "text" },             // Updated field name
-            { label: "Policy Name", name: "policy_name", type: "text" },         // Updated field name
-            { label: "Coverage Age", name: "coverage", type: "text" },           // Updated field name
+            { label: "Policy ID", name: "policy_id", type: "text" },           
+            { label: "Policy Name", name: "policy_name", type: "text" },      
+            { label: "Coverage Age", name: "coverage", type: "text" },          
           ].map(({ label, name, type }) => (
             <div key={name} className="space-y-2">
               <label className="block font-semibold text-gray-700">{label}</label>
@@ -98,8 +96,8 @@ const PolicyCreatePage = () => {
 
         <div className="grid grid-cols-3 gap-6">
           {[
-            { label: "Settlement %", name: "settlement", type: "number" },       // Updated field name
-            { label: "Amount", name: "premium_amount", type: "number" },         // Updated field name
+            { label: "Settlement %", name: "settlement", type: "number" },     
+            { label: "Amount", name: "premium_amount", type: "number" },     
           ].map(({ label, name, type }) => (
             <div key={name} className="space-y-2">
               <label className="block font-semibold text-gray-700">{label}</label>
@@ -114,12 +112,11 @@ const PolicyCreatePage = () => {
           ))}
         </div>
 
-        {/* Policy Type */}
         <div className="space-y-2">
           <label className="block font-semibold text-gray-700">Policy Type</label>
           <select
-            name="policy_type"                                           // Updated field name
-            value={formData.policy_type}                                 // Updated field name
+            name="policy_type"                                      
+            value={formData.policy_type}                              
             onChange={handleChange}
             className="w-full p-3 border rounded-lg shadow-sm"
             required
@@ -131,11 +128,10 @@ const PolicyCreatePage = () => {
           </select>
         </div>
 
-        {/* Age Group & Income Range */}
         <div className="grid grid-cols-2 gap-6">
           {[
-            { label: "Age Group", name: "age_group", options: ["18-25", "26-35", "36-45", "46-55", "56-65", "66-70", "70+"] },  // Updated field name
-            { label: "Income Range", name: "income_range", options: ["₹0 - ₹2,50,000", "₹2,50,001 - ₹5,00,000", "₹5,00,001 - ₹10,00,000", "₹10,00,001 - ₹25,00,000", "₹25,00,001 - ₹50,00,000", "₹50,00,001 and above"] },  // Updated field name
+            { label: "Age Group", name: "age_group", options: ["18-25", "26-35", "36-45", "46-55", "56-65", "66-70", "70+"] },
+            { label: "Income Range", name: "income_range", options: ["₹0 - ₹2,50,000", "₹2,50,001 - ₹5,00,000", "₹5,00,001 - ₹10,00,000", "₹10,00,001 - ₹25,00,000", "₹25,00,001 - ₹50,00,000", "₹50,00,001 and above"] }, 
           ].map(({ label, name, options }) => (
             <div key={name} className="space-y-2">
               <label className="block font-semibold text-gray-700">{label}</label>
@@ -157,13 +153,12 @@ const PolicyCreatePage = () => {
           ))}
         </div>
 
-        {/* Required Documents */}
         <div className="mt-2">
           <label className="block font-bold text-gray-700 mb-4 text-lg">
             Required Documents
           </label>
           <div className="flex flex-wrap gap-4">
-            {["id_proof", "passbook", "photo", "pan_card", "income_proof","nominee_address_proof"].map((doc) => (  // Updated field names
+            {["id_proof", "passbook", "photo", "pan_card", "income_proof","nominee_address_proof"].map((doc) => ( 
               <div key={doc} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
@@ -181,12 +176,11 @@ const PolicyCreatePage = () => {
           </div>
         </div>
 
-        {/* Description */}
         <div className="space-y-2">
           <label className="block font-semibold text-gray-700">Description</label>
           <textarea
-            name="description"                                        // Updated field name
-            value={formData.description}                              // Updated field name
+            name="description"                                  
+            value={formData.description}                         
             onChange={handleChange}
             className="w-full p-3 border rounded-lg shadow-sm min-h-[120px]"
             placeholder="Enter description"
@@ -194,7 +188,6 @@ const PolicyCreatePage = () => {
           ></textarea>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full py-3 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-300"

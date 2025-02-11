@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { admin_login } from "../../store/slices/adminAuthentication"
 import { jwtDecode } from "jwt-decode"
 import { toast } from "react-toastify"
-import { FiAlertCircle } from "react-icons/fi";
+import { FiAlertCircle } from "react-icons/fi"
 
 const AdminLoginPage = () => {
   const [formData, setFormData] = useState({
@@ -14,14 +14,12 @@ const AdminLoginPage = () => {
     password: "",
   })
 
-  const [formError, setFormError] = useState("") // ✅ Fix: Define state for error messages
+  const [formError, setFormError] = useState("")
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    // ✅ Fix: Make function async
-    console.log("cccc")
     e.preventDefault()
     try {
       const res = await axios.post(
@@ -31,18 +29,13 @@ const AdminLoginPage = () => {
 
       if (res.status === 200) {
         console.log(res)
-        // ✅ Fix: Correct if statement syntax
         localStorage.setItem("access_token", res.data.access_token)
         localStorage.setItem("refresh_token", res.data.refresh_token)
-        // localStorage.setItem("user_id", res.data.user_id)
         localStorage.setItem("user_name", res.data.user_name)
-
         const decodedToken = jwtDecode(res.data.access_token)
         dispatch(
           admin_login({
-            // userid: decodedToken.user.user_id,
             username: res.data.user_name,
-            // email: decodedToken.email,
             isAuthenticated: true,
           })
         )
@@ -54,7 +47,7 @@ const AdminLoginPage = () => {
         setFormError(error.response.data.message || "Login failed")
       } else {
         setFormError("An unexpected error occurred. Please try again.")
-        console.error("Login Error:", error.message) // ✅ Log error for debugging
+        console.error("Login Error:", error.message)
       }
     }
   }
@@ -68,17 +61,16 @@ const AdminLoginPage = () => {
             Admin Login
           </h2>
         </div>
-        {/* Display error message with icon at the top of the form */}
         {formError && (
           <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4 text-sm flex items-center">
-            <FiAlertCircle className="mr-2" /> {/* Add error icon */}
+            <FiAlertCircle className="mr-2" />
             {formError}
           </div>
         )}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">
-              Email ID
+              Username
             </label>
             <input
               type="text"
@@ -90,19 +82,6 @@ const AdminLoginPage = () => {
               }
               required
             />
-          </div>
-          {/* Email Input Field */}
-          <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-lg">
-            {/* <input
-              type="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              required
-              className="w-full text-gray-700 focus:outline-none"
-            /> */}
           </div>
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-1">

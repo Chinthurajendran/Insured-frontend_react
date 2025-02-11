@@ -5,17 +5,13 @@ import { Link } from "react-router-dom"
 const Login_with_google = () => {
   return (
     <div className="min-h-screen flex flex-col lg:flex-row-reverse items-center justify-center bg-white p-4">
-      {/* Login Form Section */}
       <div className="w-full lg:w-1/2 max-w-md px-5 ml-30">
-        {/* Header Section */}
         <div className="mb-8 w-full flex flex-col items-center">
           <h1 className="text-3xl font-bold text-[#0B4B2C] mb-10">Insured+</h1>
           <h2 className="text-xl font-medium text-gray-900">Log in</h2>
         </div>
 
-        {/* Buttons Section */}
         <div className="space-y-4">
-          {/* Google Login Button */}
           <button className="w-full flex items-center justify-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 border border-gray-200 rounded-lg">
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -37,8 +33,6 @@ const Login_with_google = () => {
             </svg>
             Continue with Google
           </button>
-
-          {/* Email Login Button */}
           <Link to="/Login_page">
             <button className="w-full flex items-center justify-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 border border-gray-200 rounded-lg">
               <svg
@@ -55,7 +49,6 @@ const Login_with_google = () => {
           </Link>
         </div>
 
-        {/* Signup Link */}
         <div className="mt-8 w-full flex justify-center ">
           <p className="text-sm text-gray-600">
             Don&apos;t have an account?{" "}
@@ -71,7 +64,6 @@ const Login_with_google = () => {
         </div>
       </div>
 
-      {/* Image Section */}
       <div className="w-full lg:w-1/2 flex items-center justify-center ml-2">
         <img
           src={loginpage}

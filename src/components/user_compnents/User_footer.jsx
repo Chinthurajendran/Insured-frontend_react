@@ -1,11 +1,10 @@
 import React from "react"
-import { FaFacebook, FaLinkedin, FaTwitter, FaYoutube } from "react-icons/fa" // Example: React Icons
+import { FaFacebook, FaLinkedin, FaTwitter, FaYoutube } from "react-icons/fa"
 
 const Footer = () => {
   return (
     <footer className="bg-white py-12">
       <div className="container mx-auto px-6">
-        {/* Top Section */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           <div>
             <a href="/" className="text-2xl font-bold text-[#0B4B2C]">
@@ -63,7 +62,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        {/* Bottom Section */}
+
         <div className="border-t pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-600 mb-4 md:mb-0">
             Bendsgner 2023 All rights reserved

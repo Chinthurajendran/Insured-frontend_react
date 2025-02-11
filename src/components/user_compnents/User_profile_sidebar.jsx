@@ -19,9 +19,9 @@ function Sidebar() {
 
   // Handle Logout
   const handleLogoutSubmit = () => {
-    localStorage.clear(); // Clear all localStorage data
-    dispatch(logout()); // Dispatch logout action to update Redux state
-    navigate("/"); // Navigate to home or login page
+    localStorage.clear();
+    dispatch(logout());
+    navigate("/");
   };
 
   return (

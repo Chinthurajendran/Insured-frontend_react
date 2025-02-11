@@ -27,31 +27,28 @@ function Userprofile() {
       <User_profile_header />
 
       <div className="flex flex-col md:flex-row min-h-screen">
-        {/* Sidebar */}
         <User_profile_sidebar />
 
-        {/* Main Content */}
         <div className="flex-1 p-8 mt-16 relative">
           <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-6 relative">
-            {/* Edit Icon */}
+
             <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
               <Edit3 size={20} />
             </button>
 
             <div className="flex items-center space-x-6 mb-6">
-              {/* User Profile Photo */}
+
               <img
-                src={gallery} // Fixed Image Source
+                src={gallery}
                 alt="User Profile"
                 className="w-30 h-30 object-cover rounded-lg mb-50"
               />
 
-              {/* Title and Form Section */}
               <div className="flex flex-col space-y-4">
                 <h2 className="text-xl font-semibold">Personal Details</h2>
 
                 <form className="space-y-6">
-                  {/* Gender Selection */}
+
                   <div className="flex space-x-4">
                     <label className="flex items-center space-x-2 cursor-pointer">
                       <input
@@ -76,7 +73,6 @@ function Userprofile() {
                     </label>
                   </div>
 
-                  {/* Form Fields */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <label>
                       <input

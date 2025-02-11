@@ -11,7 +11,6 @@ const UserHeader = () => {
       style={{ backgroundColor: "#ffffff", borderBottomColor: "#0e4a31" }}
     >
       <nav className="flex items-center justify-between">
-        {/* Logo */}
         <a
           href="/"
           className="text-2xl font-bold transition-all duration-300 hover:text-[#0A4528] hover:scale-105"
@@ -20,9 +19,7 @@ const UserHeader = () => {
           Insured+
         </a>
 
-        {/* Navigation Links */}
         <div className="flex items-center space-x-8">
-          {/* Links */}
           <div className="hidden md:flex space-x-6">
             <a
               href="/"
@@ -47,9 +44,8 @@ const UserHeader = () => {
             </a>
           </div>
 
-          {/* Icons */}
           <div className="flex items-center space-x-4">
-            {/* Customer Care Icon */}
+
             <button
               className="transition-all duration-300 hover:text-[#0A4528] hover:scale-110"
               style={{ color: "#0e4a31" }}
@@ -59,7 +55,6 @@ const UserHeader = () => {
 
             {userId ? (
               <>
-                {/* Notification Icon */}
                 <button
                   className="transition-all duration-300 hover:text-[#0A4528] hover:scale-110"
                   style={{ color: "#0e4a31" }}
@@ -67,7 +62,6 @@ const UserHeader = () => {
                   <BellIcon className="w-6 h-6" />
                 </button>
 
-                {/* User Icon */}
                 <Link to={"/Userprofile"}>
                   <button
                     className="transition-all duration-300 hover:text-[#0A4528] hover:scale-110"
@@ -78,7 +72,6 @@ const UserHeader = () => {
                 </Link>
               </>
             ) : (
-              // Sign In Button when userId is not found
               <Link to="/Loginpage_with_google">
                 <button className="bg-yellow-400 text-black font-bold rounded-lg hover:bg-yellow-500 transition-all px-6 py-1.5 hover:scale-105">
                   <span>Sign In</span>

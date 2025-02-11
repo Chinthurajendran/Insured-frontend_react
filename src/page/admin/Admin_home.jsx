@@ -21,7 +21,7 @@ function Admin_home() {
       <div className="flex">
         <AdminSidebar />
         <div className="w-5/6 p-6">
-          <Outlet /> {/* Child routes will be rendered here */}
+          <Outlet />
         </div>
       </div>
     </div>

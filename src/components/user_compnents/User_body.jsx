@@ -5,7 +5,6 @@ import homeinsurance from "../../assets/homeinsurance.jpg"
 import autoinsurance from "../../assets/autoinsurance.jpg"
 
 
-// Reusable PolicyCard Component
 const PolicyCard = ({ image, title, description }) => (
   <div className="max-w-sm overflow-hidden bg-white rounded-lg shadow-md">
     <img src={image} alt={title} className="w-full h-48 object-cover" />
@@ -16,7 +15,6 @@ const PolicyCard = ({ image, title, description }) => (
   </div>
 )
 
-// Reusable StatsCard Component for the Statistics Section
 const StatsCard = ({ count, label }) => (
   <div className="bg-[#0D5835] p-6 rounded-lg transform transition-all duration-300 hover:scale-105">
     <div className="text-4xl font-bold text-white mb-2">{count}</div>
@@ -51,11 +49,10 @@ const User_body = () => {
       className="py-12 px-6 overflow-hidden"
       style={{ backgroundColor: "#0D4A31" }}
     >
-      {/* Hero Section */}
       <section className="relative bg-[#0B4B2] min-h-screen">
         <div className="container mx-auto px-6 pt-32 pb-20">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Text Content */}
+
             <div className="text-white space-y-6">
               <h1 className="text-5xl font-bold leading-tight">
                 Are You Covered?
@@ -80,7 +77,6 @@ const User_body = () => {
               </div>
             </div>
 
-            {/* Image Content */}
             <div className="hidden md:block">
               <img
                 src={insuranceImage}
@@ -92,7 +88,6 @@ const User_body = () => {
         </div>
       </section>
 
-      {/* Policy Cards Section */}
       <section className="bg-[#0B4B2C] py-20 pl-15">
         <div className="container mx-auto px-6">
           <h2 className="text-white text-3xl font-bold mb-12">
@@ -116,7 +111,6 @@ const User_body = () => {
         </div>
       </section>
 
-      {/* Statistics Section */}
       <section className="bg-[#0B4B2C] py-20">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">

@@ -27,7 +27,7 @@ const Agent_list = () => {
         });
 
         if (response.status === 200) {
-          setUsers(response.data.agents || response.data); // Ensure correct key
+          setUsers(response.data.agents || response.data);
         }
       } catch (error) {
         console.error("Error fetching users:", error);

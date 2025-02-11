@@ -13,7 +13,7 @@ import { jwtDecode } from "jwt-decode";
 
 const Login_page = () => {
   const location = useLocation()
-  const message = location.state?.message // Get success message from Sign-up Page
+  const message = location.state?.message
 
   const [formError, setFormError] = useState([])
   const [formData, setFormData] = useState({
@@ -61,19 +61,15 @@ const Login_page = () => {
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row-reverse items-center justify-center bg-white p-4">
-      {/* Login Form Section */}
       <div className="w-full lg:w-1/2 max-w-md px-5 ml-30">
-        {/* Header Section */}
         <div className="mb-8 w-full flex flex-col items-center">
           <h1 className="text-3xl font-bold text-[#014751] mb-10">Insured+</h1>
           <h2 className="text-xl font-medium text-gray-900">Log in</h2>
         </div>
         {formError && <p className="text-red-600 text-center mb-4">{formError}</p>}
-
-        {/* Buttons Section */}
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {/* Email Input Field */}
+
             <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-lg">
               <input
                 type="email"
@@ -86,7 +82,6 @@ const Login_page = () => {
               />
             </div>
 
-            {/* Password Input Field */}
             <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-lg mb-4">
               <input
                 type="password"
@@ -100,7 +95,6 @@ const Login_page = () => {
             </div>
           </div>
 
-          {/* Login Button */}
           <button className="w-full flex items-center justify-center gap-3 px-4 py-3 text-white bg-[#014751] hover:bg-[#013a41] rounded-lg font-bold">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +114,6 @@ const Login_page = () => {
           </button>
         </form>
 
-        {/* Forgot Password Link */}
         <div className="mt-4 text-center">
           <Link
             to="/forgot-password"
@@ -129,11 +122,8 @@ const Login_page = () => {
             Forgot my password?
           </Link>
         </div>
-
-        {/* Divider Line */}
         <div className="my-4 border-t border-gray-300"></div>
 
-        {/* Signup Link */}
         <div className="w-full flex justify-center">
           <p className="text-sm text-gray-600">
             Don&apos;t have an account?{" "}
@@ -146,7 +136,6 @@ const Login_page = () => {
         </div>
       </div>
 
-      {/* Image Section */}
       <div className="w-full lg:w-1/2 flex items-center justify-center ml-2">
         <img
           src={loginpage}

@@ -1,22 +1,6 @@
 import React from 'react';
 import { Trash2 } from "lucide-react";
 
-const users = [
-  {
-    id: 1,
-    image:
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-02-05%20131934-0JlUNKX6AEhYryfdd3oAdDDOUfTmUU.png",
-    name: "Chinthu rajendran",
-    email: "Chinturajendran1512@gmail.com",
-    gender: "Male",
-    phone: "9745474547",
-    dateOfBirth: "15-12-1997",
-    annualIncome: 100000,
-    maritalStatus: "Single",
-    city: "Kochi",
-    isActive: true,
-  },
-];
 
 const Admin_user_list = () => {
   return (

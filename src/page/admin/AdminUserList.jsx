@@ -17,7 +17,6 @@ const userColumns = [
   { key: "city", label: "City" },
   { key: "policy_status", label: "Policy Status" },
   { key: "block_status", label: "Block Status" },
-  // { key: "is_admin", label: "Is Admin" },
 ];
 
 const AdminUserList = () => {
@@ -34,7 +33,7 @@ const AdminUserList = () => {
         });
 
         if (response.status === 200) {
-          setUsers(response.data.users || response.data); // Ensure correct key
+          setUsers(response.data.users || response.data);
         }
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -54,37 +53,6 @@ const AdminUserList = () => {
   };
   console.log(users)
 
-  // const handleAdminToggle = async (userId) => {
-  //   try {
-  //     const res = await axios.put(
-  //       `${baseURL}/admin_auth/isadmin/${userId}`,
-  //       {}, // Empty body if no data is needed
-  //       {
-  //         headers: { Authorization: `Bearer ${token}` },
-  //       }
-  //     );
-  
-  //     if (res.status === 200) {
-  //       toast.success("User status updated successfully.");
-
-  //       setUsers((prevUsers) =>
-  //         prevUsers.map((user) =>
-  //           user.user_id === userId ? { ...user, is_admin: !user.is_admin } : user
-  //         )
-  //       );
-  //     }
-  //   } catch (error) {
-  //     if (error.response && error.response.data) {
-  //       setFormError(error.response.data);
-  //       toast.error(error.response.data.message || "An error occurred.");
-  //     } else {
-  //       setFormError(["An unexpected error occurred. Please try again."]);
-  //       toast.error("An unexpected error occurred. Please try again.");
-  //     }
-  //   }
-  // };
-  
-
   const handleDeleteUser = (userId) => {
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
   };
@@ -97,7 +65,6 @@ const AdminUserList = () => {
       columns={userColumns}
       title="User Management"
       onBlockToggle={handleBlockToggle}
-      // onAdminToggle={handleAdminToggle}
       onDelete={handleDeleteUser}
     />
   );

@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Sign_up = () => {
 
-  const [formError, setFormError] = useState([]) // Renamed 'error' to 'formError'
+  const [formError, setFormError] = useState([])
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -31,33 +31,29 @@ const Sign_up = () => {
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        setFormError(error.response.data) // Error handling
+        setFormError(error.response.data) 
       } else {
-        setFormError(["An unexpected error occurred. Please try again."]) // Default error message
+        setFormError(["An unexpected error occurred. Please try again."])
       }
     }
   }
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row-reverse items-center justify-center bg-white p-4">
-      {/* Login Form Section */}
       <div className="w-full lg:w-1/2 max-w-md px-5 ml-30">
-        {/* Header Section */}
+
         <div className="mb-8 w-full flex flex-col items-center">
           <h1 className="text-3xl font-bold text-[#014751] mb-10">Insured+</h1>
           <h2 className="text-xl font-medium text-gray-900">Sign Up</h2>
         </div>
 
-        {/* Error Message */}
         {formError.length > 0 && (
           <p className="text-red-500 text-center mb-4">
-            {formError.join(', ')} {/* Show all error messages */}
+            {formError.join(', ')} 
           </p>
         )}
 
-        {/* Buttons Section */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Username Input Field */}
           <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-lg">
             <input
               type="text"
@@ -70,7 +66,6 @@ const Sign_up = () => {
             />
           </div>
 
-          {/* Email Input Field */}
           <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-lg">
             <input
               type="email"
@@ -83,7 +78,6 @@ const Sign_up = () => {
             />
           </div>
 
-          {/* Password Input Field */}
           <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-lg mb-4">
             <input
               type="password"
@@ -96,7 +90,6 @@ const Sign_up = () => {
             />
           </div>
 
-          {/* Confirm Password Input Field */}
           <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-lg mb-4">
             <input
               type="password"
@@ -108,8 +101,6 @@ const Sign_up = () => {
               className="w-full text-gray-700 focus:outline-none"
             />
           </div>
-
-          {/* Register Button */}
           <button
             type="submit"
             className="w-full flex items-center justify-center gap-3 px-4 py-3 text-white bg-[#014751] hover:bg-[#013a41] rounded-lg font-bold"
@@ -132,7 +123,6 @@ const Sign_up = () => {
           </button>
         </form>
 
-        {/* Link to Login Page */}
         <div className="mt-4 w-full flex justify-center">
           <p className="text-sm text-gray-600">
             Already have an account?{" "}
@@ -146,7 +136,6 @@ const Sign_up = () => {
         </div>
       </div>
 
-      {/* Image Section */}
       <div className="w-full lg:w-1/2 flex items-center justify-center ml-2">
         <img
           src={loginpage}
