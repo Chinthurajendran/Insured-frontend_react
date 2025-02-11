@@ -12,7 +12,7 @@ function Agent_home() {
     
     useEffect(() => {
       if (!isAuthenticated) {
-        navigate("/Agent_home");
+        navigate("/Agent_login_page");
       }
     }, [isAuthenticated, navigate]);
 

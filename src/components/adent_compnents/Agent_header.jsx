@@ -1,19 +1,20 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { agent_logout } from "../../store/slices/agentAuthentication";
+import React from "react"
+import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { agent_logout } from "../../store/slices/agentAuthentication"
 import { toast } from "react-toastify"
 
 function Agent_header() {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-    const handleLogoutSubmit = ()=>{
-        localStorage.clear()
-        dispatch(agent_logout())
-        navigate("/Agent_login_page")
-        toast.success("Logout successful. See you next time!",);
-    }
+  const handleLogoutSubmit = () => {
+    localStorage.clear()
+    dispatch(agent_logout())
+    console.log("hhee")
+    navigate("/Agent_login_page")
+    toast.success("Logout successful. See you next time!")
+  }
 
   return (
     <header className="bg-[#0B4D2E] text-white px-6 py-4 flex justify-center items-center">
@@ -25,7 +26,7 @@ function Agent_header() {
         Log out
       </button>
     </header>
-  );
+  )
 }
 
-export default Agent_header;
+export default Agent_header
