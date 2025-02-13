@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { baseURL } from "../../baseUrls/Urls"
 import axios from "axios"
 import { useDispatch } from "react-redux"
@@ -44,13 +44,13 @@ const AdminLoginPage = () => {
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        setFormError(error.response.data.message || "Login failed")
+        setFormError(error.response.data.detail || "Login failed")
       } else {
         setFormError("An unexpected error occurred. Please try again.")
-        console.error("Login Error:", error.message)
       }
     }
   }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">

@@ -14,7 +14,7 @@ function Admin_home() {
       navigate("/Admin_login_page");
     }
   }, [isAuthenticated, navigate]);
-
+console.log(isAuthenticated)
   return (
     <div>
       <Admin_header />

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { baseURL } from "../../baseUrls/Urls";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify"
 
 function AgentApprovalPage() {
   const [gender, setGender] = useState("male");
@@ -29,9 +30,10 @@ const handleReject = async () => {
 
     if (response.status === 200) {
       navigate("/Admin_home/agentmanagement");
+      toast.success("Agent rejected successfully.")
     }
   } catch (error) {
-    alert("Failed to reject agent. Please try again later.");
+    toast.error("Failed to reject agent. Please try again later.");
   }
 };
 
@@ -50,9 +52,10 @@ const handleapproved = async () => {
 
     if (response.status === 200) {
       navigate("/Admin_home/agentmanagement");
+      toast.success("Agent approved successfully.");
     }
   } catch (error) {
-    alert("Failed to reject agent. Please try again later.");
+    toast.error("Failed to approve agent. Please try again later.");
   }
 };
 

@@ -4,6 +4,7 @@ import { User, FileText, Wallet, LogOut } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/slices/userAuthentication";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify"
 
 function Sidebar() {
   const [selected, setSelected] = useState("Profile");
@@ -22,6 +23,7 @@ function Sidebar() {
     localStorage.clear();
     dispatch(logout());
     navigate("/");
+    toast.success("Logout successful. See you next time!",);
   };
 
   return (

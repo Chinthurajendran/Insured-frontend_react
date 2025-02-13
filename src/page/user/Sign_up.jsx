@@ -4,12 +4,12 @@ import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { baseURL } from "../../baseUrls/Urls"
 import axios from "axios"
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { FiAlertCircle } from "react-icons/fi"
 
 const Sign_up = () => {
-
-  const [formError, setFormError] = useState([])
+  const [formError, setFormError] = useState("")
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -25,32 +25,33 @@ const Sign_up = () => {
       const res = await axios.post(`${baseURL}/auth/signup`, formData)
       if (res.status == 201) {
         navigate("/Login_page", {
-            state: { message: "Registration successful! Please log in." },
+          state: { message: "Registration successful! Please log in." },
         })
+        toast.success("Login successful! Welcome back.")
         return res
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        setFormError(error.response.data) 
+        setFormError(error.response.data.detail)
       } else {
-        setFormError(["An unexpected error occurred. Please try again."])
+        setFormError("An unexpected error occurred. Please try again.")
       }
     }
   }
-
+  console.log("rrr", formError)
   return (
     <div className="min-h-screen flex flex-col lg:flex-row-reverse items-center justify-center bg-white p-4">
       <div className="w-full lg:w-1/2 max-w-md px-5 ml-30">
-
         <div className="mb-8 w-full flex flex-col items-center">
           <h1 className="text-3xl font-bold text-[#014751] mb-10">Insured+</h1>
           <h2 className="text-xl font-medium text-gray-900">Sign Up</h2>
         </div>
 
-        {formError.length > 0 && (
-          <p className="text-red-500 text-center mb-4">
-            {formError.join(', ')} 
-          </p>
+        {formError && (
+          <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4 text-sm flex items-center">
+            <FiAlertCircle className="mr-2" />
+            {formError}
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">

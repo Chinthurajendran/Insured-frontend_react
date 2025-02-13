@@ -1,43 +1,45 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { baseURL } from "../../baseUrls/Urls";
-import { Link } from "react-router-dom";
+import axios from "axios"
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import { baseURL } from "../../baseUrls/Urls"
+import { Link } from "react-router-dom"
+import { toast } from "react-toastify"
+import { FiAlertCircle } from "react-icons/fi"
 
 const PolicyCreatePage = () => {
   const [formData, setFormData] = useState({
-    policy_id: "", 
-    policy_name: "",    
-    policy_type: "",    
-    coverage: "",            
-    settlement: "",            
-    premium_amount: "",        
-    age_group: "",              
-    income_range: "",           
-    id_proof: false,           
-    passbook: false,            
-    photo: false,             
-    pan_card: false,          
-    income_proof: false,      
-    nominee_address_proof: false, 
-    description: "",           
-  });
+    policy_id: "",
+    policy_name: "",
+    policy_type: "",
+    coverage: "",
+    settlement: "",
+    premium_amount: "",
+    age_group: "",
+    income_range: "",
+    id_proof: false,
+    passbook: false,
+    photo: false,
+    pan_card: false,
+    income_proof: false,
+    nominee_address_proof: false,
+    description: "",
+  })
 
-  const [formError, setFormError] = useState(null);
-  const navigate = useNavigate();
-  const token = localStorage.getItem("access_token");
+  const [formError, setFormError] = useState('')
+  const navigate = useNavigate()
+  const token = localStorage.getItem("access_token")
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+    }))
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Form Submitted", formData);
+    e.preventDefault()
+    console.log("Form Submitted", formData)
 
     try {
       const response = await axios.post(
@@ -46,21 +48,22 @@ const PolicyCreatePage = () => {
         {
           headers: { Authorization: `Bearer ${token}` },
         }
-      );
+      )
 
       if (response.status === 201) {
         navigate("/Admin_home/policy", {
           state: { message: "Policy created successfully!" },
-        });
+        })
+        toast.success("Policy created successfully!")
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        setFormError(error.response.data.detail);
+        setFormError(error.response.data.detail)
       } else {
-        setFormError(["An unexpected error occurred. Please try again."]);
+        setFormError(["An unexpected error occurred. Please try again."])
       }
     }
-  };
+  }
 
   return (
     <div className="w-full max-w-6xl mx-auto p-8 flex flex-col space-y-6">
@@ -69,20 +72,23 @@ const PolicyCreatePage = () => {
       </h2>
 
       {formError && (
-        <div className="text-red-500 font-medium text-center">
-          {Array.isArray(formError) ? formError.join(", ") : formError}
+        <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4 text-sm flex items-center">
+          <FiAlertCircle className="mr-2" />
+          {formError}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-3 gap-6">
           {[
-            { label: "Policy ID", name: "policy_id", type: "text" },           
-            { label: "Policy Name", name: "policy_name", type: "text" },      
-            { label: "Coverage Age", name: "coverage", type: "text" },          
+            { label: "Policy ID", name: "policy_id", type: "text" },
+            { label: "Policy Name", name: "policy_name", type: "text" },
+            { label: "Coverage Age", name: "coverage", type: "text" },
           ].map(({ label, name, type }) => (
             <div key={name} className="space-y-2">
-              <label className="block font-semibold text-gray-700">{label}</label>
+              <label className="block font-semibold text-gray-700">
+                {label}
+              </label>
               <input
                 type={type}
                 name={name}
@@ -96,11 +102,13 @@ const PolicyCreatePage = () => {
 
         <div className="grid grid-cols-3 gap-6">
           {[
-            { label: "Settlement %", name: "settlement", type: "number" },     
-            { label: "Amount", name: "premium_amount", type: "number" },     
+            { label: "Settlement %", name: "settlement", type: "number" },
+            { label: "Amount", name: "premium_amount", type: "number" },
           ].map(({ label, name, type }) => (
             <div key={name} className="space-y-2">
-              <label className="block font-semibold text-gray-700">{label}</label>
+              <label className="block font-semibold text-gray-700">
+                {label}
+              </label>
               <input
                 type={type}
                 name={name}
@@ -113,10 +121,12 @@ const PolicyCreatePage = () => {
         </div>
 
         <div className="space-y-2">
-          <label className="block font-semibold text-gray-700">Policy Type</label>
+          <label className="block font-semibold text-gray-700">
+            Policy Type
+          </label>
           <select
-            name="policy_type"                                      
-            value={formData.policy_type}                              
+            name="policy_type"
+            value={formData.policy_type}
             onChange={handleChange}
             className="w-full p-3 border rounded-lg shadow-sm"
             required
@@ -130,11 +140,36 @@ const PolicyCreatePage = () => {
 
         <div className="grid grid-cols-2 gap-6">
           {[
-            { label: "Age Group", name: "age_group", options: ["18-25", "26-35", "36-45", "46-55", "56-65", "66-70", "70+"] },
-            { label: "Income Range", name: "income_range", options: ["₹0 - ₹2,50,000", "₹2,50,001 - ₹5,00,000", "₹5,00,001 - ₹10,00,000", "₹10,00,001 - ₹25,00,000", "₹25,00,001 - ₹50,00,000", "₹50,00,001 and above"] }, 
+            {
+              label: "Age Group",
+              name: "age_group",
+              options: [
+                "18-25",
+                "26-35",
+                "36-45",
+                "46-55",
+                "56-65",
+                "66-70",
+                "70+",
+              ],
+            },
+            {
+              label: "Income Range",
+              name: "income_range",
+              options: [
+                "₹0 - ₹2,50,000",
+                "₹2,50,001 - ₹5,00,000",
+                "₹5,00,001 - ₹10,00,000",
+                "₹10,00,001 - ₹25,00,000",
+                "₹25,00,001 - ₹50,00,000",
+                "₹50,00,001 and above",
+              ],
+            },
           ].map(({ label, name, options }) => (
             <div key={name} className="space-y-2">
-              <label className="block font-semibold text-gray-700">{label}</label>
+              <label className="block font-semibold text-gray-700">
+                {label}
+              </label>
               <select
                 name={name}
                 value={formData[name]}
@@ -158,7 +193,14 @@ const PolicyCreatePage = () => {
             Required Documents
           </label>
           <div className="flex flex-wrap gap-4">
-            {["id_proof", "passbook", "photo", "pan_card", "income_proof","nominee_address_proof"].map((doc) => ( 
+            {[
+              "id_proof",
+              "passbook",
+              "photo",
+              "pan_card",
+              "income_proof",
+              "nominee_address_proof",
+            ].map((doc) => (
               <div key={doc} className="flex items-center space-x-2">
                 <input
                   type="checkbox"
@@ -177,10 +219,12 @@ const PolicyCreatePage = () => {
         </div>
 
         <div className="space-y-2">
-          <label className="block font-semibold text-gray-700">Description</label>
+          <label className="block font-semibold text-gray-700">
+            Description
+          </label>
           <textarea
-            name="description"                                  
-            value={formData.description}                         
+            name="description"
+            value={formData.description}
             onChange={handleChange}
             className="w-full p-3 border rounded-lg shadow-sm min-h-[120px]"
             placeholder="Enter description"
@@ -196,7 +240,7 @@ const PolicyCreatePage = () => {
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default PolicyCreatePage;
+export default PolicyCreatePage
