@@ -20,7 +20,7 @@ const policyColumns = [
   { key: "nominee_address_proof", label: "Nominee Address Proof" }
 ]
 
-const Admin_policy_management = () => {
+const Admin_policy_list = () => {
   const [policies, setPolicies] = useState([])
   const [loading, setLoading] = useState(true)
   const token = localStorage.getItem("access_token")
@@ -68,4 +68,6 @@ const Admin_policy_management = () => {
   )
 }
 
-export default Admin_policy_management
+export default Admin_policy_list
+
+

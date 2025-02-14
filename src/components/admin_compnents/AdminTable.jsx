@@ -14,10 +14,10 @@ const AdminTable = ({
 }) => {
   return (
     <div className="container mx-auto p-6 max-w-screen-2xl">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{title}</h1>
+      <div className="relative flex items-center justify-center mb-6">
+        <h1 className="text-2xl font-bold text-center flex-1">{title}</h1>
         {buttonlink && (
-          <Link to={buttonlink}>
+          <Link to={buttonlink} className="absolute right-0">
             <button
               className="bg-gray-600 hover:bg-green-800 text-white px-4 py-2 rounded transition duration-200"
               aria-label="Create User"
@@ -37,7 +37,9 @@ const AdminTable = ({
                   {col.label}
                 </th>
               ))}
-              {onDelete && <th className="p-3 text-center whitespace-nowrap">Actions</th>}
+              {onDelete && (
+                <th className="p-3 text-center whitespace-nowrap">Actions</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -50,7 +52,10 @@ const AdminTable = ({
                   {index + 101}
                 </td>
                 {columns.map((col) => (
-                  <td key={col.key} className="p-3 text-center whitespace-nowrap">
+                  <td
+                    key={col.key}
+                    className="p-3 text-center whitespace-nowrap"
+                  >
                     {col.key === "image" ? (
                       <img
                         src={user[col.key] || adminuser}
@@ -70,27 +75,39 @@ const AdminTable = ({
                       </button>
                     ) : col.key === "is_admin" ? (
                       <button
-                        onClick={() => onAdminToggle(user.user_id )}
+                        onClick={() => onAdminToggle(user.user_id)}
                         className={`px-4 py-1 rounded text-white ${
                           user[col.key] ? "bg-blue-500" : "bg-gray-500"
                         }`}
                       >
                         {user[col.key] ? "Admin" : "User"}
                       </button>
-                    ) : ["id_proof", "passbook", "photo", "pan_card", "income_proof", "nominee_address_proof", "live_status"].includes(col.key) ? (
-                      <span className=" text-xl">{user[col.key] ? "✅" : "❌"}</span>
+                    ) : [
+                        "id_proof",
+                        "passbook",
+                        "photo",
+                        "pan_card",
+                        "income_proof",
+                        "nominee_address_proof",
+                        "live_status",
+                      ].includes(col.key) ? (
+                      <span className=" text-xl">
+                        {user[col.key] ? "✅" : "❌"}
+                      </span>
                     ) : col.key === "date_of_birth" ? (
                       new Date(user[col.key]).toLocaleDateString("en-GB", {
                         day: "2-digit",
                         month: "short",
                         year: "numeric",
                       })
-                    ) : col.key === "policy_status" ? (
+                    ) : col.key === "status" ? (
                       <span
                         className={`px-3 py-1 rounded text-white ${
                           user[col.key] ? "bg-green-500" : "bg-red-500"
                         }`}
-                        aria-label={user[col.key] ? "Active status" : "Inactive status"}
+                        aria-label={
+                          user[col.key] ? "Active status" : "Inactive status"
+                        }
                       >
                         {user[col.key] ? "Active" : "Inactive"}
                       </span>
@@ -101,7 +118,10 @@ const AdminTable = ({
                 ))}
                 {onDelete && (
                   <td className="p-3 text-center whitespace-nowrap">
-                    <button onClick={() => onDelete(user.id)} className="text-red-600">
+                    <button
+                      onClick={() => onDelete(user.id)}
+                      className="text-red-600"
+                    >
                       <Trash2 className="h-4 w-4 mx-auto" />
                     </button>
                   </td>

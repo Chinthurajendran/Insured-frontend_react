@@ -1,9 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { baseURL } from '../../baseUrls/Urls';
-import Agent_approval_page from './Agent_approval_page';
-import { Navigate, useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 
 const getStatusStyles = (status) => {
   switch (status) {
@@ -18,34 +16,32 @@ const getStatusStyles = (status) => {
   }
 };
 
-
 const AdminPolicyManagement = () => {
+  const [agent, Setagent] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("access_token");
+  const navigate = useNavigate();
 
-  const [agent,Setagent] = useState([])
-  const [loading, setLoading] = useState(true)
-  const token = localStorage.getItem("access_token")
-  const navigate = useNavigate()
-
-  useEffect(()=>{
+  useEffect(() => {
     if (!token) {
-      setLoading(false)
-      return
+      setLoading(false);
+      return;
     }
 
-    const fatchagnet = async()=>{
-      try{
-        const res =await axios.get(`${baseURL}/agent_auth/agent_state`,{headers:{ Authorization: `Bearer ${token}` }})
-        if(res.status == 200){
-          Setagent(res.data.agents || res.data)
+    const fetchAgent = async () => {
+      try {
+        const res = await axios.get(`${baseURL}/agent_auth/agent_state`, { headers: { Authorization: `Bearer ${token}` } });
+        if (res.status === 200) {
+          Setagent(res.data.agents || res.data);
         }
-      }catch(error){
-        alert("Failed to fetch policies. Please try again later.") 
-      }finally{
-        setLoading(false)
+      } catch (error) {
+        alert("Failed to fetch policies. Please try again later.");
+      } finally {
+        setLoading(false);
       }
-    }
-    fatchagnet()
-  },[token])
+    };
+    fetchAgent();
+  }, [token]);
 
   const handleSubmit = (id) => {
     const selectedAgent = agent.find(user => user.agent_id === id);
@@ -53,9 +49,10 @@ const AdminPolicyManagement = () => {
       navigate("/Agent_approval_page", { state: { agentId: id } });
     }
   };
-  
+
   return (
     <div className="container mx-auto p-6 max-w-screen-xl">
+      <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Agent Management</h1>
       <div className="overflow-x-auto rounded-xl shadow-lg">
         <table className="w-full min-w-[1100px] bg-gray-200 rounded-lg border border-gray-300">
           <thead>
@@ -69,7 +66,7 @@ const AdminPolicyManagement = () => {
           <tbody>
             {agent.map((user, index) => (
               <tr key={user.agent_id} className={index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"} onClick={() => handleSubmit(user.agent_id)}>
-                <td className="p-3 pl-6 text-left">{index+101}</td>
+                <td className="p-3 pl-6 text-left">{index + 101}</td>
                 <td className="p-3 text-left">{user.agent_name}</td>
                 <td className="p-3 text-left">{user.agent_email}</td>
                 <td className="p-3 text-left">

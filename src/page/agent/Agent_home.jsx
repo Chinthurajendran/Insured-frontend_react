@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function Agent_home() {
-    const isAuthenticated = useSelector((state) => state.agentAuth.isAuthenticated);
+    const isAuthenticated = useSelector((state) => state.agentAuth.isAuthenticated_agent);
     const navigate = useNavigate();
     
     useEffect(() => {

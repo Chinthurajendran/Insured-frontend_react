@@ -5,13 +5,14 @@ import { baseURL } from "../../baseUrls/Urls";
 
 const userColumns = [
   { key: "image", label: "Image" },
+  { key: "agentid", label: "Agent ID" },
   { key: "name", label: "Name" },
   { key: "email", label: "Email" },
   { key: "gender", label: "Gender" },
   { key: "phone", label: "Phone" },
   { key: "date_of_birth", label: "Date of Birth" },
   { key: "city", label: "City" },
-  { key: "policy_status", label: "Login Status" },
+  { key: "status", label: "Login Status" },
 ];
 
 const Agent_list = () => {
@@ -69,6 +70,7 @@ const Agent_list = () => {
       onBlockToggle={handleBlockToggle}
       onAdminToggle={handleAdminToggle}
       onDelete={handleDeleteUser}
+      buttonlink="/Policy_create_page"
     />
   );
 };

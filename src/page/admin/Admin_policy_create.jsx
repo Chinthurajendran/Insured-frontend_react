@@ -6,7 +6,7 @@ import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
 
-const PolicyCreatePage = () => {
+const Admin_policy_create = () => {
   const [formData, setFormData] = useState({
     policy_id: "",
     policy_name: "",
@@ -243,4 +243,4 @@ const PolicyCreatePage = () => {
   )
 }
 
-export default PolicyCreatePage
+export default Admin_policy_create

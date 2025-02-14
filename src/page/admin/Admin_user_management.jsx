@@ -19,7 +19,7 @@ const userColumns = [
   { key: "block_status", label: "Block Status" },
 ];
 
-const AdminUserList = () => {
+const Admin_user_management = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("access_token");
@@ -70,4 +70,4 @@ const AdminUserList = () => {
   );
 };
 
-export default AdminUserList;
+export default Admin_user_management;
