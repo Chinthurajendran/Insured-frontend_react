@@ -23,7 +23,7 @@ const policyColumns = [
 const Admin_policy_list = () => {
   const [policies, setPolicies] = useState([])
   const [loading, setLoading] = useState(true)
-  const token = localStorage.getItem("access_token")
+  const token = localStorage.getItem("admin_access_token")
 
   useEffect(() => {
     if (!token) {

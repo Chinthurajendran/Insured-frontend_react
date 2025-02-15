@@ -19,7 +19,7 @@ const getStatusStyles = (status) => {
 const AdminPolicyManagement = () => {
   const [agent, Setagent] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("admin_access_token");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const AdminPolicyManagement = () => {
 
     const fetchAgent = async () => {
       try {
-        const res = await axios.get(`${baseURL}/agent_auth/agent_state`, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await axios.get(`${baseURL}/admin_auth/agent_management`, { headers: { Authorization: `Bearer ${token}` } });
         if (res.status === 200) {
           Setagent(res.data.agents || res.data);
         }

@@ -6,15 +6,14 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
 function Admin_home() {
-  const isAuthenticated = useSelector((state) => state.adminAuth.isAuthenticated);
   const navigate = useNavigate();
+  const admin_token = localStorage.getItem('admin_access_token')
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!admin_token) {
       navigate("/Admin_login_page");
     }
-  }, [isAuthenticated, navigate]);
-console.log(isAuthenticated)
+  }, [admin_token, navigate]);
   return (
     <div>
       <Admin_header />

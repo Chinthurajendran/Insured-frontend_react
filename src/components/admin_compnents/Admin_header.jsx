@@ -9,7 +9,9 @@ function AdminHeader() {
     const navigate = useNavigate()
 
     const handleLogoutSubmit = ()=>{
-        localStorage.clear()
+        localStorage.removeItem("admin_username")
+        localStorage.removeItem("admin_access_token") 
+        localStorage.removeItem("admin_refresh_token") 
         dispatch(admin_logout())
         navigate("/Admin_login_page")
         toast.success("Logout successful. See you next time!",);

@@ -3,20 +3,18 @@ import { Outlet } from "react-router-dom"
 import Agent_header from "../../components/adent_compnents/Agent_header"
 import Agent_sidebar from "../../components/adent_compnents/Agent_sidebar"
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom"
 
 function Agent_home() {
-    const isAuthenticated = useSelector((state) => state.agentAuth.isAuthenticated_agent);
-    const navigate = useNavigate();
-    
-    useEffect(() => {
-      if (!isAuthenticated) {
-        navigate("/Agent_login_page");
-      }
-    }, [isAuthenticated, navigate]);
+  const agent_token = localStorage.getItem("agent_access_token")
+  const navigate = useNavigate()
 
-    console.log(isAuthenticated)
+  useEffect(() => {
+    if (!agent_token) {
+      navigate("/Agent_login_page")
+    }
+  }, [agent_token, navigate])
+
   return (
     <div>
       <Agent_header />

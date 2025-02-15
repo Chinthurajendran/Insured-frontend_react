@@ -29,11 +29,11 @@ const Login_page = () => {
     try {
       const res = await axios.post(`${baseURL}/auth/login`, formData)
       if (res.status == 200) {
-        localStorage.setItem("access_token", res.data.access_token)
-        localStorage.setItem("refresh_token", res.data.refresh_token)
+        localStorage.setItem("user_access_token", res.data.user_access_token)
+        localStorage.setItem("user_refresh_token", res.data.user_refresh_token)
         localStorage.setItem("user_id", res.data.user_id)
         localStorage.setItem("user_name", res.data.user_name)
-        const decodedToken = jwtDecode(res.data.access_token)
+        const decodedToken = jwtDecode(res.data.user_access_token)
         dispatch(
           login({
             userid: decodedToken.user.user_id,

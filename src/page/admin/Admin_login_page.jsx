@@ -19,6 +19,14 @@ const AdminLoginPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const admin_token = localStorage.getItem("admin_access_token")
+
+  useEffect(() => {
+    if (admin_token) {
+      navigate("/Admin_home")
+    }
+  }, [admin_token, navigate])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -29,14 +37,17 @@ const AdminLoginPage = () => {
 
       if (res.status === 200) {
         console.log(res)
-        localStorage.setItem("access_token", res.data.access_token)
-        localStorage.setItem("refresh_token", res.data.refresh_token)
-        localStorage.setItem("user_name", res.data.user_name)
-        const decodedToken = jwtDecode(res.data.access_token)
+        localStorage.setItem("admin_access_token", res.data.admin_access_token)
+        localStorage.setItem(
+          "admin_refresh_token",
+          res.data.admin_refresh_token
+        )
+        localStorage.setItem("admin_username", res.data.admin_username)
+        const decodedToken = jwtDecode(res.data.admin_access_token)
         dispatch(
           admin_login({
-            username: res.data.user_name,
-            isAuthenticated: true,
+            admin_username: decodedToken.user.admin_username,
+            isAuthenticated_admin: true,
           })
         )
         navigate("/Admin_home", { state: { message: "Login successful!" } })
@@ -50,7 +61,6 @@ const AdminLoginPage = () => {
       }
     }
   }
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">

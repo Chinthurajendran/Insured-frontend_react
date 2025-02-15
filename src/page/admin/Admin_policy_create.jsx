@@ -27,7 +27,7 @@ const Admin_policy_create = () => {
 
   const [formError, setFormError] = useState('')
   const navigate = useNavigate()
-  const token = localStorage.getItem("access_token")
+  const token = localStorage.getItem("admin_access_token")
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target

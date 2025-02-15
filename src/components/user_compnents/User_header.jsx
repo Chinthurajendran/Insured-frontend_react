@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 
 
 const UserHeader = () => {
-  const userId = localStorage.getItem("user_id")
+  const user_token = localStorage.getItem("user_access_token")
   return (
     <header
       className="absolute w-full z-10 px-6 py-4"
@@ -39,7 +39,7 @@ const UserHeader = () => {
               <PhoneIcon className="w-6 h-6" />
             </button>
 
-            {userId ? (
+            {user_token ? (
               <>
                 <button className="text-white hover:text-gray-300">
                   <BellIcon className="w-6 h-6" />

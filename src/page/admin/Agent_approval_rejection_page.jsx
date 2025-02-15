@@ -12,7 +12,7 @@ function Agent_approval_rejection_page() {
   const location = useLocation()
   const agentId = location.state?.agentId
   const [agent, setAgent] = useState(null)
-  const token = localStorage.getItem("access_token")
+  const token = localStorage.getItem("admin_access_token")
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
@@ -22,7 +22,7 @@ function Agent_approval_rejection_page() {
       formData.append("reason", rejectionReason)
 
       const response = await axios.put(
-        `${baseURL}/agent_auth/agent_rejected/${agentId}`,
+        `${baseURL}/admin_auth/agent_rejected/${agentId}`,
         formData, // Send as form data
         {
           headers: {
@@ -45,7 +45,7 @@ function Agent_approval_rejection_page() {
   const handleApproved = async () => {
     try {
       const response = await axios.put(
-        `${baseURL}/agent_auth/agent_approved/${agentId}`,
+        `${baseURL}/admin_auth/agent_approved/${agentId}`,
         {},
         {
           headers: {
@@ -71,7 +71,7 @@ function Agent_approval_rejection_page() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `${baseURL}/agent_auth/agent_approval/${agentId}`,
+          `${baseURL}/admin_auth/agent_approval_and_rejection/${agentId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

@@ -3,17 +3,17 @@ import { createSlice } from "@reduxjs/toolkit"
 export const adminSlice = createSlice({
   name: 'authentication_admin',
   initialState: {
-    username: null,
-    isAuthenticated: false
+    admin_username: null,
+    isAuthenticated_admin: false
   },
   reducers: {
     admin_login: (state, action) => {
-      state.username = action.payload.username;  
-      state.isAuthenticated = true;     
+      state.admin_username = action.payload.admin_username;  
+      state.isAuthenticated_admin = true;     
     },
     admin_logout: (state) => {
-      state.username = null;
-      state.isAuthenticated = false;    
+      state.admin_username = null;
+      state.isAuthenticated_admin = false;    
     }
   }
 })

@@ -41,11 +41,11 @@ const Agent_login_page = () => {
           })
 
           if (res.status === 200) {
-            localStorage.setItem("access_token", res.data.access_token)
-            localStorage.setItem("refresh_token", res.data.refresh_token)
+            localStorage.setItem("agent_access_token", res.data.agent_access_token)
+            localStorage.setItem("agent_refresh_token", res.data.agent_refresh_token)
             localStorage.setItem("agent_uuid", res.data.agnet_id)
             localStorage.setItem("agent_username ", res.data.agent_name)
-            const decodedToken = jwtDecode(res.data.access_token)
+            const decodedToken = jwtDecode(res.data.agent_access_token)
             dispatch(
               agent_login({
                 agent_uuid: decodedToken.user.user_id,

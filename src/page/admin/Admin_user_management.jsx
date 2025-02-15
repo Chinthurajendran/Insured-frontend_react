@@ -22,7 +22,7 @@ const userColumns = [
 const Admin_user_management = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("admin_access_token");
   const [formError, setFormError] = useState(""); 
 
   useEffect(() => {

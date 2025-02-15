@@ -49,7 +49,7 @@ const AgentSignUpPage = () => {
       })
 
       if (res.status === 201) {
-        toast.success("Registration successful! Please log in.")
+        toast.success("Registration submitted for admin approval.")
         navigate("/Agent_login_page")
       }
     } catch (error) {

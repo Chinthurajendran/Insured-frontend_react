@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('access_token');
+        const token = localStorage.getItem('agent_access_token');
         console.log("Sending Authorization Header:", token); 
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`; // Fix syntax error
@@ -43,13 +43,13 @@ axiosInstance.interceptors.response.use(
                     {},
                     { withCredentials: true }
                 );
-                console.log("New Access Token :::", data, data.accessToken);
-                localStorage.setItem("accessToken", data.accessToken);
-                originalRequest.headers["Authorization"] = `Bearer ${data.accessToken}`;
+                console.log("New Access Token :::", data, data.agent_access_token);
+                localStorage.setItem("agent_access_token", data.agent_access_token);
+                originalRequest.headers["Authorization"] = `Bearer ${data.agent_access_token}`;
                 return axiosInstance(originalRequest);
             } catch (refreshError) {
                 console.error("Refresh Token Expired or Invalid!");
-                localStorage.removeItem("accessToken");
+                localStorage.removeItem("agent_access_token");
                 window.location.assign("/Agent_login_page"); // Redirect to login
                 return Promise.reject(refreshError);
             }
