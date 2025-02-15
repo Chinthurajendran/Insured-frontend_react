@@ -6,6 +6,7 @@ import { toast } from "react-toastify"
 import axios from "axios"
 import { baseURL } from "../../baseUrls/Urls"
 import { useSelector } from "react-redux"
+import axiosInstance from "../../Interceptors/agent"
 
 function Agent_header() {
   const dispatch = useDispatch()
@@ -24,9 +25,7 @@ function Agent_header() {
     }
 
     try {
-      const res = await axios.put(`${baseURL}/agent_auth/agent_logout/${agentId}`,{},{
-        headers: { Authorization: `Bearer ${token}`, },
-      })
+      const res = await axiosInstance.put(`agent_logout/${agentId}`)
       
       if (res.status === 200) {
         localStorage.clear()

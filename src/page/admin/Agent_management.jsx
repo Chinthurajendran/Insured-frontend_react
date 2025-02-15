@@ -46,7 +46,7 @@ const AdminPolicyManagement = () => {
   const handleSubmit = (id) => {
     const selectedAgent = agent.find(user => user.agent_id === id);
     if (selectedAgent && selectedAgent.approval_status === 'processing') {
-      navigate("/Agent_approval_page", { state: { agentId: id } });
+      navigate("/Agent_approval_rejection_page", { state: { agentId: id } });
     }
   };
 

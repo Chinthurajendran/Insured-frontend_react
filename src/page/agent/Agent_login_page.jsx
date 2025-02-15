@@ -7,6 +7,8 @@ import { jwtDecode } from "jwt-decode"
 import { agent_login } from "../../store/slices/agentAuthentication"
 import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
+import axiosInstance from "../../Interceptors/agent"
+
 
 const Agent_login_page = () => {
   const [formData, setFormData] = useState({
@@ -32,7 +34,7 @@ const Agent_login_page = () => {
         const { latitude, longitude } = position.coords
         console.log(latitude)
         try {
-          const res = await axios.post(`${baseURL}/agent_auth/agent_login`, {
+          const res = await axiosInstance.post(`agent_login`, {
             ...formData,
             latitude,
             longitude,

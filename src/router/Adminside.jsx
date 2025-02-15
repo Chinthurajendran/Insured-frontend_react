@@ -26,7 +26,7 @@ function Adminside() {
             <Route path="Agent_list" element={<Agent_list />} />
             <Route path="Demo" element={<Demo_loading_page />} />
           </Route>
-          <Route path="/ccccc" element={<Agent_approval_rejection_page />} />
+          <Route path="/Agent_approval_rejection_page" element={<Agent_approval_rejection_page />} />
           <Route path="/Policy_create_page" element={<Admin_policy_create />} />
         </Routes>
       </BrowserRouter>
