@@ -10,9 +10,9 @@ function Sidebar() {
   const [selected, setSelected] = useState("Profile");
 
   const menuItems = [
-    { name: "Profile", icon: <User className="h-5 w-5" />, link: "/Userprofile" },
-    { name: "Your Policies", icon: <FileText className="h-5 w-5" />, link: "/YourPolicies" },
-    { name: "Wallet", icon: <Wallet className="h-5 w-5" />, link: "/Wallet" },
+    { name: "Profile", icon: <User className="h-5 w-5" />, link: "/Userpage/Userprofile" },
+    { name: "Your Policies", icon: <FileText className="h-5 w-5" />, link: "/Userpage/Userprofile" },
+    { name: "Wallet", icon: <Wallet className="h-5 w-5" />, link: "/Userpage/Userprofile" },
   ];
 
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="w-64 h-70 bg-[#0e4a31] p-4 pt-6 pl-6 mt-20 ml-2 rounded-3xl shadow-lg">
+    <div className="w-64 h-70 bg-[#0e4a31] p-4 pt-6 pl-6  ml-2 rounded-3xl shadow-lg">
       <nav className="space-y-2">
         {menuItems.map((item) => (
           <Link

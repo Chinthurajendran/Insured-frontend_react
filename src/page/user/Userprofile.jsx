@@ -1,8 +1,5 @@
 import React, { useEffect } from "react"
 import { User, Edit3 } from "lucide-react"
-import User_header from "../../components/user_compnents/User_header"
-import User_profile_sidebar from "../../components/user_compnents/User_profile_sidebar"
-import User_profile_header from "../../components/user_compnents/User_profile_header"
 import gallery from "../../assets/gallery.png"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
@@ -23,11 +20,7 @@ function Userprofile() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <User_header />
-      <User_profile_header />
-
-      <div className="flex flex-col md:flex-row min-h-screen">
-        <User_profile_sidebar />
+      <div className="flex flex-col md:flex-row min-h-screen -mt-28">
 
         <div className="flex-1 p-8 mt-16 relative">
           <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-6 relative">

@@ -61,7 +61,7 @@ const Sign_up = () => {
               placeholder="Username"
               value={formData.username}
               onChange={(e) =>
-                setFormData({ ...formData, username: e.target.value })
+                setFormData({ ...formData, username: e.target.value.toLowerCase() })
               }
               className="w-full text-gray-700 focus:outline-none"
             />
@@ -73,7 +73,7 @@ const Sign_up = () => {
               placeholder="Enter your email"
               value={formData.email}
               onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
+                setFormData({ ...formData, email: e.target.value.toLowerCase() })
               }
               className="w-full text-gray-700 focus:outline-none"
             />

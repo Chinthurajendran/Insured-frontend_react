@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import AdminTable from "../../components/admin_compnents/AdminTable"
-import axios from "axios"
-import { baseURL } from "../../baseUrls/Urls"
+import axiosInstance from "../../Interceptors/admin"
 
 const policyColumns = [
   { key: "policy_name", label: "Policy Name" },
@@ -33,9 +32,7 @@ const Admin_policy_list = () => {
 
     const fetchpolicy = async () => {
       try {
-        const res = await axios.get(`${baseURL}/admin_auth/policy_list`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        const res = await axiosInstance.get(`policy_list`)
 
         if (res.status === 200) {
           setPolicies(res.data.policy || res.data)

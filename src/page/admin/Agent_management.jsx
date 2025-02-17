@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { baseURL } from '../../baseUrls/Urls';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from "../../Interceptors/admin";
 
 const getStatusStyles = (status) => {
   switch (status) {
@@ -30,7 +31,7 @@ const AdminPolicyManagement = () => {
 
     const fetchAgent = async () => {
       try {
-        const res = await axios.get(`${baseURL}/admin_auth/agent_management`, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await axiosInstance.get(`agent_management`);
         if (res.status === 200) {
           Setagent(res.data.agents || res.data);
         }

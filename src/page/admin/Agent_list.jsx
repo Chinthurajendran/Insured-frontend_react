@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AdminTable from "../../components/admin_compnents/AdminTable";
-import axios from "axios";
-import { baseURL } from "../../baseUrls/Urls";
+import axiosInstance from "../../Interceptors/admin";
 
 const userColumns = [
   { key: "image", label: "Image" },
@@ -23,9 +22,7 @@ const Agent_list = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${baseURL}/admin_auth/agent_list`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axiosInstance.get(`agent_list`);
 
         if (response.status === 200) {
           setUsers(response.data.agents || response.data);

@@ -45,6 +45,7 @@ const Agent_login_page = () => {
             localStorage.setItem("agent_refresh_token", res.data.agent_refresh_token)
             localStorage.setItem("agent_uuid", res.data.agnet_id)
             localStorage.setItem("agent_username ", res.data.agent_name)
+            localStorage.setItem("agent_role", res.data.agent_role)
             const decodedToken = jwtDecode(res.data.agent_access_token)
             dispatch(
               agent_login({
@@ -52,6 +53,7 @@ const Agent_login_page = () => {
                 agent_username: decodedToken.user.user_name,
                 agent_email: decodedToken.agent_email,
                 agnet_userid: decodedToken.agnet_userid,
+                agent_role: decodedToken.agent_role,
                 isAuthenticated_agent: true,
               })
             )

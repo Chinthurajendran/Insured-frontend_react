@@ -33,11 +33,14 @@ const Login_page = () => {
         localStorage.setItem("user_refresh_token", res.data.user_refresh_token)
         localStorage.setItem("user_id", res.data.user_id)
         localStorage.setItem("user_name", res.data.user_name)
+        localStorage.setItem("user_role", res.data.user_role)
         const decodedToken = jwtDecode(res.data.user_access_token)
+        console.log(res)
         dispatch(
           login({
             userid: decodedToken.user.user_id,
             username: res.data.user_name,
+            user_role: res.data.user_role,
             useremail: formData.email,
             isAuthenticated: true,
           })

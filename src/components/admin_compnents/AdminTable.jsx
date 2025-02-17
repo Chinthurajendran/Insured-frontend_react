@@ -66,7 +66,7 @@ const AdminTable = ({
                       />
                     ) : col.key === "block_status" ? (
                       <button
-                        onClick={() => onBlockToggle(user.id)}
+                        onClick={() => onBlockToggle(user.user_id)}
                         className={`px-4 py-1 rounded text-white ${
                           user[col.key] ? "bg-red-500" : "bg-green-500"
                         }`}

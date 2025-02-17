@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { baseURL } from "../../baseUrls/Urls"
-import axios from "axios"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { admin_login } from "../../store/slices/adminAuthentication"
 import { jwtDecode } from "jwt-decode"
 import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
+import axiosInstance from "../../Interceptors/admin"
 
 const AdminLoginPage = () => {
   const [formData, setFormData] = useState({
@@ -30,8 +29,8 @@ const AdminLoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post(
-        `${baseURL}/admin_auth/admin_login`,
+      const res = await axiosInstance.post(
+        `admin_login`,
         formData
       )
 
@@ -43,10 +42,12 @@ const AdminLoginPage = () => {
           res.data.admin_refresh_token
         )
         localStorage.setItem("admin_username", res.data.admin_username)
+        localStorage.setItem("admin_role", res.data.admin_role)
         const decodedToken = jwtDecode(res.data.admin_access_token)
         dispatch(
           admin_login({
             admin_username: decodedToken.user.admin_username,
+            admin_role: decodedToken.user.admin_role,
             isAuthenticated_admin: true,
           })
         )

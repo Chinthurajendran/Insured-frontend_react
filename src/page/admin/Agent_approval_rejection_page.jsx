@@ -1,102 +1,94 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
-import { baseURL } from "../../baseUrls/Urls"
-import { toast } from "react-toastify"
-import { FiAlertCircle } from "react-icons/fi"
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { FiAlertCircle } from "react-icons/fi";
+import axiosInstance from "../../Interceptors/admin";
 
 function Agent_approval_rejection_page() {
-  const [gender, setGender] = useState("male")
-  const [rejectionReason, setRejectionReason] = useState("")
-  const [formError, setFormError] = useState("")
-  const location = useLocation()
-  const agentId = location.state?.agentId
-  const [agent, setAgent] = useState(null)
-  const token = localStorage.getItem("admin_access_token")
-  const [loading, setLoading] = useState(true)
-  const navigate = useNavigate()
+  const [gender, setGender] = useState("male");
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [formError, setFormError] = useState("");
+  const location = useLocation();
+  const agentId = location.state?.agentId;
+  const [agent, setAgent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const handleReject = async () => {
     try {
-      const formData = new URLSearchParams()
-      formData.append("reason", rejectionReason)
-
-      const response = await axios.put(
-        `${baseURL}/admin_auth/agent_rejected/${agentId}`,
-        formData, // Send as form data
+      const formData = new URLSearchParams();
+      formData.append("reason", rejectionReason);
+      console.log("Rejection Reason:", rejectionReason);
+      const response = await axiosInstance.put(
+        `agent_rejected/${agentId}`,
+        formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/x-www-form-urlencoded",
+            'Content-Type': 'application/x-www-form-urlencoded',
           },
         }
-      )
+      );
 
       if (response.status === 200) {
-        toast.success("Agent rejected successfully.")
-        navigate("/Admin_home/agentmanagement")
+        toast.success("Agent rejected successfully.");
+        navigate("/Admin_home/agentmanagement");
       }
     } catch (error) {
-      setFormError(error.response?.data?.detail || "Failed to reject agent.")
+      console.error("Error details:", error.response);
+      const errorMessage = error.response?.data?.detail || "Failed to reject agent.";
+      if (typeof errorMessage === "object") {
+        setFormError(JSON.stringify(errorMessage));
+      } else {
+        setFormError(errorMessage);
+      }
     }
-  }
+  };
 
-  // Function to handle agent approval
   const handleApproved = async () => {
     try {
-      const response = await axios.put(
-        `${baseURL}/admin_auth/agent_approved/${agentId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      const response = await axiosInstance.put(
+        `agent_approved/${agentId}`
+      );
 
       if (response.status === 200) {
-        toast.success("Agent approved successfully.")
-        navigate("/Admin_home/agentmanagement")
+        toast.success("Agent approved successfully.");
+        navigate("/Admin_home/agentmanagement");
       }
     } catch (error) {
-      toast.error("Failed to approve agent. Please try again later.")
+      toast.error("Failed to approve agent. Please try again later.");
     }
-  }
+  };
 
-  // Fetch agent details
   useEffect(() => {
-    if (!agentId) return
+    if (!agentId) return;
 
     const fetchData = async () => {
       try {
-        const res = await axios.get(
-          `${baseURL}/admin_auth/agent_approval_and_rejection/${agentId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
+        const res = await axiosInstance.get(
+          `agent_approval_and_rejection/${agentId}`
+        );
 
         if (res.status === 200) {
-          const agentData = res.data.agents || res.data
-          setAgent(agentData)
-          setGender(agentData.gender || "male")
+          const agentData = res.data.agents || res.data;
+          setAgent(agentData);
+          setGender(agentData.gender || "male");
         }
       } catch (error) {
-        toast.error("Failed to fetch agent details. Please try again later.")
+        toast.error("Failed to fetch agent details. Please try again later.");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchData()
-  }, [agentId, token])
+    fetchData();
+  }, [agentId]);
 
-  if (loading) return <div className="text-center py-10">Loading...</div>
+  if (loading) return <div className="text-center py-10">Loading...</div>;
   if (!agent)
     return (
       <div className="text-center py-10 text-red-500">Agent not found.</div>
-    )
+    );
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6 space-y-8">
@@ -105,7 +97,7 @@ function Agent_approval_rejection_page() {
       {formError && (
         <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4 text-sm flex items-center">
           <FiAlertCircle className="mr-2" />
-          {formError}
+          {typeof formError === "string" ? formError : JSON.stringify(formError)}
         </div>
       )}
 
@@ -226,10 +218,8 @@ function Agent_approval_rejection_page() {
           Reject
         </button>
       </div>
-
     </div>
-  )
+  );
 }
 
-export default Agent_approval_rejection_page
-
+export default Agent_approval_rejection_page;

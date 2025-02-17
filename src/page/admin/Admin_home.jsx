@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet,Navigate } from "react-router-dom";
 import Admin_header from "../../components/admin_compnents/Admin_header";
 import AdminSidebar from "../../components/admin_compnents/Admin_sidebar";
 import { useSelector } from 'react-redux';
@@ -21,6 +21,7 @@ function Admin_home() {
         <AdminSidebar />
         <div className="w-5/6 p-6">
           <Outlet />
+          {/* <Navigate to="/Admin_home/users" replace /> */}
         </div>
       </div>
     </div>

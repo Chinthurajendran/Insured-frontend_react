@@ -1,10 +1,9 @@
-import axios from "axios"
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { baseURL } from "../../baseUrls/Urls"
 import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
+import axiosInstance from "../../Interceptors/admin"
 
 const Admin_policy_create = () => {
   const [formData, setFormData] = useState({
@@ -30,25 +29,24 @@ const Admin_policy_create = () => {
   const token = localStorage.getItem("admin_access_token")
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }))
-  }
+      [name]: type === "checkbox" ? checked : name === "policy_name"
+        ? value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+        : value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     console.log("Form Submitted", formData)
 
     try {
-      const response = await axios.post(
-        `${baseURL}/admin_auth/policy_create`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      const response = await axiosInstance.post(
+        `admin_auth/policy_create`,
+        formData)
 
       if (response.status === 201) {
         navigate("/Admin_home/policy", {
@@ -132,9 +130,7 @@ const Admin_policy_create = () => {
             required
           >
             <option value="">Select policy type</option>
-            <option value="Term Insurance">Term Insurance</option>
-            <option value="Whole Life">Whole Life</option>
-            <option value="Endowment">Endowment</option>
+            <option value="Term Insurance">Life Insurance</option>
           </select>
         </div>
 
