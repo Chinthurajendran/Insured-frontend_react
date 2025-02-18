@@ -35,6 +35,7 @@ function Agent_header() {
         localStorage.removeItem("agent_username")
         localStorage.removeItem("agent_access_token")
         localStorage.removeItem("agent_refresh_token")
+        localStorage.removeItem("agent_role")
         dispatch(agent_logout())
         navigate("/Agent_login_page")
         toast.success("Logout successful. See you next time!")

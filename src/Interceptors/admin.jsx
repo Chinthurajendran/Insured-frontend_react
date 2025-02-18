@@ -30,6 +30,7 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
+        console.log('rrrr',originalRequest)
         if (!error.response) {
             console.error("Network Error or No Response from Server!");
             toast.error("Network Error! Please check your internet connection.");

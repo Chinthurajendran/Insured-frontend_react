@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../store/slices/userAuthentication";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
+import axiosInstance from "../../Interceptors/user";
+
 
 function Sidebar() {
   const [selected, setSelected] = useState("Profile");
@@ -19,12 +21,40 @@ function Sidebar() {
   const navigate = useNavigate();
 
   // Handle Logout
-  const handleLogoutSubmit = () => {
-    localStorage.clear();
-    dispatch(logout());
-    navigate("/");
-    toast.success("Logout successful. See you next time!",);
-  };
+  // const handleLogoutSubmit = () => {
+  //   localStorage.clear();
+  //   dispatch(logout());
+  //   navigate("/");
+  //   toast.success("Logout successful. See you next time!",);
+  // };
+
+
+  const handleLogoutSubmit = async () => {
+    const user_id = localStorage.getItem("user_id")
+
+    if (!user_id) {
+      toast.error("No user ID found. Please log in again.")
+      return
+    }
+
+    try {
+      const res = await axiosInstance.put(`user_logout/${user_id}`)
+
+      if (res.status === 200) {
+        localStorage.removeItem("user_id")
+        localStorage.removeItem("user_name")
+        localStorage.removeItem("user_access_token")
+        localStorage.removeItem("user_refresh_token")
+        localStorage.removeItem("user_role")
+        dispatch(logout())
+        navigate("/")
+        toast.success("Logout successful. See you next time!")
+      }
+    } catch (error) {
+      console.error("Logout failed:", error)
+      toast.error("Logout failed. Please try again.")
+    }
+  }
 
   return (
     <div className="w-64 h-70 bg-[#0e4a31] p-4 pt-6 pl-6  ml-2 rounded-3xl shadow-lg">

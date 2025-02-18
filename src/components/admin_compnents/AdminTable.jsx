@@ -12,6 +12,20 @@ const AdminTable = ({
   onAdminToggle,
   buttonlink,
 }) => {
+  console.log(users)
+  const blockButton = (user) => {
+    if (user.role === "agent") {
+      return user.agentuid
+    } else if (user.role === "user") {
+      // Fixed `eife` to `else if`
+      return user.user_id
+    } else if (user.role === "admin") {
+      // Fixed `eife` to `else if`
+      return user.policy_uid
+    }
+    return null // Default return if role doesn't match
+  }
+
   return (
     <div className="container mx-auto p-6 max-w-screen-2xl">
       <div className="relative flex items-center justify-center mb-6">
@@ -66,7 +80,7 @@ const AdminTable = ({
                       />
                     ) : col.key === "block_status" ? (
                       <button
-                        onClick={() => onBlockToggle(user.user_id)}
+                        onClick={() => onBlockToggle(blockButton(user))}
                         className={`px-4 py-1 rounded text-white ${
                           user[col.key] ? "bg-red-500" : "bg-green-500"
                         }`}

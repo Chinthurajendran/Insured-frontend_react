@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AdminTable from "../../components/admin_compnents/AdminTable";
 import axiosInstance from "../../Interceptors/admin";
+import { toast } from "react-toastify"
 
 const userColumns = [
   { key: "image", label: "Image" },
@@ -12,6 +13,7 @@ const userColumns = [
   { key: "date_of_birth", label: "Date of Birth" },
   { key: "city", label: "City" },
   { key: "status", label: "Login Status" },
+  { key: "block_status", label: "Block Status" },
 ];
 
 const Agent_list = () => {
@@ -36,27 +38,33 @@ const Agent_list = () => {
     fetchUsers();
   }, [token]);
 
-  const handleBlockToggle = (userId) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === userId ? { ...user, block_status: !user.block_status } : user
-      )
-    );
+  const handleBlockToggle = async (userId) => {
+
+    try {
+      const response = await axiosInstance.put(`agent_block/${userId}`);
+      if (response.status === 200) {
+        setUsers((prevUsers) => {
+          const updatedUsers = prevUsers.map((user) =>
+            user.agentuid === userId
+              ? { ...user, block_status: !user.block_status }
+              : user
+          );
+          return updatedUsers;
+        });
+        toast.success("User block status updated successfully.");
+      }
+    } catch (error) {
+      toast.error("Failed to update block status.");
+    }
   };
 
-  const handleAdminToggle = (userId) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === userId ? { ...user, is_admin: !user.is_admin } : user
-      )
-    );
-  };
+
 
   const handleDeleteUser = (userId) => {
     setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
   };
 
-  console.log(users)
+  console.log("weee",users)
   return loading ? (
     <p>Loading users...</p>
   ) : (
@@ -65,7 +73,6 @@ const Agent_list = () => {
       columns={userColumns}
       title="Agent list"
       onBlockToggle={handleBlockToggle}
-      onAdminToggle={handleAdminToggle}
       onDelete={handleDeleteUser}
       buttonlink="/Policy_create_page"
     />

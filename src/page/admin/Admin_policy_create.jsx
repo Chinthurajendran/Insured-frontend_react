@@ -26,7 +26,6 @@ const Admin_policy_create = () => {
 
   const [formError, setFormError] = useState('')
   const navigate = useNavigate()
-  const token = localStorage.getItem("admin_access_token")
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -45,7 +44,7 @@ const Admin_policy_create = () => {
 
     try {
       const response = await axiosInstance.post(
-        `admin_auth/policy_create`,
+        `policy_create`,
         formData)
 
       if (response.status === 201) {
@@ -62,7 +61,6 @@ const Admin_policy_create = () => {
       }
     }
   }
-
   return (
     <div className="w-full max-w-6xl mx-auto p-8 flex flex-col space-y-6">
       <h2 className="text-3xl font-semibold text-center text-gray-800">
