@@ -17,13 +17,22 @@ const AdminTable = ({
     if (user.role === "agent") {
       return user.agentuid
     } else if (user.role === "user") {
-      // Fixed `eife` to `else if`
       return user.user_id
     } else if (user.role === "admin") {
-      // Fixed `eife` to `else if`
       return user.policy_uid
     }
-    return null // Default return if role doesn't match
+    return null
+  }
+
+  const deleteButton = (user) => {
+    if (user.role === "agent") {
+      return user.agentuid
+    } else if (user.role === "user") {
+      return user.user_id
+    } else if (user.role === "admin") {
+      return user.policy_uid
+    }
+    return null
   }
 
   return (
@@ -133,7 +142,7 @@ const AdminTable = ({
                 {onDelete && (
                   <td className="p-3 text-center whitespace-nowrap">
                     <button
-                      onClick={() => onDelete(user.id)}
+                      onClick={() => onDelete(deleteButton(user))}
                       className="text-red-600"
                     >
                       <Trash2 className="h-4 w-4 mx-auto" />

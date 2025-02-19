@@ -59,12 +59,19 @@ const Agent_list = () => {
   };
 
 
-
-  const handleDeleteUser = (userId) => {
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
-  };
-
-  console.log("weee",users)
+  const handleDeleteUser = async (userId) => {
+    try {
+      const response = await axiosInstance.put(`agent_delete/${userId}`)
+      if (response.status === 200) {
+        setUsers((prevUsers) => prevUsers.filter((user) => user.agentuid !== userId));
+        toast.success("Agent deleted successfully.")
+      }
+    } catch (error) {
+      toast.error("Failed to delete the user.")
+      console.error("Error:", error)
+    }
+  }
+  
   return loading ? (
     <p>Loading users...</p>
   ) : (

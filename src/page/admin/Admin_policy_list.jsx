@@ -50,33 +50,47 @@ const Admin_policy_list = () => {
     fetchpolicy()
   }, [token])
 
-  const handleDeletePolicy = (policyId) => {
-    setPolicies((prevPolicies) =>
-      prevPolicies.filter((policy) => policy.id !== policyId)
-    )
+  // const handleDeletePolicy = (policyId) => {
+  //   setPolicies((prevPolicies) =>
+  //     prevPolicies.filter((policy) => policy.id !== policyId)
+  //   )
+  // }
+
+  const handleDeletePolicy = async (policyId) => {
+    try {
+      const response = await axiosInstance.put(`policy_delete/${policyId}`)
+      if (response.status === 200) {
+        setPolicies((prevPolicies) =>
+          prevPolicies.filter((policy) => policy.policy_uid !== policyId)
+        )
+        toast.success("User deleted successfully.")
+      }
+    } catch (error) {
+      toast.error("Failed to delete the user.")
+      console.error("Error:", error)
+    }
   }
 
-console.log(policies )
+  console.log(policies)
   const handleBlockToggle = async (userId) => {
     console.log(userId)
     try {
-      const response = await axiosInstance.put(`Policy_block/${userId}`);
+      const response = await axiosInstance.put(`Policy_block/${userId}`)
       if (response.status === 200) {
         setPolicies((prevUsers) => {
           const updatedUsers = prevUsers.map((user) =>
             user.policy_uid === userId
               ? { ...user, block_status: !user.block_status }
               : user
-          );
-          return updatedUsers;
-        });
-        toast.success("User block status updated successfully.");
+          )
+          return updatedUsers
+        })
+        toast.success("User block status updated successfully.")
       }
     } catch (error) {
-      toast.error("Failed to update block status.");
+      toast.error("Failed to update block status.")
     }
-  };
-
+  }
 
   return (
     <AdminTable
@@ -91,5 +105,3 @@ console.log(policies )
 }
 
 export default Admin_policy_list
-
-

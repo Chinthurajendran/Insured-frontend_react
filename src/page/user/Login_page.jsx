@@ -83,7 +83,7 @@ const Login_page = () => {
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
+                  setFormData({ ...formData, email: e.target.value.toLowerCase() })
                 }
                 className="w-full text-gray-700 focus:outline-none"
               />

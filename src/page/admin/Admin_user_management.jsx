@@ -4,7 +4,6 @@ import { AwardIcon } from "lucide-react"
 import { toast } from "react-toastify"
 import axiosInstance from "../../Interceptors/admin"
 
-
 const userColumns = [
   { key: "image", label: "Image" },
   { key: "username", label: "Name" },
@@ -41,9 +40,8 @@ const Admin_user_management = () => {
     }
     fetchUsers()
   }, [token])
-  
+
   const handleBlockToggle = async (userId) => {
-    console.log("User ID:", userId);
     try {
       const response = await axiosInstance.put(`user_block/${userId}`)
       if (response.status == 200) {
@@ -54,7 +52,7 @@ const Admin_user_management = () => {
               : user
           )
         )
-        toast.success("User block status updated successfully.")
+        toast.success("Policy block status updated successfully.")
       }
     } catch (error) {
       toast.error("Failed to update block status.")
@@ -62,8 +60,17 @@ const Admin_user_management = () => {
     }
   }
 
-  const handleDeleteUser = (userId) => {
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId))
+  const handleDeleteUser = async (userId) => {
+    try {
+      const response = await axiosInstance.put(`user_delete/${userId}`)
+      if (response.status === 200) {
+        setUsers((prevUsers) => prevUsers.filter((user) => user.user_id !== userId))
+        toast.success("User deleted successfully.")
+      }
+    } catch (error) {
+      toast.error("Failed to delete the user.")
+      console.error("Error:", error)
+    }
   }
 
   return loading ? (

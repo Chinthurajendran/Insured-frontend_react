@@ -9,7 +9,6 @@ import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
 import axiosInstance from "../../Interceptors/agent"
 
-
 const Agent_login_page = () => {
   const [formData, setFormData] = useState({
     agentid: "",
@@ -41,8 +40,14 @@ const Agent_login_page = () => {
           })
 
           if (res.status === 200) {
-            localStorage.setItem("agent_access_token", res.data.agent_access_token)
-            localStorage.setItem("agent_refresh_token", res.data.agent_refresh_token)
+            localStorage.setItem(
+              "agent_access_token",
+              res.data.agent_access_token
+            )
+            localStorage.setItem(
+              "agent_refresh_token",
+              res.data.agent_refresh_token
+            )
             localStorage.setItem("agent_uuid", res.data.agnet_id)
             localStorage.setItem("agent_username ", res.data.agent_name)
             localStorage.setItem("agent_role", res.data.agent_role)
@@ -123,7 +128,16 @@ const Agent_login_page = () => {
               required
             />
           </div>
-
+          <div className="w-full flex justify-center">
+            <p className="text-sm text-gray-600">
+              Don&apos;t have an account?{" "}
+              <Link to="/Agent_sign_up_page">
+                <span className="text-emerald-700 hover:text-emerald-600 font-semibold">
+                  Sign up
+                </span>
+              </Link>
+            </p>
+          </div>
           <button
             type="submit"
             className="w-full bg-[#0B4D2E] text-white py-2 rounded-md text-lg font-medium hover:bg-[#083D24] transition duration-300"
