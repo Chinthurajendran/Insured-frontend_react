@@ -12,6 +12,7 @@ import Demo_loading_page from "../page/admin/demo.jsx"
 import Agent_management from "../page/admin/Agent_management.jsx"
 import Agent_approval_rejection_page from "../page/admin/Agent_approval_rejection_page"
 import Agent_list from "../page/admin/Agent_list.jsx"
+import Admin_policy_edit from "../page/admin/Admin_policy_edit.jsx"
 
 function Adminside() {
   return (
@@ -28,6 +29,7 @@ function Adminside() {
           </Route>
           <Route path="/Agent_approval_rejection_page" element={<Agent_approval_rejection_page />} />
           <Route path="/Policy_create_page" element={<Admin_policy_create />} />
+          <Route path="/Admin_policy_edit" element={<Admin_policy_edit />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -6,27 +6,24 @@ import { logout } from "../../store/slices/userAuthentication";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
 import axiosInstance from "../../Interceptors/user";
+import { useLocation } from "react-router-dom";
 
 
 function Sidebar() {
   const [selected, setSelected] = useState("Profile");
+  const location = useLocation();
+
+  const Visible = location.state?.isVisible;
+  console.log("eeee",Visible)
 
   const menuItems = [
     { name: "Profile", icon: <User className="h-5 w-5" />, link: "/Userpage/Userprofile" },
-    { name: "Your Policies", icon: <FileText className="h-5 w-5" />, link: "/Userpage/Userprofile" },
-    { name: "Wallet", icon: <Wallet className="h-5 w-5" />, link: "/Userpage/Userprofile" },
+    { name: "Your Policies", icon: <FileText className="h-5 w-5" />, link: "/Userpage/Userpolicy" },
+    { name: "Wallet", icon: <Wallet className="h-5 w-5" />, link: "" },
   ];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // Handle Logout
-  // const handleLogoutSubmit = () => {
-  //   localStorage.clear();
-  //   dispatch(logout());
-  //   navigate("/");
-  //   toast.success("Logout successful. See you next time!",);
-  // };
 
 
   const handleLogoutSubmit = async () => {

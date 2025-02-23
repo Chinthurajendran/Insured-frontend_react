@@ -16,7 +16,7 @@ axiosInstance.interceptors.request.use(
         const token = localStorage.getItem('admin_access_token');
         console.log("Sending Authorization Header:", token); 
         if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`; // Fix syntax error
+            config.headers['Authorization'] = `Bearer ${token}`;
         }
         return config;
     },
@@ -40,7 +40,7 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true;
             try {
                 const { data } = await axios.post(
-                    `${baseURL}/admin_auth/admin_refresh_token`, // Fix template literal
+                    `${baseURL}/admin_auth/admin_refresh_token`,
                     {},
                     { withCredentials: true }
                 );
@@ -51,7 +51,7 @@ axiosInstance.interceptors.response.use(
             } catch (refreshError) {
                 console.error("Refresh Token Expired or Invalid!");
                 localStorage.removeItem("admin_access_token");
-                window.location.assign("/Admin_login_page"); // Redirect to login
+                window.location.assign("/Admin_login_page"); 
                 return Promise.reject(refreshError);
             }
         }

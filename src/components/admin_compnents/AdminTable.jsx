@@ -1,7 +1,7 @@
-import React from "react"
-import { Trash2 } from "lucide-react"
-import adminuser from "../../assets/adminuser.png"
-import { Link } from "react-router-dom"
+import React from "react";
+import { Trash2, Edit2 } from "lucide-react";
+import adminuser from "../../assets/adminuser.png";
+import { Link } from "react-router-dom";
 
 const AdminTable = ({
   users,
@@ -10,30 +10,43 @@ const AdminTable = ({
   onBlockToggle,
   onDelete,
   onAdminToggle,
+  onEdit,
   buttonlink,
 }) => {
-  console.log(users)
+  console.log(users);
+  
   const blockButton = (user) => {
     if (user.role === "agent") {
-      return user.agentuid
+      return user.agentuid;
     } else if (user.role === "user") {
-      return user.user_id
+      return user.user_id;
     } else if (user.role === "admin") {
-      return user.policy_uid
+      return user.policy_uid;
     }
-    return null
-  }
+    return null;
+  };
 
   const deleteButton = (user) => {
     if (user.role === "agent") {
-      return user.agentuid
+      return user.agentuid;
     } else if (user.role === "user") {
-      return user.user_id
+      return user.user_id;
     } else if (user.role === "admin") {
-      return user.policy_uid
+      return user.policy_uid;
     }
-    return null
-  }
+    return null;
+  };
+
+  const editeButton = (user) => {
+    if (user.role === "agent") {
+      return user.agentuid;
+    } else if (user.role === "user") {
+      return user.user_id;
+    } else if (user.role === "admin") {
+      return user.policy_uid;
+    }
+    return null;
+  };
 
   return (
     <div className="container mx-auto p-6 max-w-screen-2xl">
@@ -60,7 +73,7 @@ const AdminTable = ({
                   {col.label}
                 </th>
               ))}
-              {onDelete && (
+              {(onDelete || onEdit) && (
                 <th className="p-3 text-center whitespace-nowrap">Actions</th>
               )}
             </tr>
@@ -90,8 +103,10 @@ const AdminTable = ({
                     ) : col.key === "block_status" ? (
                       <button
                         onClick={() => onBlockToggle(blockButton(user))}
-                        className={`px-4 py-1 rounded text-white ${
-                          user[col.key] ? "bg-red-500" : "bg-green-500"
+                        className={`px-4 py-1 rounded text-white transition duration-200 ${
+                          user[col.key] 
+                            ? "bg-red-500 hover:bg-red-700" 
+                            : "bg-green-500 hover:bg-green-700"
                         }`}
                       >
                         {user[col.key] ? "Blocked" : "Unblocked"}
@@ -99,8 +114,10 @@ const AdminTable = ({
                     ) : col.key === "is_admin" ? (
                       <button
                         onClick={() => onAdminToggle(user.user_id)}
-                        className={`px-4 py-1 rounded text-white ${
-                          user[col.key] ? "bg-blue-500" : "bg-gray-500"
+                        className={`px-4 py-1 rounded text-white transition duration-200 ${
+                          user[col.key] 
+                            ? "bg-blue-500 hover:bg-blue-700" 
+                            : "bg-gray-500 hover:bg-gray-700"
                         }`}
                       >
                         {user[col.key] ? "Admin" : "User"}
@@ -125,8 +142,10 @@ const AdminTable = ({
                       })
                     ) : col.key === "status" ? (
                       <span
-                        className={`px-3 py-1 rounded text-white ${
-                          user[col.key] ? "bg-green-500" : "bg-red-500"
+                        className={`px-3 py-1 rounded text-white transition duration-200 ${
+                          user[col.key] 
+                            ? "bg-green-500 hover:bg-green-700" 
+                            : "bg-red-500 hover:bg-red-700"
                         }`}
                         aria-label={
                           user[col.key] ? "Active status" : "Inactive status"
@@ -139,14 +158,24 @@ const AdminTable = ({
                     )}
                   </td>
                 ))}
-                {onDelete && (
-                  <td className="p-3 text-center whitespace-nowrap">
-                    <button
-                      onClick={() => onDelete(deleteButton(user))}
-                      className="text-red-600"
-                    >
-                      <Trash2 className="h-4 w-4 mx-auto" />
-                    </button>
+                {(onDelete || onEdit) && (
+                  <td className="p-4.5 text-center whitespace-nowrap flex justify-center">
+                    {onEdit && (
+                      <button
+                        onClick={() => onEdit(editeButton(user))}
+                        className="text-blue-600 hover:text-blue-800 transition duration-200 mr-2"
+                      >
+                        <Edit2 className="h-4 w-4 mx-auto" />
+                      </button>
+                    )}
+                    {onDelete && (
+                      <button
+                        onClick={() => onDelete(deleteButton(user))}
+                        className="text-red-600 hover:text-red-800 transition duration-200"
+                      >
+                        <Trash2 className="h-4 w-4 mx-auto" />
+                      </button>
+                    )}
                   </td>
                 )}
               </tr>
@@ -155,7 +184,7 @@ const AdminTable = ({
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminTable
+export default AdminTable;

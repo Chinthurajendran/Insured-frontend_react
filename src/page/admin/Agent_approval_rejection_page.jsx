@@ -89,6 +89,7 @@ function Agent_approval_rejection_page() {
     return (
       <div className="text-center py-10 text-red-500">Agent not found.</div>
     );
+console.log("ID Proof URL:", agent.idproof);
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6 space-y-8">

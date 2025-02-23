@@ -16,7 +16,7 @@ axiosInstance.interceptors.request.use(
         const token = localStorage.getItem('user_access_token');
         console.log("Sending Authorization Header:", token); 
         if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`; // Fix syntax error
+            config.headers['Authorization'] = `Bearer ${token}`; 
         }
         return config;
     },
@@ -39,7 +39,7 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true;
             try {
                 const { data } = await axios.post(
-                    `${baseURL}/auth/user_refresh_token`, // Fix template literal
+                    `${baseURL}/auth/user_refresh_token`,
                     {},
                     { withCredentials: true }
                 );
@@ -50,7 +50,7 @@ axiosInstance.interceptors.response.use(
             } catch (refreshError) {
                 console.error("Refresh Token Expired or Invalid!");
                 localStorage.removeItem("user_access_token");
-                window.location.assign("/Login_page"); // Redirect to login
+                window.location.assign("/Login_page"); 
                 return Promise.reject(refreshError);
             }
         }

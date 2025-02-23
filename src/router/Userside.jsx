@@ -6,6 +6,8 @@ import Login_page from "../page/user/Login_page.jsx"
 import Sign_up from "../page/user/Sign_up.jsx"
 import Userprofile from "../page/user/Userprofile.jsx"
 import Userpage from "../page/user/userpage.jsx"
+import Userpolicy from "../page/user/Userpolicy.jsx"
+import Policypage from "../page/user/Policypage.jsx"
 
 function Userside() {
   return (
@@ -20,9 +22,10 @@ function Userside() {
           <Route path="/Login_page" element={<Login_page />} />
           <Route path="/Sign_up_pag" element={<Sign_up />} />
           <Route path="/Userpage" element={<Userpage />}>
-            <Route path="Userprofile" element={<Userprofile />} />{" "}
-            {/* Fixed nested route */}
+            <Route path="Userprofile" element={<Userprofile />} />
+            <Route path="Userpolicy" element={<Userpolicy />} />
           </Route>
+          <Route path="/Policypage" element={<Policypage />} />
         </Routes>
       </BrowserRouter>
     </div>

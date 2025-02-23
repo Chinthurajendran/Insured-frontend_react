@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import AdminTable from "../../components/admin_compnents/AdminTable"
 import axiosInstance from "../../Interceptors/admin"
 import { toast } from "react-toastify"
+import { useNavigate } from "react-router-dom"
 
 const policyColumns = [
   { key: "policy_name", label: "Policy Name" },
@@ -25,6 +26,7 @@ const Admin_policy_list = () => {
   const [policies, setPolicies] = useState([])
   const [loading, setLoading] = useState(true)
   const token = localStorage.getItem("admin_access_token")
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!token) {
@@ -50,11 +52,6 @@ const Admin_policy_list = () => {
     fetchpolicy()
   }, [token])
 
-  // const handleDeletePolicy = (policyId) => {
-  //   setPolicies((prevPolicies) =>
-  //     prevPolicies.filter((policy) => policy.id !== policyId)
-  //   )
-  // }
 
   const handleDeletePolicy = async (policyId) => {
     try {
@@ -71,9 +68,7 @@ const Admin_policy_list = () => {
     }
   }
 
-  console.log(policies)
   const handleBlockToggle = async (userId) => {
-    console.log(userId)
     try {
       const response = await axiosInstance.put(`Policy_block/${userId}`)
       if (response.status === 200) {
@@ -92,6 +87,13 @@ const Admin_policy_list = () => {
     }
   }
 
+  const handleEditPolicy = (policyId) => {
+    const policyselect = policies.find(data => data.policy_uid == policyId)
+    if(policyselect){
+      navigate("/Admin_policy_edit", { state: { policy_Id: policyId } });
+    }
+  };
+
   return (
     <AdminTable
       users={policies}
@@ -99,6 +101,7 @@ const Admin_policy_list = () => {
       title="Policy Management"
       onDelete={handleDeletePolicy}
       onBlockToggle={handleBlockToggle}
+      onEdit={handleEditPolicy}
       buttonlink="/Policy_create_page"
     />
   )
