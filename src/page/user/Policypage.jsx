@@ -72,7 +72,7 @@ function Policypage() {
                 </div>
 
                 <div className="bg-gray-200 text-red-600 px-4 py-2 rounded-md font-bold text-sm">
-                  ₹{policy.premium_amount}/month
+                  ₹{policy.monthly_payment}/month
                 </div>
               </div>
             </div>

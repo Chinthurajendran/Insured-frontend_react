@@ -3,9 +3,6 @@ import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { agent_logout } from "../../store/slices/agentAuthentication"
 import { toast } from "react-toastify"
-import axios from "axios"
-import { baseURL } from "../../baseUrls/Urls"
-import { useSelector } from "react-redux"
 import axiosInstance from "../../Interceptors/agent"
 
 function Agent_header() {
@@ -14,8 +11,14 @@ function Agent_header() {
   const agent_token = localStorage.getItem("agent_access_token")
 
   useEffect(() => {
-    if (agent_token) {
-      navigate("/Agent_home")
+    if (!agent_token) {
+      navigate("/Agent_login_page")
+      localStorage.removeItem("agent_uuid")
+      localStorage.removeItem("agent_username")
+      localStorage.removeItem("agent_access_token")
+      localStorage.removeItem("agent_refresh_token")
+      localStorage.removeItem("agent_role")
+      dispatch(agent_logout())
     }
   }, [agent_token, navigate])
 

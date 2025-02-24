@@ -13,9 +13,6 @@ function Sidebar() {
   const [selected, setSelected] = useState("Profile");
   const location = useLocation();
 
-  const Visible = location.state?.isVisible;
-  console.log("eeee",Visible)
-
   const menuItems = [
     { name: "Profile", icon: <User className="h-5 w-5" />, link: "/Userpage/Userprofile" },
     { name: "Your Policies", icon: <FileText className="h-5 w-5" />, link: "/Userpage/Userpolicy" },
