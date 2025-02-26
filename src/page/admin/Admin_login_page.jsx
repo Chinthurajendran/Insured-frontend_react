@@ -51,7 +51,7 @@ const AdminLoginPage = () => {
             isAuthenticated_admin: true,
           })
         )
-        navigate("/Admin_home", { state: { message: "Login successful!" } })
+        navigate("/Admin_home/Demo", { state: { message: "Login successful!" } })
         toast.success("Login successful! Welcome back.")
       }
     } catch (error) {

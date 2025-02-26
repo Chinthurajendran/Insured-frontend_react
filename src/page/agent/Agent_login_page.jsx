@@ -54,16 +54,16 @@ const Agent_login_page = () => {
             const decodedToken = jwtDecode(res.data.agent_access_token)
             dispatch(
               agent_login({
-                agent_uuid: decodedToken.user.user_id,
-                agent_username: decodedToken.user.user_name,
-                agent_email: decodedToken.agent_email,
-                agnet_userid: decodedToken.agnet_userid,
-                agent_role: decodedToken.agent_role,
+                agent_uuid: decodedToken.user.agnet_id,
+                agent_username:decodedToken.user.agent_name,
+                agent_email: decodedToken.user.agent_email,
+                agnet_userid: decodedToken.user.agent_userid,
+                agent_role: decodedToken.user.agent_role,
                 isAuthenticated_agent: true,
               })
             )
 
-            navigate("/Agent_home", { state: { message: "Login successful!" } })
+            navigate("/Agent_home/AgentProfle", { state: { message: "Login successful!" } })
             toast.success("Login successful! Welcome back.")
           }
         } catch (error) {

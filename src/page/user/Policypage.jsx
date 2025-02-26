@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css"
 import { toast } from "react-toastify"
 import axiosInstance from "../../Interceptors/user"
 
+
 function Policypage() {
   const userId = useSelector((state) => state.userAuth.userid)
   const [policyData, setPolicyData] = useState([])
@@ -26,7 +27,7 @@ function Policypage() {
     fetchData()
   }, [userId])
 
-  console.log(policyData)
+  console.log("tt",policyData)
 
   return (
     <div className="max-w-6xl mx-auto p-2">

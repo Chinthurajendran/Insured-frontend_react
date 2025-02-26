@@ -47,7 +47,7 @@ const UserHeader = () => {
                   <BellIcon className="w-6 h-6" />
                 </button>
 
-                <Link to={"/Userpage"}>
+                <Link to={"/Userpage/Userprofile"}>
                   <button className="text-white hover:text-gray-300">
                     <UserIcon className="w-6 h-6" />
                   </button>

@@ -6,6 +6,8 @@ import Agent_sign_up_page from '../page/agent/Agent_sign_up_page.jsx';
 import AgentHome from '../page/agent/AgentHome.jsx';
 import Demo from '../page/admin/demo.jsx';
 import AgentProfle from '../page/agent/AgentProfle.jsx';
+import AgentDocumentUpload from '../page/agent/AgentDocumentUpload.jsx';
+import AgentPolicyList from '../page/agent/AgentPolicyList.jsx';
 
 function Agentside() {
   return (
@@ -17,6 +19,8 @@ function Agentside() {
         <Route path="/Agent_home" element={<AgentHome />}>
             <Route path="demo" element={<Demo />} />
             <Route path="AgentProfle" element={<AgentProfle />} />
+            <Route path="AgentDocumentUpload" element={<AgentDocumentUpload />} />
+            <Route path="AgentPolicyList" element={<AgentPolicyList />} />
         </Route>
 
 
