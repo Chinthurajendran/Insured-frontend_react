@@ -5,6 +5,7 @@ import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 
 const policyColumns = [
+  { key: "policy_id", label: "Policy ID" },
   { key: "policy_name", label: "Policy Name" },
   { key: "policy_type", label: "Policy Type" },
   { key: "premium_amount", label: "Policy Amount" },
@@ -52,7 +53,7 @@ const Admin_policy_list = () => {
     fetchpolicy()
   }, [token])
 
-
+console.log(policies)
   const handleDeletePolicy = async (policyId) => {
     try {
       const response = await axiosInstance.put(`policy_delete/${policyId}`)

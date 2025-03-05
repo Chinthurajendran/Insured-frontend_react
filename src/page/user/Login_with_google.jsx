@@ -20,7 +20,7 @@ const Login_with_google = () => {
     try {
       const { credential } = credentialResponse
       const res = await axios.post(`${baseURL}/auth/google-login`, {
-        token: credential, // Ensure that the token is being sent in the request body
+        token: credential,
       })
 
       if (res.status === 200) {

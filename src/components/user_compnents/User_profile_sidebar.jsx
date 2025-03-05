@@ -70,7 +70,6 @@ function Sidebar() {
           </Link>
         ))}
 
-        {/* Logout Button */}
         <button
           onClick={handleLogoutSubmit}
           className="flex items-center gap-3 text-white font-bold p-3 rounded-xl transition-all duration-300 hover:bg-red-600 mt-4 w-full"

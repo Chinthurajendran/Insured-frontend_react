@@ -26,7 +26,6 @@ function AgentProfle() {
 
   const agentId = useSelector((state) => state.agentAuth.agent_uuid)
 
-  // Function to fetch agent profile data
   const fetchAgentProfile = async () => {
     if (!agentId) return
     
@@ -38,7 +37,6 @@ function AgentProfle() {
         setUser(agentdata)
         setGender(agentdata.gender || "none")
         
-        // Update form data when user data is fetched
         setFormData({
           gender: agentdata.gender || "",
           username: agentdata.username || "",
@@ -49,7 +47,6 @@ function AgentProfle() {
           image: null,
         })
         
-        // Clear any image preview if we're just loading the profile
         if (isVisible) {
           setImagePreview(null)
         }
@@ -84,10 +81,10 @@ function AgentProfle() {
 
   const updateProfile = async () => {
     try {
-      // Create a new FormData object to properly handle the file upload
+
       const formDataToSend = new FormData()
       
-      // Add all form fields to the FormData
+
       Object.keys(formData).forEach(key => {
         if (formData[key] !== null && formData[key] !== undefined) {
           formDataToSend.append(key, formData[key])
@@ -106,7 +103,6 @@ function AgentProfle() {
         toast.success("Updated successfully!")
         setIsVisible(true)
         
-        // Fetch the updated profile data immediately after successful update
         await fetchAgentProfile()
       }
     } catch (error) {
@@ -115,11 +111,11 @@ function AgentProfle() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="h-screen w-full">
       <div className="flex flex-col md:flex-row min-h-screen -mt-4">
         <div className="flex-1 p-8 mt-16 relative">
           {isVisible ? (
-            <div className="max-w-2xl mx-auto bg-white rounded-lg shadow p-6 relative">
+            <div className="max-w-2xl mx-auto bg-gray-100 rounded-lg shadow p-6 relative">
               <button
                 className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
                 onClick={() => setIsVisible(false)}
@@ -128,7 +124,6 @@ function AgentProfle() {
               </button>
 
               <div className="flex items-center space-x-6 mb-6">
-                {/* User Profile Image */}
                 <img
                   src={user?.image || gallery}
                   alt="User Profile"
@@ -139,7 +134,7 @@ function AgentProfle() {
                   <h2 className="text-xl font-semibold">Personal Details</h2>
 
                   <form className="space-y-6">
-                    {/* Gender Selection */}
+
                     <div className="flex space-x-4">
                       <label className="flex items-center space-x-2 cursor-pointer">
                         <input
@@ -181,7 +176,6 @@ function AgentProfle() {
                       </label>
                     </div>
 
-                    {/* User Details */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <label>
                         <input
@@ -366,7 +360,6 @@ function AgentProfle() {
                           />
                         </label>
                       </div>
-
                       <button
                         type="button"
                         onClick={updateProfile}

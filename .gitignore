@@ -1,0 +1,7 @@
+# Node.js (Frontend)
+node_modules/
+
+# Environment variables
+.env
+
+

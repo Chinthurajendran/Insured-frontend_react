@@ -21,7 +21,6 @@ function Admin_home() {
         <AdminSidebar />
         <div className="w-5/6 p-6">
           <Outlet />
-          {/* <Navigate to="/Admin_home/users" replace /> */}
         </div>
       </div>
     </div>

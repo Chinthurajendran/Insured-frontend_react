@@ -81,7 +81,6 @@ const Agent_list = () => {
       title="Agent list"
       onBlockToggle={handleBlockToggle}
       onDelete={handleDeleteUser}
-      buttonlink="/Policy_create_page"
     />
   );
 };

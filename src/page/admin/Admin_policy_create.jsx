@@ -7,7 +7,6 @@ import axiosInstance from "../../Interceptors/admin"
 
 const Admin_policy_create = () => {
   const [formData, setFormData] = useState({
-    policy_id: "",
     policy_name: "",
     policy_type: "",
     coverage: "",
@@ -77,7 +76,6 @@ const Admin_policy_create = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-3 gap-6">
           {[
-            { label: "Policy ID", name: "policy_id", type: "text" },
             { label: "Policy Name", name: "policy_name", type: "text" },
             { label: "Coverage Age", name: "coverage", type: "text" },
           ].map(({ label, name, type }) => (

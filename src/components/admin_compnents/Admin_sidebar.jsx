@@ -9,6 +9,11 @@ import {
   Phone,
   ChevronDown,
   ChevronRight,
+  ClipboardList,
+  CheckCircle,
+  Info,
+  List,
+  Headphones,
 } from "lucide-react";
 
 function Admin_sidebar() {
@@ -53,10 +58,18 @@ function Admin_sidebar() {
               <ul className="ml-6 mt-2 space-y-2 border-l-2 border-[#083D24] pl-3">
                 <li>
                   <Link
-                    to="Demo"
+                    to="PolicyList"
                     className="flex items-center px-4 py-2 rounded-lg hover:bg-[#083D24]"
                   >
-                    <ShieldCheck className="h-5 w-5 mr-3" /> Policy Approvals
+                    <ClipboardList className="h-5 w-5 mr-3" /> Policy List
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="PolicyApprovel"
+                    className="flex items-center px-4 py-2 rounded-lg hover:bg-[#083D24]"
+                  >
+                    <CheckCircle className="h-5 w-5 mr-3" /> Policy Approvals
                   </Link>
                 </li>
                 <li>
@@ -75,7 +88,7 @@ function Admin_sidebar() {
               to="Demo"
               className="flex items-center px-4 py-3 rounded-lg hover:bg-[#083D24]"
             >
-              <FileText className="h-5 w-5 mr-3" /> Policy Details
+              <Info className="h-5 w-5 mr-3" /> Policy Details
             </Link>
           </li>
           <li>
@@ -107,7 +120,7 @@ function Admin_sidebar() {
                     to="Agent_list"
                     className="flex items-center px-4 py-2 rounded-lg hover:bg-[#083D24]"
                   >
-                    <Briefcase className="h-5 w-5 mr-3" /> Agent Listings
+                    <List className="h-5 w-5 mr-3" /> Agent Listings
                   </Link>
                 </li>
               </ul>
@@ -118,7 +131,7 @@ function Admin_sidebar() {
               to="Demo"
               className="flex items-center px-4 py-3 rounded-lg hover:bg-[#083D24]"
             >
-              <Phone className="h-5 w-5 mr-3" /> Customer Care
+              <Headphones className="h-5 w-5 mr-3" /> Customer Care
             </Link>
           </li>
         </ul>
@@ -128,4 +141,3 @@ function Admin_sidebar() {
 }
 
 export default Admin_sidebar;
-

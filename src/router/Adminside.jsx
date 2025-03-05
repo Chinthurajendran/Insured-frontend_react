@@ -13,6 +13,9 @@ import Agent_management from "../page/admin/Agent_management.jsx"
 import Agent_approval_rejection_page from "../page/admin/Agent_approval_rejection_page"
 import Agent_list from "../page/admin/Agent_list.jsx"
 import Admin_policy_edit from "../page/admin/Admin_policy_edit.jsx"
+import PolicyApprovalRejection from "../page/admin/PolicyApprovalRejection.jsx"
+import PolicyApprovalRejection_page from "../page/admin/PolicyApprovalRejection_page.jsx"
+import PolicyList from "../page/admin/PolicyList.jsx"
 
 function Adminside() {
   return (
@@ -25,8 +28,11 @@ function Adminside() {
             <Route path="policy" element={<Admin_policy_list />} />
             <Route path="agentmanagement" element={<Agent_management />} />
             <Route path="Agent_list" element={<Agent_list />} />
+            <Route path="PolicyApprovel" element={<PolicyApprovalRejection />} />
+            <Route path="PolicyList" element={<PolicyList />} />
             <Route path="Demo" element={<Demo_loading_page />} />
           </Route>
+          <Route path="PolicyApprovalRejection_page" element={<PolicyApprovalRejection_page />} />
           <Route path="/Agent_approval_rejection_page" element={<Agent_approval_rejection_page />} />
           <Route path="/Policy_create_page" element={<Admin_policy_create />} />
           <Route path="/Admin_policy_edit" element={<Admin_policy_edit />} />

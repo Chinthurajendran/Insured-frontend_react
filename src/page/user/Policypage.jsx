@@ -66,7 +66,7 @@ function Policypage() {
                 </div>
               </div>
 
-              {/* Bottom Bar */}
+
               <div className="bg-[#1F4D30] px-6 py-2 flex justify-between items-center pb-2.5">
                 <div className="text-white font-medium text-lg pl-55">
                   Plan Details

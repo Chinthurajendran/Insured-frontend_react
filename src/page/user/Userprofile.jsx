@@ -34,7 +34,7 @@ function Userprofile() {
     }
   }, [user_token, navigate])
 
-  // Function to fetch user profile data
+
   const fetchUserProfile = async () => {
     if (!userId) return
     
@@ -46,7 +46,6 @@ function Userprofile() {
         setUser(userdata)
         setGender(userdata.gender || "male")
         
-        // Update form data when user data is fetched
         setFormData({
           gender: userdata.gender || "",
           username: userdata.username || "",
@@ -59,7 +58,6 @@ function Userprofile() {
           image: null,
         })
         
-        // Clear image preview if we're just loading the profile
         if (isVisible) {
           setImagePreview(null)
         }
@@ -88,10 +86,8 @@ function Userprofile() {
 
   const updateProfile = async () => {
     try {
-      // Create a new FormData object to properly handle the file upload
       const formDataToSend = new FormData()
       
-      // Add all form fields to the FormData
       Object.keys(formData).forEach(key => {
         if (formData[key] !== null && formData[key] !== undefined) {
           formDataToSend.append(key, formData[key])
@@ -110,7 +106,6 @@ function Userprofile() {
         toast.success("Updated successfully!")
         setIsVisible(true)
         
-        // Fetch the updated profile data immediately after successful update
         await fetchUserProfile()
       }
     } catch (error) {
@@ -132,7 +127,7 @@ function Userprofile() {
               </button>
 
               <div className="flex items-center space-x-6 mb-6">
-                {/* User Profile Image */}
+
                 <img
                   src={user?.image || gallery}
                   alt="User Profile"
@@ -143,7 +138,7 @@ function Userprofile() {
                   <h2 className="text-xl font-semibold">Personal Details</h2>
 
                   <form className="space-y-6">
-                    {/* Gender Selection */}
+
                     <div className="flex space-x-4">
                       <label className="flex items-center space-x-2 cursor-pointer">
                         <input
@@ -185,7 +180,6 @@ function Userprofile() {
                       </label>
                     </div>
 
-                    {/* User Details */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <label>
                         <input

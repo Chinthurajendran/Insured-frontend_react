@@ -194,7 +194,6 @@ console.log("ID Proof URL:", agent.idproof);
         </div>
       </div>
 
-      {/* Rejection Reason Input */}
       <div className="space-y-2">
         <label className="block font-semibold">Reason</label>
         <textarea

@@ -37,7 +37,7 @@ function AgentSidebar() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="demo" className="flex items-center px-4 py-2 rounded-lg hover:bg-[#083D24]">
+                  <Link to="PolicyStatus" className="flex items-center px-4 py-2 rounded-lg hover:bg-[#083D24]">
                     <CheckCircle className="h-5 w-5 mr-3" /> Approval & Rejection
                   </Link>
                 </li>
@@ -45,7 +45,7 @@ function AgentSidebar() {
             )}
           </li>
           <li>
-            <Link to="demo" className="flex items-center px-4 py-3 rounded-lg hover:bg-[#083D24]">
+            <Link to="CustomerSearch" className="flex items-center px-4 py-3 rounded-lg hover:bg-[#083D24]">
               <Database className="h-5 w-5 mr-3" /> Customer Database
             </Link>
           </li>

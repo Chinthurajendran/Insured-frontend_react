@@ -8,6 +8,9 @@ import Demo from '../page/admin/demo.jsx';
 import AgentProfle from '../page/agent/AgentProfle.jsx';
 import AgentDocumentUpload from '../page/agent/AgentDocumentUpload.jsx';
 import AgentPolicyList from '../page/agent/AgentPolicyList.jsx';
+import PolicyStatus from '../page/agent/PolicyStatus.jsx';
+import PolicyResubmit from '../page/agent/PolicyResubmit.jsx';
+import CustomerSearch from '../page/agent/CustomerSearch.jsx';
 
 function Agentside() {
   return (
@@ -21,9 +24,10 @@ function Agentside() {
             <Route path="AgentProfle" element={<AgentProfle />} />
             <Route path="AgentDocumentUpload" element={<AgentDocumentUpload />} />
             <Route path="AgentPolicyList" element={<AgentPolicyList />} />
+            <Route path="PolicyStatus" element={<PolicyStatus />} />
+            <Route path="CustomerSearch" element={<CustomerSearch />} />
         </Route>
-
-
+        <Route path="/PolicyResubmit" element={<PolicyResubmit />} />
       </Routes>
     </BrowserRouter>
   );

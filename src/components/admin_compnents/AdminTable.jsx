@@ -13,39 +13,21 @@ const AdminTable = ({
   onEdit,
   buttonlink,
 }) => {
-  console.log(users);
-  
-  const blockButton = (user) => {
-    if (user.role === "agent") {
-      return user.agentuid;
-    } else if (user.role === "user") {
-      return user.user_id;
-    } else if (user.role === "admin") {
-      return user.policy_uid;
-    }
-    return null;
-  };
+  const blockButton = (user) => user.agentuid || user.user_id || user.policy_uid || null;
+  const deleteButton = (user) => user.agentuid || user.user_id || user.policy_uid || null;
+  const editButton = (user) => user.agentuid || user.user_id || user.policy_uid || null;
 
-  const deleteButton = (user) => {
-    if (user.role === "agent") {
-      return user.agentuid;
-    } else if (user.role === "user") {
-      return user.user_id;
-    } else if (user.role === "admin") {
-      return user.policy_uid;
+  const getStatusStyles = (status) => {
+    switch (status) {
+      case "approved":
+        return "bg-green-500 text-white";
+      case "processing":
+        return "bg-yellow-500 text-white";
+      case "rejected":
+        return "bg-red-500 text-white";
+      default:
+        return "bg-gray-500 text-white";
     }
-    return null;
-  };
-
-  const editeButton = (user) => {
-    if (user.role === "agent") {
-      return user.agentuid;
-    } else if (user.role === "user") {
-      return user.user_id;
-    } else if (user.role === "admin") {
-      return user.policy_uid;
-    }
-    return null;
   };
 
   return (
@@ -54,44 +36,31 @@ const AdminTable = ({
         <h1 className="text-2xl font-bold text-center flex-1">{title}</h1>
         {buttonlink && (
           <Link to={buttonlink} className="absolute right-0">
-            <button
-              className="bg-gray-600 hover:bg-green-800 text-white px-4 py-2 rounded transition duration-200"
-              aria-label="Create User"
-            >
+            <button className="bg-gray-600 hover:bg-green-800 text-white px-4 py-2 rounded transition duration-200">
               Create User
             </button>
           </Link>
         )}
       </div>
+
       <div className="overflow-x-auto rounded-xl shadow-lg">
         <table className="w-full min-w-[1600px] bg-gray-200 rounded-lg border border-gray-300">
           <thead>
             <tr className="bg-green-800 text-white">
-              <th className="p-3 text-center whitespace-nowrap">ID</th>
+              <th className="p-3 text-center whitespace-nowrap">No</th>
               {columns.map((col) => (
-                <th key={col.key} className="p-3 text-center whitespace-nowrap">
-                  {col.label}
-                </th>
+                <th key={col.key} className="p-3 text-center whitespace-nowrap">{col.label}</th>
               ))}
-              {(onDelete || onEdit) && (
-                <th className="p-3 text-center whitespace-nowrap">Actions</th>
-              )}
+              {(onDelete || onEdit) && <th className="p-3 text-center whitespace-nowrap">Actions</th>}
             </tr>
           </thead>
+
           <tbody>
             {users.map((user, index) => (
-              <tr
-                key={user.id}
-                className={index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"}
-              >
-                <td className="p-3 text-center whitespace-nowrap">
-                  {index + 101}
-                </td>
+              <tr key={user.id} className={index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"}>
+                <td className="p-3 text-center whitespace-nowrap">{index + 101}</td>
                 {columns.map((col) => (
-                  <td
-                    key={col.key}
-                    className="p-3 text-center whitespace-nowrap"
-                  >
+                  <td key={col.key} className="p-3 text-center whitespace-nowrap">
                     {col.key === "image" ? (
                       <img
                         src={user[col.key] || adminuser}
@@ -104,9 +73,7 @@ const AdminTable = ({
                       <button
                         onClick={() => onBlockToggle(blockButton(user))}
                         className={`px-4 py-1 rounded text-white transition duration-200 ${
-                          user[col.key] 
-                            ? "bg-red-500 hover:bg-red-700" 
-                            : "bg-green-500 hover:bg-green-700"
+                          user[col.key] ? "bg-red-500 hover:bg-red-700" : "bg-green-500 hover:bg-green-700"
                         }`}
                       >
                         {user[col.key] ? "Blocked" : "Unblocked"}
@@ -115,9 +82,7 @@ const AdminTable = ({
                       <button
                         onClick={() => onAdminToggle(user.user_id)}
                         className={`px-4 py-1 rounded text-white transition duration-200 ${
-                          user[col.key] 
-                            ? "bg-blue-500 hover:bg-blue-700" 
-                            : "bg-gray-500 hover:bg-gray-700"
+                          user[col.key] ? "bg-blue-500 hover:bg-blue-700" : "bg-gray-500 hover:bg-gray-700"
                         }`}
                       >
                         {user[col.key] ? "Admin" : "User"}
@@ -131,27 +96,22 @@ const AdminTable = ({
                         "nominee_address_proof",
                         "live_status",
                       ].includes(col.key) ? (
-                      <span className=" text-xl">
-                        {user[col.key] ? "✅" : "❌"}
-                      </span>
+                      <span className="text-xl">{user[col.key] ? "✅" : "❌"}</span>
                     ) : col.key === "date_of_birth" ? (
                       new Date(user[col.key]).toLocaleDateString("en-GB", {
                         day: "2-digit",
                         month: "short",
                         year: "numeric",
                       })
-                    ) : col.key === "status" ? (
-                      <span
-                        className={`px-3 py-1 rounded text-white transition duration-200 ${
-                          user[col.key] 
-                            ? "bg-green-500 hover:bg-green-700" 
-                            : "bg-red-500 hover:bg-red-700"
-                        }`}
-                        aria-label={
-                          user[col.key] ? "Active status" : "Inactive status"
-                        }
-                      >
+                    ) : col.key === "policy_status" ? (
+                      <span className={`px-3 py-1 rounded text-white ${user[col.key] ? "bg-green-500" : "bg-red-500"}`}>
                         {user[col.key] ? "Active" : "Inactive"}
+                      </span>
+                    ) : col.key === "currentstatus" ? (
+                      <span className={`px-3 py-1 rounded-md text-sm ${getStatusStyles(user.policy_status)}`}>
+                        {user.policy_status
+                          ? user.policy_status.charAt(0).toUpperCase() + user.policy_status.slice(1)
+                          : "N/A"}
                       </span>
                     ) : (
                       user[col.key]
@@ -159,10 +119,10 @@ const AdminTable = ({
                   </td>
                 ))}
                 {(onDelete || onEdit) && (
-                  <td className="p-4.5 text-center whitespace-nowrap flex justify-center">
+                  <td className="p-3 text-center whitespace-nowrap flex justify-center">
                     {onEdit && (
                       <button
-                        onClick={() => onEdit(editeButton(user))}
+                        onClick={() => onEdit(editButton(user))}
                         className="text-blue-600 hover:text-blue-800 transition duration-200 mr-2"
                       >
                         <Edit2 className="h-4 w-4 mx-auto" />

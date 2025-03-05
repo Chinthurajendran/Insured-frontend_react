@@ -14,7 +14,7 @@ const userColumns = [
   { key: "annual_income", label: "Annual Income" },
   { key: "marital_status", label: "Marital Status" },
   { key: "city", label: "City" },
-  { key: "status", label: "Policy Status" },
+  { key: "policy_status", label: "Policy Status" },
   { key: "block_status", label: "Block Status" },
 ]
 
@@ -40,7 +40,7 @@ const Admin_user_management = () => {
     }
     fetchUsers()
   }, [token])
-
+console.log(users)
   const handleBlockToggle = async (userId) => {
     try {
       const response = await axiosInstance.put(`user_block/${userId}`)
