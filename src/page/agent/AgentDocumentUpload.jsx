@@ -115,7 +115,7 @@ function AgentDocumentUpload() {
     return customerData.documents && customerData.documents[documentType]
   }
 
-  // Submit Existing Customer form
+
   const handleExistingCustomerSubmit = (e) => {
     e.preventDefault()
     if (!existingCustomerData.email.trim()) {
@@ -257,24 +257,24 @@ function AgentDocumentUpload() {
       return
     }
 
-    const dob = new Date(newCustomerData.dob)
-    const today = new Date()
-    const age = today.getFullYear() - dob.getFullYear()
-    const monthDiff = today.getMonth() - dob.getMonth()
+    // const dob = new Date(newCustomerData.dob)
+    // const today = new Date()
+    // const age = today.getFullYear() - dob.getFullYear()
+    // const monthDiff = today.getMonth() - dob.getMonth()
 
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-      age--
-    }
+    // if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    //   age--
+    // }
 
-    if (age < 18) {
-      setFormError("Age must be greater than 18 years")
-      return // Stop the submission
-    }
+    // if (age < 18) {
+    //   setFormError("Age must be greater than 18 years")
+    //   return // Stop the submission
+    // }
 
-    if (newCustomerData.name == newCustomerData.nomineeName) {
-      setFormError("Name and Nominee Name cannot be the same")
-      return
-    }
+    // if (newCustomerData.name == newCustomerData.nomineeName) {
+    //   setFormError("Name and Nominee Name cannot be the same")
+    //   return
+    // }
 
     if (
       !newCustomerData.name ||
@@ -319,15 +319,15 @@ function AgentDocumentUpload() {
         "nominee_address_proof",
         newCustomerData.documents["Nominee Address Proof"]
       )
-
+      console.log("eeeeeeee",formData)
       const response = await axiosInstance.post(
         `NewCustomer/${agentId}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
+          timeout: 30000,
         }
       )
-
       if (response.status === 200) {
         toast.success("Policy Submitted for Approval")
         navigate("/Agent_home/PolicyStatus")
@@ -344,7 +344,6 @@ function AgentDocumentUpload() {
       }
     }
   }
-
   const ExistingCustomerHandler = async () => {
     try {
       const formData = new FormData()
@@ -371,6 +370,7 @@ function AgentDocumentUpload() {
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
+          timeout: 30000,
         }
       )
 
@@ -387,8 +387,6 @@ function AgentDocumentUpload() {
     }
   }
 
-  console.log("nnnnnnnnnnnnnnnnnnnnn", newCustomerData)
-  console.log("eeee", formError)
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="bg-white p-6 shadow-md">

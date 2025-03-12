@@ -4,11 +4,12 @@ import { useSelector } from "react-redux"
 import "react-toastify/dist/ReactToastify.css"
 import { toast } from "react-toastify"
 import axiosInstance from "../../Interceptors/user"
-
+import { useNavigate } from "react-router-dom"
 
 function Policypage() {
   const userId = useSelector((state) => state.userAuth.userid)
   const [policyData, setPolicyData] = useState([])
+    const navigate = useNavigate();
 
   useEffect(() => {
     if (!userId) return
@@ -27,7 +28,6 @@ function Policypage() {
     fetchData()
   }, [userId])
 
-  console.log("tt",policyData)
 
   return (
     <div className="max-w-6xl mx-auto p-2">
@@ -66,15 +66,17 @@ function Policypage() {
                 </div>
               </div>
 
-
               <div className="bg-[#1F4D30] px-6 py-2 flex justify-between items-center pb-2.5">
                 <div className="text-white font-medium text-lg pl-55">
                   Plan Details
                 </div>
 
-                <div className="bg-gray-200 text-red-600 px-4 py-2 rounded-md font-bold text-sm">
+                <button className="bg-gray-200 text-red-600 px-4 py-2 rounded-md font-bold text-sm hover:bg-gray-300 hover:text-red-700 transition duration-200" 
+                onClick={()=>{
+                  navigate("/PolicyDocumentUpload", { state: { userId,policyId: policy.policy_id } })
+                }}>
                   ₹{policy.monthly_payment}/month
-                </div>
+                </button>
               </div>
             </div>
           </div>

@@ -1,17 +1,3 @@
-// import React from 'react'
-
-// function PolicyList() {
-//   return (
-//     <div>
-      
-//     </div>
-//   )
-// }
-
-// export default PolicyList
-
-
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../Interceptors/admin";
@@ -39,15 +25,10 @@ const PolicyList = () => {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const response = await axiosInstance.get("Policy_list");
+        const response = await axiosInstance.get("PolicyDetails_list");
         if (response.status === 200) {
           const policies = response.data.policies || response.data;
-          console.log(policies)
-          // Sort policies based on approval and rejection
           const approvedPolicies = policies.filter(policy => policy.policy_status === 'approved');
-        //   const rejectedPolicies = policies.filter(policy => policy.status === 'rejected');
-  
-          // Combine sorted policies
           const sortedPolicies = [...approvedPolicies];
           
           Setpolicy(sortedPolicies);
@@ -61,8 +42,7 @@ const PolicyList = () => {
     };
     fetchPolicies();
   }, []);
-  
-console.log(policy)
+
 
   const handleSubmit = (id) => {
     const selectedPolicy = policy.find(({ policydetails_uid }) => policydetails_uid === id);

@@ -16,8 +16,7 @@ const Login_page = () => {
 
   const [formError, setFormError] = useState("")
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: ""
   })
 
   const navigate = useNavigate()
@@ -35,7 +34,6 @@ const Login_page = () => {
         localStorage.setItem("user_name", res.data.user_name)
         localStorage.setItem("user_role", res.data.user_role)
         const decodedToken = jwtDecode(res.data.user_access_token)
-        console.log(res)
         dispatch(
           login({
             userid: decodedToken.user.user_id,
@@ -123,7 +121,7 @@ const Login_page = () => {
 
         <div className="mt-4 text-center">
           <Link
-            to="/forgot-password"
+            to="/Passwordrecovery"
             className="text-sm text-blue-600 hover:text-blue-700"
           >
             Forgot my password?

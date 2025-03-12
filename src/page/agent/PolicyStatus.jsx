@@ -25,15 +25,10 @@ const PolicyStatus = () => {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const response = await axiosInstance.get("Policy_list");
+        const response = await axiosInstance.get("PolicyDetails_list");
         if (response.status === 200) {
-          const policies = response.data.policies || response.data;
-          const processingPolicies = policies.filter(policy => policy.policy_status === 'processing');
-          const rejectedPolicies = policies.filter(policy => policy.policy_status === 'rejected');
-
-          const sortedPolicies = [...processingPolicies,...rejectedPolicies];
-          
-          Setpolicy(sortedPolicies);
+          const filteredPolicies = response.data.policies.filter(policy => policy.agent_id !== "None");
+          Setpolicy(filteredPolicies);
         }
       } catch (error) {
         console.error("Error fetching policies:", error);
@@ -42,9 +37,12 @@ const PolicyStatus = () => {
         setLoading(false);
       }
     };
+  
     fetchPolicies();
   }, []);
   
+  
+
 console.log(policy)
 
   const handleSubmit = (id) => {

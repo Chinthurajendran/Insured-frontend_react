@@ -1,75 +1,271 @@
 import { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { Upload } from "lucide-react"
+import axiosInstance from "../../Interceptors/agent"
 import { toast } from "react-toastify"
-import { FiAlertCircle, FiX } from "react-icons/fi"
-import axiosInstance from "../../Interceptors/admin"
+import { useSelector } from "react-redux"
+import "react-toastify/dist/ReactToastify.css"
+import { FiAlertCircle } from "react-icons/fi"
+import { useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
-function PolicyResubmit() {
-  const [gender, setGender] = useState("male")
-  const [rejectionReason, setRejectionReason] = useState("")
+function AgentDocumentUpload() {
+  const [policyName, setPolicyName] = useState([])
+  const [FiledName, setFiledName] = useState([])
+  const [SelectIndex, setSelectIdex] = useState()
   const [formError, setFormError] = useState("")
+  const [gender, setGender] = useState("male")
+  const [policy, setPolicy] = useState(null)
+  const [loading, setLoading] = useState(false);
   const location = useLocation()
   const PolicyId = location.state?.policydetails_uid
-  const [agent, setAgent] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const navigate = useNavigate()
-  const [popupImage, setPopupImage] = useState(null)
 
-  const handleReject = async () => {
+  const navigate = useNavigate()
+
+  const [newCustomerData, setNewCustomerData] = useState({
+    gender: "",
+    name: "",
+    phone: "",
+    email: "",
+    dob: "",
+    income: "",
+    maritalStatus: "",
+    city: "",
+    insurancePlan: "",
+    insuranceType: "",
+    nomineeName: "",
+    nomineeRelation: "",
+    documents: {},
+  })
+
+  const newCustomerpolicyuploads = (e) => {
+    const { name, value } = e.target
+    const selectedIndex = policyName.findIndex((policy) => policy === value)
+    setSelectIdex(selectedIndex)
+    setNewCustomerData({
+      ...newCustomerData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const handleNewCustomerChange = (e) => {
+    setNewCustomerData({ ...newCustomerData, [e.target.name]: e.target.value })
+  }
+
+  const handleNewCustomerFileUpload = (e, documentType) => {
+    const file = e.target.files[0]
+    if (file) {
+      setNewCustomerData((prevData) => ({
+        ...prevData,
+        documents: { ...prevData.documents, [documentType]: file },
+      }))
+    }
+  }
+
+  const isDocumentUploaded = (customerData, documentType) => {
+    return customerData.documents && customerData.documents[documentType]
+  }
+
+  const handleNewCustomerSubmit = (e) => {
+    e.preventDefault()
+    const requiredFields = [
+      "gender",
+      "name",
+      "phone",
+      "email",
+      "dob",
+      "income",
+      "maritalStatus",
+      "city",
+      "insurancePlan",
+      "insuranceType",
+      "nomineeName",
+      "nomineeRelation",
+    ]
+  }
+
+  const UploadField = ({ label, onChange, customerData, required = false }) => {
+    const isUploaded = isDocumentUploaded(customerData, label)
+
+    return (
+      <div className="space-y-2">
+        <p className="text-sm text-gray-600">
+          {label}{" "}
+          {required && !isUploaded && <span className="text-red-500">*</span>}
+        </p>
+        <div
+          className={`w-full border rounded-lg flex overflow-hidden ${
+            isUploaded ? "border-green-500" : "border-gray-300"
+          }`}
+        >
+          <input
+            type="file"
+            className="flex-1 p-2 text-sm"
+            onChange={(e) => onChange(e, label)}
+          />
+          <div
+            className={`text-white px-3 py-2 flex items-center justify-center ${
+              isUploaded ? "bg-green-500" : "bg-gray-400"
+            }`}
+          >
+            <Upload className="w-4 h-4" />
+          </div>
+        </div>
+        {isUploaded && (
+          <p className="text-xs text-green-600">
+            File uploaded: {customerData.documents[label].name}
+          </p>
+        )}
+      </div>
+    )
+  }
+
+  useEffect(() => {
+    const fetchPolicy = async () => {
+      try {
+        const response = await axiosInstance.get("PolicyName")
+        if (response.status === 200) {
+          setPolicyName(response.data.policies)
+          setFiledName(response.data.additional_fields)
+        }
+      } catch (error) {
+        toast.error("Policy is not fetched")
+      }
+    }
+
+    fetchPolicy()
+  }, [])
+
+  const agentId = useSelector((state) => state.agentAuth.agent_uuid)
+
+  const NewCustomerHandler = async () => {
+    console.log("1111111")
+    if (newCustomerData.phone && newCustomerData.phone.length > 10) {
+      setFormError("Phone number cannot exceed 10 digits")
+      return
+    }
+
+    const dob = new Date(newCustomerData.dob)
+    const today = new Date()
+    let  age = today.getFullYear() - dob.getFullYear()
+    const monthDiff = today.getMonth() - dob.getMonth()
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--
+    }
+    console.log("222222222")
+    if (age < 18) {
+      setFormError("Age must be greater than 18 years")
+      return
+    }
+
+    if (newCustomerData.name == newCustomerData.nomineeName) {
+      setFormError("Name and Nominee Name cannot be the same")
+      return
+    }
+    console.log("33333333333")
+    if (
+      !newCustomerData.name ||
+      !newCustomerData.email ||
+      !newCustomerData.gender ||
+      !newCustomerData.phone ||
+      !newCustomerData.dob ||
+      !newCustomerData.income ||
+      !newCustomerData.maritalStatus ||
+      !newCustomerData.city ||
+      !newCustomerData.insurancePlan ||
+      !newCustomerData.insuranceType ||
+      !newCustomerData.nomineeName ||
+      !newCustomerData.nomineeRelation
+    ) {
+      setFormError("All fields are required")
+      return
+    }
+
     try {
-      const formData = new URLSearchParams()
-      formData.append("reason", rejectionReason)
-      console.log("Rejection Reason:", rejectionReason)
+      const formData = new FormData()
+      formData.append("name", newCustomerData.name)
+      formData.append("email", newCustomerData.email)
+      formData.append("gender", newCustomerData.gender)
+      formData.append("phone", newCustomerData.phone)
+      formData.append("dob", newCustomerData.dob)
+      formData.append("income", newCustomerData.income)
+      formData.append("maritalStatus", newCustomerData.maritalStatus)
+      formData.append("city", newCustomerData.city)
+
+      formData.append("insurancePlan", newCustomerData.insurancePlan)
+      formData.append("insuranceType", newCustomerData.insuranceType)
+      formData.append("nomineeName", newCustomerData.nomineeName)
+      formData.append("nomineeRelation", newCustomerData.nomineeRelation)
+
+      formData.append("id_proof", newCustomerData.documents["Id Proof"])
+      formData.append("passbook", newCustomerData.documents["Passbook"])
+      formData.append("income_proof", newCustomerData.documents["Income Proof"])
+      formData.append("photo", newCustomerData.documents["Photo"])
+      formData.append("pan_card", newCustomerData.documents["Pan Card"])
+      formData.append(
+        "nominee_address_proof",
+        newCustomerData.documents["Nominee Address Proof"]
+      )
+      console.log("44444444444",formData)
       const response = await axiosInstance.put(
-        `policy_rejected/${PolicyId}`,
+        `policyupdate/${PolicyId}`,
         formData,
         {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       )
 
       if (response.status === 200) {
-        toast.success("Agent rejected successfully.")
-        navigate("/Admin_home/PolicyApprovel")
+        toast.success("Policy Submitted for Approval")
+        navigate("/Agent_home/PolicyStatus")
       }
     } catch (error) {
-      console.error("Error details:", error.response)
-      const errorMessage =
-        error.response?.data?.detail || "Failed to reject agent."
-      if (typeof errorMessage === "object") {
-        setFormError(JSON.stringify(errorMessage))
+      if (error.response) {
+        if (error.response.status === 500) {
+          setFormError("Email not found")
+        } else {
+          setFormError(`Server responded with status: ${error.response.status}`)
+        }
       } else {
-        setFormError(errorMessage)
+        setFormError("No response received from server")
       }
     }
   }
 
-  const openImagePopup = (imageSrc) => {
-    setPopupImage(imageSrc)
-  }
 
-  const closeImagePopup = () => {
-    setPopupImage(null)
-  }
 
   useEffect(() => {
+
     if (!PolicyId) return
 
     const fetchData = async () => {
       try {
-        const res = await axiosInstance.get(
-          `PolicyApprovalAndRejection/${PolicyId}`
-        )
+        const res = await axiosInstance.get(`Policy_list/${PolicyId}`)
 
         if (res.status === 200) {
-          const agentData = res.data.policy || res.data
-          setAgent(agentData)
-          setGender(agentData.gender?.toLowerCase() || "male")
+          const policyData = res.data.policies || res.data
+
+          setPolicy(policyData)
+
+          setGender(policyData.gender?.toLowerCase() || "male")
+
+          setNewCustomerData((prev) => ({
+            ...prev,
+            gender: policyData.gender || "Not provided",
+            name: policyData.policy_holder || "Not provided",
+
+            phone: policyData.phone || "Not provided",
+            email: policyData.email || "Not provided",
+            dob: policyData.date_of_birth || "Not provided",
+            income: policyData.income_range || "Not provided",
+            maritalStatus: policyData.marital_status || "Not provided",
+            city: policyData.city || "Not provided",
+            nomineeName: policyData.nominee_name || "Not provided",
+            nomineeRelation: policyData.nominee_relationship || "Not provided",
+          }))
         }
       } catch (error) {
-        toast.error("Failed to fetch agent details. Please try again later.")
+        toast.error("Failed to fetch policy details. Please try again later.")
       } finally {
         setLoading(false)
       }
@@ -78,285 +274,218 @@ function PolicyResubmit() {
     fetchData()
   }, [PolicyId])
 
-  if (loading) return <div className="text-center py-10">Loading...</div>
-  if (!agent)
-    return (
-      <div className="text-center py-10 text-red-500">Agent not found.</div>
-    )
 
+  console.log("ppppppppp", newCustomerData)
+  console.log("error", formError)
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 space-y-8 relative">
-      <h1 className="text-2xl font-bold text-center">Personal Details</h1>
-
-      {formError && (
-        <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4 text-sm flex items-center">
-          <FiAlertCircle className="mr-2" />
-          {typeof formError === "string"
-            ? formError
-            : JSON.stringify(formError)}
-        </div>
-      )}
-
-      <div className="grid grid-cols-2 gap-6">
-        <div className="col-span-2 flex gap-4">
-          <button
-            className={`flex-1 px-4 py-2 rounded-md ${
-              gender === "male" ? "bg-blue-500 text-white" : "bg-gray-300"
-            }`}
-            
-          >
-            Male
-          </button>
-          <button
-            className={`flex-1 px-4 py-2 rounded-md ${
-              gender === "female" ? "bg-pink-500 text-white" : "bg-gray-300"
-            }`}
-          >
-            Female
-          </button>
-        </div>
-
-        <div className="space-y-2">
-          <label className="block font-semibold">Policy holder</label>
-          <input
-            className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            value={agent.policy_holder || ""}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="block font-semibold">Policy type</label>
-          <input
-            className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            value={agent.policy_type || ""}
-            readOnly
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="block font-semibold">Policy name</label>
-          <input
-            className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            value={agent.policy_name || ""}
-            readOnly
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="block font-semibold">Age</label>
-          <input
-            className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            value={agent.age || ""}
-            readOnly
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="block font-semibold">Income range</label>
-          <input
-            className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            value={agent.income_range || ""}
-            readOnly
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="block font-semibold">Coverage</label>
-          <input
-            className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            value={agent.coverage || ""}
-            readOnly
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="block font-semibold">Premium amount</label>
-          <input
-            className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            value={agent.premium_amount || ""}
-            readOnly
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="block font-semibold">Settlement</label>
-          <input
-            className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            value={agent.settlement || ""}
-            readOnly
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="block font-semibold">Nominee name</label>
-          <input
-            className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            value={agent.nominee_name || ""}
-            readOnly
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="block font-semibold">Nominee relationship</label>
-          <input
-            className="w-full border rounded-md px-3 py-2 bg-gray-100"
-            value={agent.nominee_relationship || ""}
-            readOnly
-          />
-        </div>
-
-        <div className="space-y-2 col-span-2">
-          <div className="flex flex-wrap gap-4">
-            <div className="space-y-2">
-              <label className="block font-semibold">Photo</label>
-              {agent.photo ? (
-                <div
-                  onClick={() => openImagePopup(agent.photo)}
-                  className="cursor-pointer"
-                >
-                  <img
-                    src={agent.photo}
-                    alt="Photo"
-                    className="w-20 h-20 object-cover rounded border-2 border-gray-300 hover:border-blue-500 transition-colors"
-                  />
-                </div>
-              ) : (
-                <span className="text-gray-500">No photo Uploaded</span>
-              )}
-            </div>
-            <div className="space-y-2">
-              <label className="block font-semibold">ID Proof</label>
-              {agent.id_proof ? (
-                <div
-                  onClick={() => openImagePopup(agent.id_proof)}
-                  className="cursor-pointer"
-                >
-                  <img
-                    src={agent.id_proof}
-                    alt="ID Proof"
-                    className="w-30 h-20 object-cover rounded border-2 border-gray-300 hover:border-blue-500 transition-colors"
-                  />
-                </div>
-              ) : (
-                <span className="text-gray-500">No ID Proof Uploaded</span>
-              )}
-            </div>
-            <div className="space-y-2">
-              <label className="block font-semibold">Income Proof</label>
-              {agent.income_proof ? (
-                <div
-                  onClick={() => openImagePopup(agent.income_proof)}
-                  className="cursor-pointer"
-                >
-                  <img
-                    src={agent.income_proof}
-                    alt="Income Proof"
-                    className="w-30 h-20 object-cover rounded border-2 border-gray-300 hover:border-blue-500 transition-colors"
-                  />
-                </div>
-              ) : (
-                <span className="text-gray-500">No Income Proof Uploaded</span>
-              )}
-            </div>
-            <div className="space-y-2">
-              <label className="block font-semibold">Pan Card</label>
-              {agent.pan_card ? (
-                <div
-                  onClick={() => openImagePopup(agent.pan_card)}
-                  className="cursor-pointer"
-                >
-                  <img
-                    src={agent.pan_card}
-                    alt="Pan Card"
-                    className="w-30 h-20 object-cover rounded border-2 border-gray-300 hover:border-blue-500 transition-colors"
-                  />
-                </div>
-              ) : (
-                <span className="text-gray-500">No Pan Card Uploaded</span>
-              )}
-            </div>
-            <div className="space-y-2">
-              <label className="block font-semibold">Passbook</label>
-              {agent.passbook ? (
-                <div
-                  onClick={() => openImagePopup(agent.passbook)}
-                  className="cursor-pointer"
-                >
-                  <img
-                    src={agent.passbook}
-                    alt="Passbook"
-                    className="w-30 h-20 object-cover rounded border-2 border-gray-300 hover:border-blue-500 transition-colors"
-                  />
-                </div>
-              ) : (
-                <span className="text-gray-500">No Passbook Uploaded</span>
-              )}
-            </div>
-            <div className="space-y-2">
-              <label className="block font-semibold">
-                Nominee Address Proof
-              </label>
-              {agent.nominee_address_proof ? (
-                <div
-                  onClick={() => openImagePopup(agent.nominee_address_proof)}
-                  className="cursor-pointer"
-                >
-                  <img
-                    src={agent.nominee_address_proof}
-                    alt="Nominee Address Proof"
-                    className="w-30 h-20 object-cover rounded border-2 border-gray-300 hover:border-blue-500 transition-colors"
-                  />
-                </div>
-              ) : (
-                <span className="text-gray-500">
-                  No Nominee Address Proof Uploaded
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
+    <div className="w-full h-screen flex flex-col">
+      <div className="bg-white p-6 shadow-md">
+        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
+          Policy Document Update
+        </h1>
       </div>
 
-      <div className="space-y-2">
-        <label className="block font-semibold">Reason</label>
-        <textarea
-          className="w-full border rounded-md px-3 py-2"
-          value={rejectionReason}
-          onChange={(e) => setRejectionReason(e.target.value)}
-          placeholder="Enter rejection reason..."
-        />
-      </div>
+      <div className="flex-1 overflow-y-auto bg-gray-50 h-[calc(100vh-100px)] p-10">
+        <div className="max-w-4xl mx-auto p-6">
+          <form onSubmit={handleNewCustomerSubmit} className="space-y-8">
+            {formError && (
+              <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4 text-sm flex items-center">
+                <FiAlertCircle className="mr-2" />
+                {formError}
+              </div>
+            )}
+            <h2 className="text-2xl font-semibold">Personal Details</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <select
+                name="gender"
+                value={newCustomerData.gender}
+                onChange={handleNewCustomerChange}
+                className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                required
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
 
-      <div className="flex justify-center gap-4 pt-4">
-        <button
-          onClick={handleReject}
-          className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-md"
-        >
-          Re-Submit
-        </button>
-      </div>
+              <input
+                name="name"
+                value={newCustomerData.name}
+                onChange={handleNewCustomerChange}
+                placeholder="Full Name"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                required
+              />
 
-      {/* Image Popup */}
-      {popupImage && (
-        <div className="fixed inset-0 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="rounded-lg p-4 max-w-3xl max-h-3xl relative">
-            <button
-              onClick={closeImagePopup}
-              className="absolute top-2 right-2 text-gray-700 hover:text-red-500 rounded-full bg-white p-1"
-            >
-              <FiX size={24} />
-            </button>
-            <img
-              src={popupImage}
-              alt="Document"
-              className="max-w-full max-h-full object-contain"
-              style={{ maxHeight: "80vh" }}
-            />
-          </div>
+              <input
+                name="phone"
+                value={newCustomerData.phone}
+                onChange={handleNewCustomerChange}
+                placeholder="Phone"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                required
+              />
+
+              <input
+                name="email"
+                value={newCustomerData.email}
+                onChange={handleNewCustomerChange}
+                placeholder="Email ID"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent md:col-span-2"
+                required
+              />
+
+              <input
+                name="dob"
+                value={newCustomerData.dob}
+                onChange={handleNewCustomerChange}
+                type="date"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                required
+              />
+
+              <select
+                name="income"
+                value={newCustomerData.income}
+                onChange={handleNewCustomerChange}
+                className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                required
+              >
+                <option value="">Select Income Range</option>
+                <option value="0 - 2,50,000">₹0 - ₹2,50,000</option>
+                <option value="2,50,001 - 5,00,000">
+                  ₹2,50,001 - ₹5,00,000
+                </option>
+                <option value="5,00,001 - 10,00,000">
+                  ₹5,00,001 - ₹10,00,000
+                </option>
+                <option value="10,00,001 - 25,00,000">
+                  ₹10,00,001 - ₹25,00,000
+                </option>
+                <option value="25,00,001 - 50,00,000">
+                  ₹25,00,001 - ₹50,00,000
+                </option>
+                <option value="50,00,001 and above">
+                  ₹50,00,001 and above
+                </option>
+              </select>
+
+              <select
+                name="maritalStatus"
+                value={newCustomerData.maritalStatus}
+                onChange={handleNewCustomerChange}
+                className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                required
+              >
+                <option value="">Select Marital Status</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+              </select>
+
+              <input
+                name="city"
+                value={newCustomerData.city}
+                onChange={handleNewCustomerChange}
+                placeholder="City"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                required
+              />
+            </div>
+
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold">Policy Details</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <select
+                  name="insurancePlan"
+                  value={newCustomerData.insurancePlan}
+                  onChange={handleNewCustomerChange}
+                  className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  required
+                >
+                  <option value="">Select Insurance Type</option>
+                  <option value="Term Insurance">Term Insurance</option>
+                </select>
+                <select
+                  name="insuranceType"
+                  value={newCustomerData.insuranceType}
+                  onChange={newCustomerpolicyuploads}
+                  className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  required
+                >
+                  <option value="">Select Insurance Plan</option>
+                  {policyName.map((policy, index) => (
+                    <option key={index} value={policy}>
+                      {policy}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold">Uploaded Documents</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {SelectIndex !== -1 &&
+                  Object.entries(FiledName[SelectIndex] || {}).map(
+                    ([key, value]) =>
+                      value ? (
+                        <UploadField
+                          key={key}
+                          label={key
+                            .replace(/_/g, " ")
+                            .replace(/\b\w/g, (c) => c.toUpperCase())}
+                          onChange={handleNewCustomerFileUpload}
+                          customerData={newCustomerData}
+                          required={true}
+                        />
+                      ) : null
+                  )}
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold">Nominee Details</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input
+                  name="nomineeName"
+                  value={newCustomerData.nomineeName}
+                  onChange={handleNewCustomerChange}
+                  placeholder="Full Name"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  required
+                />
+                <select
+                  name="nomineeRelation"
+                  value={newCustomerData.nomineeRelation}
+                  onChange={handleNewCustomerChange}
+                  className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  required
+                >
+                  <option value="">Select Relationship</option>
+                  <option value="Spouse">Spouse</option>
+                  <option value="Child">Child</option>
+                  <option value="Parent">Parent</option>
+                  <option value="Sibling">Sibling</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex justify-center py-6">
+              <button
+                type="submit"
+                className="bg-red-600 text-white px-12 py-3 text-lg rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                onClick={NewCustomerHandler}
+              >
+                Re-Submit
+              </button>
+            </div>
+          </form>
         </div>
-      )}
+      </div>
     </div>
   )
 }
 
-export default PolicyResubmit
+export default AgentDocumentUpload

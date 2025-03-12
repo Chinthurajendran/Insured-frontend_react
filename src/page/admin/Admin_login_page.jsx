@@ -37,10 +37,10 @@ const AdminLoginPage = () => {
       if (res.status === 200) {
         console.log(res)
         localStorage.setItem("admin_access_token", res.data.admin_access_token)
-        // localStorage.setItem(
-        //   "admin_refresh_token",
-        //   res.data.admin_refresh_token
-        // )
+        localStorage.setItem(
+          "admin_refresh_token",
+          res.data.admin_refresh_token
+        )
         localStorage.setItem("admin_username", res.data.admin_username)
         localStorage.setItem("admin_role", res.data.admin_role)
         const decodedToken = jwtDecode(res.data.admin_access_token)
@@ -55,6 +55,7 @@ const AdminLoginPage = () => {
         toast.success("Login successful! Welcome back.")
       }
     } catch (error) {
+      console.log(error)
       if (error.response && error.response.data) {
         setFormError(error.response.data.detail || "Login failed")
       } else {

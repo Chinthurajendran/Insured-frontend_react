@@ -8,6 +8,9 @@ import Userprofile from "../page/user/Userprofile.jsx"
 import Userpage from "../page/user/userpage.jsx"
 import Userpolicy from "../page/user/Userpolicy.jsx"
 import Policypage from "../page/user/Policypage.jsx"
+import Passwordrecovery from "../page/user/passwordrecovery.jsx"
+import Resetpassword from "../page/user/Resetpassword.jsx"
+import PolicyDocumentUpload from "../page/user/PolicyDocumentUpload.jsx"
 
 function Userside() {
   return (
@@ -26,6 +29,9 @@ function Userside() {
             <Route path="Userpolicy" element={<Userpolicy />} />
           </Route>
           <Route path="/Policypage" element={<Policypage />} />
+          <Route path="/Passwordrecovery" element={<Passwordrecovery />} />
+          <Route path="/Resetpassword" element={<Resetpassword />} />
+          <Route path="/PolicyDocumentUpload" element={<PolicyDocumentUpload />} />
         </Routes>
       </BrowserRouter>
     </div>
