@@ -21,13 +21,15 @@ function Policypage() {
           setPolicyData(res.data.matching_policies)
         }
       } catch (error) {
+        console.log("www",res)
         toast.error("Failed to fetch policy details. Please try again later.")
       }
     }
 
     fetchData()
   }, [userId])
-
+  console.log("qqqqqqqqq",policyData)
+  console.log("eeeeeeee", policyData.length);
 
   return (
     <div className="max-w-6xl mx-auto p-2">

@@ -55,7 +55,7 @@ const Agent_login_page = () => {
             dispatch(
               agent_login({
                 agent_uuid: decodedToken.user.agnet_id,
-                agent_username:decodedToken.user.agent_name,
+                agent_username: decodedToken.user.agent_name,
                 agent_email: decodedToken.user.agent_email,
                 agnet_userid: decodedToken.user.agent_userid,
                 agent_role: decodedToken.user.agent_role,
@@ -63,7 +63,9 @@ const Agent_login_page = () => {
               })
             )
 
-            navigate("/Agent_home/AgentProfle", { state: { message: "Login successful!" } })
+            navigate("/Agent_home/AgentProfle", {
+              state: { message: "Login successful!" },
+            })
             toast.success("Login successful! Welcome back.")
           }
         } catch (error) {
@@ -127,6 +129,14 @@ const Agent_login_page = () => {
               }
               required
             />
+          </div>
+          <div className="mt-4 text-center">
+            <Link
+              to="/AgentPasswordRecovery"
+              className="text-sm text-blue-600 hover:text-blue-700"
+            >
+              Forgot my password?
+            </Link>
           </div>
           <div className="w-full flex justify-center">
             <p className="text-sm text-gray-600">

@@ -85,7 +85,7 @@ function Admin_sidebar() {
           </li>
           <li>
             <Link
-              to="Demo"
+              to="PolicyInfo"
               className="flex items-center px-4 py-3 rounded-lg hover:bg-[#083D24]"
             >
               <Info className="h-5 w-5 mr-3" /> Policy Details

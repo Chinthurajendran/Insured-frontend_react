@@ -11,6 +11,8 @@ import Policypage from "../page/user/Policypage.jsx"
 import Passwordrecovery from "../page/user/passwordrecovery.jsx"
 import Resetpassword from "../page/user/Resetpassword.jsx"
 import PolicyDocumentUpload from "../page/user/PolicyDocumentUpload.jsx"
+import Browsepolicies from "../page/user/Browsepolicies.jsx"
+import Policyinformation from "../page/user/Policyinformation.jsx"
 
 function Userside() {
   return (
@@ -32,6 +34,8 @@ function Userside() {
           <Route path="/Passwordrecovery" element={<Passwordrecovery />} />
           <Route path="/Resetpassword" element={<Resetpassword />} />
           <Route path="/PolicyDocumentUpload" element={<PolicyDocumentUpload />} />
+          <Route path="/Browsepolicies" element={<Browsepolicies />} />
+          <Route path="/Policyinformation" element={<Policyinformation />} />
         </Routes>
       </BrowserRouter>
     </div>

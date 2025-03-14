@@ -11,6 +11,8 @@ import AgentPolicyList from '../page/agent/AgentPolicyList.jsx';
 import PolicyStatus from '../page/agent/PolicyStatus.jsx';
 import PolicyResubmit from '../page/agent/PolicyResubmit.jsx';
 import CustomerSearch from '../page/agent/CustomerSearch.jsx';
+import AgentPasswordRecovery from '../page/agent/AgentPasswordRecovery.jsx';
+import AgentResetpassword from '../page/agent/AgentResetpassword.jsx';
 
 function Agentside() {
   return (
@@ -28,6 +30,8 @@ function Agentside() {
             <Route path="CustomerSearch" element={<CustomerSearch />} />
         </Route>
         <Route path="/PolicyResubmit" element={<PolicyResubmit />} />
+        <Route path="/AgentPasswordRecovery" element={<AgentPasswordRecovery />} />
+        <Route path="/AgentResetpassword" element={<AgentResetpassword />} />
       </Routes>
     </BrowserRouter>
   );

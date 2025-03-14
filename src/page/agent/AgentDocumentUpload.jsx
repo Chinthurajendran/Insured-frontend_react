@@ -8,14 +8,18 @@ import { FiAlertCircle } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
 
 function AgentDocumentUpload() {
+  // States for toggling customer type and form errors
   const [isExistingCustomer, setIsExistingCustomer] = useState(false)
-  const [policyName, setPolicyName] = useState([])
-  const [FiledName, setFiledName] = useState([])
-  const [SelectIndex, setSelectIdex] = useState()
+  const [policyNames, setPolicyNames] = useState([])
+  const [fieldNames, setFieldNames] = useState([]) // additional fields from policy
+  const [selectedIndex, setSelectedIndex] = useState(-1)
   const [formError, setFormError] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const navigate = useNavigate()
+  const agentId = useSelector((state) => state.agentAuth.agent_uuid)
 
+  // State for existing customer
   const [existingCustomerData, setExistingCustomerData] = useState({
     email: "",
     insurancePlan: "",
@@ -25,6 +29,7 @@ function AgentDocumentUpload() {
     documents: {},
   })
 
+  // State for new customer
   const [newCustomerData, setNewCustomerData] = useState({
     gender: "",
     name: "",
@@ -41,56 +46,28 @@ function AgentDocumentUpload() {
     documents: {},
   })
 
+  // -------------------------------
+  // Handlers for form field changes
+  // -------------------------------
   const handleExistingCustomerChange = (e) => {
     const { name, value } = e.target
-
-    setExistingCustomerData({
-      ...existingCustomerData,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const handlepolicy = (e) => {
-    const { name, value } = e.target
-    const selectedIndex = policyName.findIndex((policy) => policy === value)
-    setSelectIdex(selectedIndex)
-    setExistingCustomerData({
-      ...existingCustomerData,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const newCustomerpolicyuploads = (e) => {
-    const { name, value } = e.target
-    const selectedIndex = policyName.findIndex((policy) => policy === value)
-    setSelectIdex(selectedIndex)
-    setNewCustomerData({
-      ...newCustomerData,
-      [e.target.name]: e.target.value,
-    })
+    setExistingCustomerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }))
   }
 
   const handleNewCustomerChange = (e) => {
-    setNewCustomerData({ ...newCustomerData, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setNewCustomerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }))
   }
 
-  // const handleNewCustomerChange = (e) => {
-  //   const { name, value } = e.target
-  //   console.log(`name=${name}`)
-
-  //   // Update state with new customer data
-  //   setNewCustomerData((prevData) => {
-  //     const updatedData = { ...prevData, [name]: value }
-  //     return updatedData
-  //   })
-
-  //   if (name === "phone" && value.length > 10) {
-  //     setError("Phone number cannot exceed 10 digits")
-  //   } else {
-  //     setError("") // Clear error if valid
-  //   }
-  // }
-
+  // -------------------------------
+  // File upload handlers
+  // -------------------------------
   const handleExistingCustomerFileUpload = (e, documentType) => {
     const file = e.target.files[0]
     if (file) {
@@ -111,95 +88,40 @@ function AgentDocumentUpload() {
     }
   }
 
-  const isDocumentUploaded = (customerData, documentType) => {
-    return customerData.documents && customerData.documents[documentType]
+  // -------------------------------
+  // Policy selection handlers
+  // -------------------------------
+  const handlePolicySelectionExisting = (e) => {
+    const { name, value } = e.target
+    const index = policyNames.findIndex((policy) => policy === value)
+    setSelectedIndex(index)
+    setExistingCustomerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }))
   }
 
-
-  const handleExistingCustomerSubmit = (e) => {
-    e.preventDefault()
-    if (!existingCustomerData.email.trim()) {
-      alert("Please enter your email.")
-      return
-    }
-
-    // Check if all required documents are uploaded
-    // const requiredDocuments = [
-    //   "ID Proof",
-    //   "Passbook copy",
-    //   "Photo",
-    //   "Pan card",
-    //   "Income Proof",
-    //   "Nominee ID Proof",
-    // ]
-    // const missingDocuments = requiredDocuments.filter(
-    //   (doc) => !isDocumentUploaded(existingCustomerData, doc)
-    // )
-
-    // if (missingDocuments.length > 0) {
-    //   alert(
-    //     `Please upload the following documents: ${missingDocuments.join(", ")}`
-    //   )
-    //   return
-    // }
-
-    console.log("Existing Customer Form submitted:", existingCustomerData)
+  const handlePolicySelectionNew = (e) => {
+    const { name, value } = e.target
+    const index = policyNames.findIndex((policy) => policy === value)
+    setSelectedIndex(index)
+    setNewCustomerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }))
   }
 
-  const handleNewCustomerSubmit = (e) => {
-    e.preventDefault()
-    const requiredFields = [
-      "gender",
-      "name",
-      "phone",
-      "email",
-      "dob",
-      "income",
-      "maritalStatus",
-      "city",
-      "insurancePlan",
-      "insuranceType",
-      "nomineeName",
-      "nomineeRelation",
-    ]
+  // -------------------------------
+  // Utility: Check if a document is uploaded
+  // -------------------------------
+  const isDocumentUploaded = (customerData, documentType) =>
+    customerData.documents && customerData.documents[documentType]
 
-    const missingFields = requiredFields.filter(
-      (field) => !newCustomerData[field]
-    )
-    if (missingFields.length > 0) {
-      alert(
-        `Please fill out the following required fields: ${missingFields.join(
-          ", "
-        )}`
-      )
-      return
-    }
-
-    // const requiredDocuments = [
-    //   "ID Proof",
-    //   "Passbook copy",
-    //   "Photo",
-    //   "Pan card",
-    //   "Income Proof",
-    //   "Nominee ID Proof",
-    // ]
-    // const missingDocuments = requiredDocuments.filter(
-    //   (doc) => !isDocumentUploaded(newCustomerData, doc)
-    // )
-
-    // if (missingDocuments.length > 0) {
-    //   alert(
-    //     `Please upload the following documents: ${missingDocuments.join(", ")}`
-    //   )
-    //   return
-    // }
-
-    console.log("New Customer Form submitted:", newCustomerData)
-  }
-
+  // -------------------------------
+  // Reusable Upload Field Component
+  // -------------------------------
   const UploadField = ({ label, onChange, customerData, required = false }) => {
     const isUploaded = isDocumentUploaded(customerData, label)
-
     return (
       <div className="space-y-2">
         <p className="text-sm text-gray-600">
@@ -233,83 +155,82 @@ function AgentDocumentUpload() {
     )
   }
 
+  // -------------------------------
+  // Fetch policy names and additional fields on mount
+  // -------------------------------
   useEffect(() => {
     const fetchPolicy = async () => {
       try {
         const response = await axiosInstance.get("PolicyName")
         if (response.status === 200) {
-          setPolicyName(response.data.policies)
-          setFiledName(response.data.additional_fields)
+          setPolicyNames(response.data.policies)
+          setFieldNames(response.data.additional_fields)
         }
       } catch (error) {
         toast.error("Policy is not fetched")
       }
     }
-
     fetchPolicy()
   }, [])
 
-  const agentId = useSelector((state) => state.agentAuth.agent_uuid)
-
-  const NewCustomerHandler = async () => {
+  // -------------------------------
+  // New Customer Submission Handler
+  // -------------------------------
+  const handleNewCustomerSubmit = async (e) => {
+    e.preventDefault()
+    // Basic validations
     if (newCustomerData.phone && newCustomerData.phone.length > 10) {
       setFormError("Phone number cannot exceed 10 digits")
       return
     }
 
-    // const dob = new Date(newCustomerData.dob)
-    // const today = new Date()
-    // const age = today.getFullYear() - dob.getFullYear()
-    // const monthDiff = today.getMonth() - dob.getMonth()
-
-    // if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-    //   age--
-    // }
-
-    // if (age < 18) {
-    //   setFormError("Age must be greater than 18 years")
-    //   return // Stop the submission
-    // }
-
-    // if (newCustomerData.name == newCustomerData.nomineeName) {
-    //   setFormError("Name and Nominee Name cannot be the same")
-    //   return
-    // }
-
-    if (
-      !newCustomerData.name ||
-      !newCustomerData.email ||
-      !newCustomerData.gender ||
-      !newCustomerData.phone ||
-      !newCustomerData.dob ||
-      !newCustomerData.income ||
-      !newCustomerData.maritalStatus ||
-      !newCustomerData.city ||
-      !newCustomerData.insurancePlan ||
-      !newCustomerData.insuranceType ||
-      !newCustomerData.nomineeName ||
-      !newCustomerData.nomineeRelation
-    ) {
-      setFormError("All fields are required")
+    const dob = new Date(newCustomerData.dob)
+    const today = new Date()
+    let age = today.getFullYear() - dob.getFullYear()
+    const monthDiff = today.getMonth() - dob.getMonth()
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--
+    }
+    if (age < 18) {
+      setFormError("Age must be greater than 18 years")
       return
     }
+    if (newCustomerData.name === newCustomerData.nomineeName) {
+      setFormError("Name and Nominee Name cannot be the same")
+      return
+    }
+    const requiredFields = [
+      "gender",
+      "name",
+      "phone",
+      "email",
+      "dob",
+      "income",
+      "maritalStatus",
+      "city",
+      "insurancePlan",
+      "insuranceType",
+      "nomineeName",
+      "nomineeRelation",
+    ]
+    for (let field of requiredFields) {
+      if (!newCustomerData[field]) {
+        setFormError("All fields are required")
+        return
+      }
+    }
+    setFormError("")
 
     try {
+      setIsSubmitting(true)
       const formData = new FormData()
-      formData.append("name", newCustomerData.name)
-      formData.append("email", newCustomerData.email)
-      formData.append("gender", newCustomerData.gender)
-      formData.append("phone", newCustomerData.phone)
-      formData.append("dob", newCustomerData.dob)
-      formData.append("income", newCustomerData.income)
-      formData.append("maritalStatus", newCustomerData.maritalStatus)
-      formData.append("city", newCustomerData.city)
-
-      formData.append("insurancePlan", newCustomerData.insurancePlan)
-      formData.append("insuranceType", newCustomerData.insuranceType)
-      formData.append("nomineeName", newCustomerData.nomineeName)
-      formData.append("nomineeRelation", newCustomerData.nomineeRelation)
-
+      // Append basic info
+      Object.entries(newCustomerData).forEach(([key, value]) => {
+        if (key !== "documents") {
+          formData.append(key, value)
+        }
+      })
+      // Append documents
       formData.append("id_proof", newCustomerData.documents["Id Proof"])
       formData.append("passbook", newCustomerData.documents["Passbook"])
       formData.append("income_proof", newCustomerData.documents["Income Proof"])
@@ -319,7 +240,7 @@ function AgentDocumentUpload() {
         "nominee_address_proof",
         newCustomerData.documents["Nominee Address Proof"]
       )
-      console.log("eeeeeeee",formData)
+
       const response = await axiosInstance.post(
         `NewCustomer/${agentId}`,
         formData,
@@ -342,10 +263,18 @@ function AgentDocumentUpload() {
       } else {
         setFormError("No response received from server")
       }
+    } finally {
+      setIsSubmitting(false)
     }
   }
-  const ExistingCustomerHandler = async () => {
+
+  // -------------------------------
+  // Existing Customer Submission Handler
+  // -------------------------------
+  const handleExistingCustomerSubmit = async (e) => {
+    e.preventDefault()
     try {
+      setIsSubmitting(true)
       const formData = new FormData()
       formData.append("email", existingCustomerData.email)
       formData.append("insurancePlan", existingCustomerData.insurancePlan)
@@ -365,6 +294,7 @@ function AgentDocumentUpload() {
         "nominee_address_proof",
         existingCustomerData.documents["Nominee Address Proof"]
       )
+
       const response = await axiosInstance.post(
         `ExistingCustomer/${agentId}`,
         formData,
@@ -381,19 +311,23 @@ function AgentDocumentUpload() {
         console.log(`Unexpected response status: ${response.status}`)
       }
     } catch (error) {
-      console.log("Error:", error)
-      setFormError(error)
-      toast.error(error.response.data.detail)
+      console.error("Error:", error)
+      setFormError("An error occurred. Please try again.")
+      toast.error(error.response?.data?.detail || "Submission failed")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
+  // -------------------------------
+  // Render Component
+  // -------------------------------
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="bg-white p-6 shadow-md">
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
           Agent Document Upload
         </h1>
-
         <div className="flex justify-center space-x-4">
           <label
             className={`flex items-center space-x-2 cursor-pointer p-3 rounded-lg ${
@@ -458,12 +392,12 @@ function AgentDocumentUpload() {
                   <select
                     name="insuranceType"
                     value={existingCustomerData.insuranceType}
-                    onChange={handlepolicy}
+                    onChange={handlePolicySelectionExisting}
                     className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
                   >
                     <option value="">Select Insurance Plan</option>
-                    {policyName.map((policy, index) => (
+                    {policyNames.map((policy, index) => (
                       <option key={index} value={policy}>
                         {policy}
                       </option>
@@ -475,8 +409,8 @@ function AgentDocumentUpload() {
               <div className="space-y-6">
                 <h2 className="text-2xl font-semibold">Uploaded Documents</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {SelectIndex !== -1 &&
-                    Object.entries(FiledName[SelectIndex] || {}).map(
+                  {selectedIndex !== -1 &&
+                    Object.entries(fieldNames[selectedIndex] || {}).map(
                       ([key, value]) =>
                         value ? (
                           <UploadField
@@ -519,23 +453,16 @@ function AgentDocumentUpload() {
                     <option value="Other">Other</option>
                   </select>
                 </div>
-                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <UploadField
-                    label="Nominee ID Proof"
-                    onChange={handleExistingCustomerFileUpload}
-                    customerData={existingCustomerData}
-                    required={true}
-                  />
-                </div> */}
               </div>
-
               <div className="flex justify-center py-6">
                 <button
                   type="submit"
-                  className="bg-red-600 text-white px-12 py-3 text-lg rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-                  onClick={ExistingCustomerHandler}
+                  disabled={isSubmitting}
+                  className={`bg-red-600 text-white px-12 py-3 text-lg rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 ${
+                    isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
-                  Submit
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
               </div>
             </form>
@@ -662,12 +589,12 @@ function AgentDocumentUpload() {
                   <select
                     name="insuranceType"
                     value={newCustomerData.insuranceType}
-                    onChange={newCustomerpolicyuploads}
+                    onChange={handlePolicySelectionNew}
                     className="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     required
                   >
                     <option value="">Select Insurance Plan</option>
-                    {policyName.map((policy, index) => (
+                    {policyNames.map((policy, index) => (
                       <option key={index} value={policy}>
                         {policy}
                       </option>
@@ -678,26 +605,9 @@ function AgentDocumentUpload() {
 
               <div className="space-y-6">
                 <h2 className="text-2xl font-semibold">Uploaded Documents</h2>
-                {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[
-                    "ID Proof",
-                    "Passbook copy",
-                    "Photo",
-                    "Pan card",
-                    "Income Proof",
-                  ].map((item) => (
-                    <UploadField
-                      key={item}
-                      label={item}
-                      onChange={handleNewCustomerFileUpload}
-                      customerData={newCustomerData}
-                      required={true}
-                    />
-                  ))}
-                </div> */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {SelectIndex !== -1 &&
-                    Object.entries(FiledName[SelectIndex] || {}).map(
+                  {selectedIndex !== -1 &&
+                    Object.entries(fieldNames[selectedIndex] || {}).map(
                       ([key, value]) =>
                         value ? (
                           <UploadField
@@ -740,23 +650,17 @@ function AgentDocumentUpload() {
                     <option value="Other">Other</option>
                   </select>
                 </div>
-                {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <UploadField
-                    label="Nominee ID Proof"
-                    onChange={handleNewCustomerFileUpload}
-                    customerData={newCustomerData}
-                    required={true}
-                  />
-                </div> */}
               </div>
 
               <div className="flex justify-center py-6">
                 <button
                   type="submit"
-                  className="bg-red-600 text-white px-12 py-3 text-lg rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-                  onClick={NewCustomerHandler}
+                  disabled={isSubmitting}
+                  className={`bg-red-600 text-white px-12 py-3 text-lg rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 ${
+                    isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
-                  Submit
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
               </div>
             </form>

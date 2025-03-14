@@ -40,8 +40,7 @@ const PolicyStatus = () => {
   
     fetchPolicies();
   }, []);
-  
-  
+
 
 console.log(policy)
 

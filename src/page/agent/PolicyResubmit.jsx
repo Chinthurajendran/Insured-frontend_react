@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Upload } from "lucide-react"
 import axiosInstance from "../../Interceptors/agent"
 import { toast } from "react-toastify"
-import { useSelector } from "react-redux"
+import { Provider, useSelector } from "react-redux"
 import "react-toastify/dist/ReactToastify.css"
 import { FiAlertCircle } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
@@ -15,9 +15,10 @@ function AgentDocumentUpload() {
   const [formError, setFormError] = useState("")
   const [gender, setGender] = useState("male")
   const [policy, setPolicy] = useState(null)
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
   const location = useLocation()
   const PolicyId = location.state?.policydetails_uid
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const navigate = useNavigate()
 
@@ -138,7 +139,6 @@ function AgentDocumentUpload() {
   const agentId = useSelector((state) => state.agentAuth.agent_uuid)
 
   const NewCustomerHandler = async () => {
-    console.log("1111111")
     if (newCustomerData.phone && newCustomerData.phone.length > 10) {
       setFormError("Phone number cannot exceed 10 digits")
       return
@@ -146,13 +146,12 @@ function AgentDocumentUpload() {
 
     const dob = new Date(newCustomerData.dob)
     const today = new Date()
-    let  age = today.getFullYear() - dob.getFullYear()
+    let age = today.getFullYear() - dob.getFullYear()
     const monthDiff = today.getMonth() - dob.getMonth()
 
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
       age--
     }
-    console.log("222222222")
     if (age < 18) {
       setFormError("Age must be greater than 18 years")
       return
@@ -162,7 +161,6 @@ function AgentDocumentUpload() {
       setFormError("Name and Nominee Name cannot be the same")
       return
     }
-    console.log("33333333333")
     if (
       !newCustomerData.name ||
       !newCustomerData.email ||
@@ -182,6 +180,7 @@ function AgentDocumentUpload() {
     }
 
     try {
+      setIsSubmitting(true)
       const formData = new FormData()
       formData.append("name", newCustomerData.name)
       formData.append("email", newCustomerData.email)
@@ -206,12 +205,12 @@ function AgentDocumentUpload() {
         "nominee_address_proof",
         newCustomerData.documents["Nominee Address Proof"]
       )
-      console.log("44444444444",formData)
       const response = await axiosInstance.put(
         `policyupdate/${PolicyId}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
+          timeout: 30000,
         }
       )
 
@@ -229,13 +228,12 @@ function AgentDocumentUpload() {
       } else {
         setFormError("No response received from server")
       }
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
-
-
   useEffect(() => {
-
     if (!PolicyId) return
 
     const fetchData = async () => {
@@ -274,9 +272,7 @@ function AgentDocumentUpload() {
     fetchData()
   }, [PolicyId])
 
-
-  console.log("ppppppppp", newCustomerData)
-  console.log("error", formError)
+  console.log("ppppppppp", policy)
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="bg-white p-6 shadow-md">
@@ -472,13 +468,26 @@ function AgentDocumentUpload() {
               </div>
             </div>
 
+            <div className="space-y-2">
+              <label className="block font-semibold">Reason</label>
+              <textarea
+                className="w-full border rounded-md px-3 py-2 bg-gray-100 cursor-not-allowed"
+                value={policy?.feedback || "Not Provided"}
+                placeholder="Enter rejection reason..."
+                readOnly
+              />
+            </div>
+
             <div className="flex justify-center py-6">
               <button
                 type="submit"
-                className="bg-red-600 text-white px-12 py-3 text-lg rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                className={`bg-red-600 text-white px-12 py-3 text-lg rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 ${
+                  isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                }`}
                 onClick={NewCustomerHandler}
+                disabled={isSubmitting}
               >
-                Re-Submit
+                {isSubmitting ? "Submitting..." : "Re-Submit"}
               </button>
             </div>
           </form>
