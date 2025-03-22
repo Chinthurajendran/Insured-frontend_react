@@ -3,13 +3,14 @@ import { Outlet } from "react-router-dom";
 import Agent_header from "../../components/adent_compnents/Agent_header";
 import Agent_sidebar from "../../components/adent_compnents/Agent_sidebar";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function AgentHome() {
-  const agent_token = localStorage.getItem("agent_access_token");
+  const agent_authenticated = useSelector((state) => state.agentAuth.isAuthenticated_agent)
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!agent_token) {
+    if (!agent_authenticated) {
       navigate("/Agent_login_page");
     }
 
@@ -18,7 +19,7 @@ function AgentHome() {
     return () => {
       document.body.classList.remove("overflow-hidden");
     };
-  }, [agent_token, navigate]);
+  }, [agent_authenticated, navigate]);
 
   return (
     <div className="h-screen overflow-hidden">

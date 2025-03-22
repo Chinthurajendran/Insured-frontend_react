@@ -7,7 +7,6 @@ import { toast } from "react-toastify"
 import axiosInstance from "../../Interceptors/agent"
 
 function AgentProfle() {
-  const agent_token = localStorage.getItem("agent_access_token")
   const navigate = useNavigate()
   const [gender, setGender] = useState("")
   const [user, setUser] = useState(null)
@@ -23,8 +22,9 @@ function AgentProfle() {
     city: "",
     image: null,
   })
-
+  
   const agentId = useSelector((state) => state.agentAuth.agent_uuid)
+  const agent_authenticated = useSelector((state) => state.agentAuth.isAuthenticated_agent)
 
   const fetchAgentProfile = async () => {
     if (!agentId) return
@@ -57,10 +57,10 @@ function AgentProfle() {
   }
 
   useEffect(() => {
-    if (!agent_token) {
+    if (!agent_authenticated) {
       navigate("/Agent_login_page")
     }
-  }, [agent_token, navigate])
+  }, [agent_authenticated, navigate])
 
   useEffect(() => {
     fetchAgentProfile()

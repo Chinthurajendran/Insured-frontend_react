@@ -48,6 +48,7 @@ const AgentResetpassword = () => {
       }
     } finally {
       setLoading(false)
+      localStorage.removeItem("agentID")
     }
   }
 
@@ -73,7 +74,6 @@ const AgentResetpassword = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {/* Password Field */}
             <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-300 rounded-lg bg-white focus-within:ring-2 focus-within:ring-[#014751]">
               <input
                 type="password"
@@ -86,7 +86,6 @@ const AgentResetpassword = () => {
               />
             </div>
 
-            {/* Confirm Password Field */}
             <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-300 rounded-lg bg-white focus-within:ring-2 focus-within:ring-[#014751]">
               <input
                 type="password"
@@ -99,8 +98,6 @@ const AgentResetpassword = () => {
               />
             </div>
           </div>
-
-          {/* Submit Button */}
           <button
             className="w-full mt-4 flex items-center justify-center gap-3 px-4 py-3 text-white bg-[#014751] hover:bg-[#013a41] rounded-lg font-bold transition duration-300 disabled:opacity-50"
             disabled={loading}

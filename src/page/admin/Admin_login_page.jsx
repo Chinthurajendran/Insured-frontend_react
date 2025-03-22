@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode"
 import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
 import axiosInstance from "../../Interceptors/admin"
+import { setAdminTokens } from "../../store/slices/AdminToken"
 
 const AdminLoginPage = () => {
   const [formData, setFormData] = useState({
@@ -29,20 +30,9 @@ const AdminLoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const res = await axiosInstance.post(
-        `admin_login`,
-        formData
-      )
+      const res = await axiosInstance.post(`admin_login`, formData)
 
       if (res.status === 200) {
-        console.log(res)
-        localStorage.setItem("admin_access_token", res.data.admin_access_token)
-        localStorage.setItem(
-          "admin_refresh_token",
-          res.data.admin_refresh_token
-        )
-        localStorage.setItem("admin_username", res.data.admin_username)
-        localStorage.setItem("admin_role", res.data.admin_role)
         const decodedToken = jwtDecode(res.data.admin_access_token)
         dispatch(
           admin_login({
@@ -51,7 +41,15 @@ const AdminLoginPage = () => {
             isAuthenticated_admin: true,
           })
         )
-        navigate("/Admin_home/Demo", { state: { message: "Login successful!" } })
+        dispatch(
+          setAdminTokens({
+            admin_access_token: res.data.admin_access_token,
+            admin_refresh_token: res.data.admin_refresh_token,
+          })
+        )
+        navigate("/Admin_home/Demo", {
+          state: { message: "Login successful!" },
+        })
         toast.success("Login successful! Welcome back.")
       }
     } catch (error) {

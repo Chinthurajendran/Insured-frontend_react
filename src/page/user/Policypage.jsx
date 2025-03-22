@@ -9,27 +9,33 @@ import { useNavigate } from "react-router-dom"
 function Policypage() {
   const userId = useSelector((state) => state.userAuth.userid)
   const [policyData, setPolicyData] = useState([])
-    const navigate = useNavigate();
+  const [additionalPolicyData, setAdditionalPolicyData] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!userId) return
 
     const fetchData = async () => {
       try {
-        const res = await axiosInstance.get(`policydetails/${userId}`)
+        const [res, res1] = await Promise.all([
+          axiosInstance.get(`policydetails/${userId}`),
+          axiosInstance.get(`UserPolicyStatus/${userId}`),
+        ])
+
         if (res.status === 200 && res.data.matching_policies) {
           setPolicyData(res.data.matching_policies)
         }
+
+        if (res1.status === 200 && res1.data.policies) {
+          setAdditionalPolicyData(res1.data.policies)
+        }
       } catch (error) {
-        console.log("www",res)
         toast.error("Failed to fetch policy details. Please try again later.")
       }
     }
 
     fetchData()
   }, [userId])
-  console.log("qqqqqqqqq",policyData)
-  console.log("eeeeeeee", policyData.length);
 
   return (
     <div className="max-w-6xl mx-auto p-2">
@@ -69,14 +75,33 @@ function Policypage() {
               </div>
 
               <div className="bg-[#1F4D30] px-6 py-2 flex justify-between items-center pb-2.5">
-                <div className="text-white font-medium text-lg pl-55">
+                <button
+                  className="text-white font-medium text-lg pl-55 hover:underline"
+                  onClick={() =>
+                    navigate("/Plandetails", {
+                      state: { policyId: policy.policy_id },
+                    })
+                  }
+                >
                   Plan Details
-                </div>
+                </button>
 
-                <button className="bg-gray-200 text-red-600 px-4 py-2 rounded-md font-bold text-sm hover:bg-gray-300 hover:text-red-700 transition duration-200" 
-                onClick={()=>{
-                  navigate("/PolicyDocumentUpload", { state: { userId,policyId: policy.policy_id } })
-                }}>
+                <button
+                  className={`px-4 py-2 rounded-md font-bold text-sm transition duration-200 
+                  ${
+                    additionalPolicyData
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-gray-200 text-red-600 hover:bg-gray-300 hover:text-red-700"
+                  }`}
+                  onClick={() => {
+                    if (!additionalPolicyData) {
+                      navigate("/PolicyDocumentUpload", {
+                        state: { userId, policyId: policy.policy_id },
+                      })
+                    }
+                  }}
+                  disabled={additionalPolicyData}
+                >
                   ₹{policy.monthly_payment}/month
                 </button>
               </div>

@@ -7,7 +7,6 @@ import axiosInstance from "../../Interceptors/user"
 import { toast } from "react-toastify"
 
 function Userprofile() {
-  const user_token = localStorage.getItem("user_access_token")
   const navigate = useNavigate()
   const [gender, setGender] = useState("male")
   const [user, setUser] = useState(null)
@@ -27,12 +26,13 @@ function Userprofile() {
   })
 
   const userId = useSelector((state) => state.userAuth.userid)
+  const user_authenticcated = useSelector((state) => state.userAuth.isAuthenticated)
 
   useEffect(() => {
-    if (!user_token) {
+    if (!user_authenticcated) {
       navigate("/Login_page")
     }
-  }, [user_token, navigate])
+  }, [user_authenticcated, navigate])
 
 
   const fetchUserProfile = async () => {
@@ -114,7 +114,7 @@ function Userprofile() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="h-96 bg-gray-100">
       <div className="flex flex-col md:flex-row min-h-screen -mt-28">
         <div className="flex-1 p-8 mt-16 relative">
           {isVisible ? (

@@ -3,16 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { admin_logout } from "../../store/slices/adminAuthentication";
 import { toast } from "react-toastify"
+import { clearAdminTokens } from "../../store/slices/AdminToken";
 
 function AdminHeader() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const handleLogoutSubmit = ()=>{
-        localStorage.removeItem("admin_username")
-        localStorage.removeItem("admin_access_token") 
-        localStorage.removeItem("admin_refresh_token") 
         dispatch(admin_logout())
+        dispatch(clearAdminTokens());
         navigate("/Admin_login_page")
         toast.success("Logout successful. See you next time!",);
     }

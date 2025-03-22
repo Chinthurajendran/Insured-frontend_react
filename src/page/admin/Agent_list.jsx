@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import AdminTable from "../../components/admin_compnents/AdminTable";
 import axiosInstance from "../../Interceptors/admin";
 import { toast } from "react-toastify"
+import { useSelector } from "react-redux";
 
 const userColumns = [
-  { key: "image", label: "Image" },
+  { key: "profile", label: "Image" },
   { key: "agentid", label: "Agent ID" },
   { key: "name", label: "Name" },
   { key: "email", label: "Email" },
@@ -19,7 +20,7 @@ const userColumns = [
 const Agent_list = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("admin_access_token");
+  const token = useSelector((state) => state.adminToken.admin_access_token)
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -36,7 +37,7 @@ const Agent_list = () => {
       }
     };
     fetchUsers();
-  }, [token]);
+  },[token]);
 
   const handleBlockToggle = async (userId) => {
 

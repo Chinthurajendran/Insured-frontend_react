@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react"
 import insuranceImage from "../../assets/3979003.png"
-import axiosInstance from "../../Interceptors/admin"
 import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import { baseURL } from "../../baseUrls/Urls"
+
 
 const PolicyCard = ({ image, title, description }) => (
   <div className="max-w-sm overflow-hidden bg-white rounded-lg shadow-md">
@@ -28,7 +30,8 @@ const User_body = () => {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const response = await axiosInstance.get("Policyinfo_list")
+        
+        const response = await axios.get(`${baseURL}/auth/Policyinfo_list`)
         if (response.status === 200) {
           const policies = response.data.policies || response.data
           const approvedPolicies = policies.filter(

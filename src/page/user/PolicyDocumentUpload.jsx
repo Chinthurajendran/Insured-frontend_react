@@ -131,7 +131,7 @@ function PolicyDocumentUpload() {
           {formError}
         </div>
       )}
-      {/* Policy Details */}
+
       {policyDetails && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-center">
           <div className="bg-gray-100 p-4 rounded-lg shadow">
@@ -173,14 +173,13 @@ function PolicyDocumentUpload() {
         </div>
       )}
 
-      {/* File Uploads */}
       <div className="mb-10">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Upload Documents
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {Object.entries(uploadPermissions)
-            .filter(([_, value]) => value) // Only show fields that are true
+            .filter(([_, value]) => value) 
             .map(([key]) => (
               <div key={key}>
                 <label className="relative text-gray-700 font-medium capitalize block mb-1">
@@ -210,7 +209,6 @@ function PolicyDocumentUpload() {
           Nominee Details
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Full Name Input */}
           <div>
             <label className="text-gray-700 font-medium block mb-1">
               Full Name
@@ -224,8 +222,6 @@ function PolicyDocumentUpload() {
               placeholder="Enter name"
             />
           </div>
-
-          {/* Relationship Dropdown */}
           <div>
             <label className="text-gray-700 font-medium block mb-1">
               Relationship
@@ -247,7 +243,6 @@ function PolicyDocumentUpload() {
         </div>
       </div>
 
-      {/* Submit Button */}
       <div className="flex justify-center">
         <button
           onClick={handleSubmit}

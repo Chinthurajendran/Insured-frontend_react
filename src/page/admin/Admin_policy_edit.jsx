@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FiAlertCircle } from "react-icons/fi";
 import axiosInstance from "../../Interceptors/admin";
+import { useSelector } from "react-redux";
 
 const REQUIRED_DOCUMENTS = [
   "id_proof",
@@ -80,7 +81,9 @@ const AdminPolicyEdit = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const policyId = location.state?.policy_Id;
-  const token = localStorage.getItem("admin_access_token");
+  const token = useSelector((state) => state.adminToken.admin_access_token)
+
+
 
   // Generic change handler (works for text, number, select and checkbox)
   const handleChange = (e) => {

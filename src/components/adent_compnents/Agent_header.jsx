@@ -4,26 +4,26 @@ import { useDispatch } from "react-redux"
 import { agent_logout } from "../../store/slices/agentAuthentication"
 import { toast } from "react-toastify"
 import axiosInstance from "../../Interceptors/agent"
+import { useSelector } from "react-redux"
+import { clearagentTokens } from "../../store/slices/AgentToken"
 
 function Agent_header() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const agent_token = localStorage.getItem("agent_access_token")
+  const agent_authenticated = useSelector((state) => state.agentAuth.isAuthenticated_agent)
+  const agentId = useSelector((state) => state.agentAuth.agent_uuid)
 
   useEffect(() => {
-    if (!agent_token) {
+    if (!agent_authenticated) {
       navigate("/Agent_login_page")
-      localStorage.removeItem("agent_uuid")
-      localStorage.removeItem("agent_username")
-      localStorage.removeItem("agent_access_token")
-      localStorage.removeItem("agent_refresh_token")
-      localStorage.removeItem("agent_role")
       dispatch(agent_logout())
+      dispatch(clearagentTokens())
     }
-  }, [agent_token, navigate])
+  }, [agent_authenticated, navigate])
 
   const handleLogoutSubmit = async () => {
-    const agentId = localStorage.getItem("agent_uuid")
+    // const agentId = localStorage.getItem("agent_uuid")
+    console.log(agentId)
 
     if (!agentId) {
       toast.error("No agent ID found. Please log in again.")
@@ -34,12 +34,8 @@ function Agent_header() {
       const res = await axiosInstance.put(`agent_logout/${agentId}`)
 
       if (res.status === 200) {
-        localStorage.removeItem("agent_uuid")
-        localStorage.removeItem("agent_username")
-        localStorage.removeItem("agent_access_token")
-        localStorage.removeItem("agent_refresh_token")
-        localStorage.removeItem("agent_role")
         dispatch(agent_logout())
+        dispatch(clearagentTokens())
         navigate("/Agent_login_page")
         toast.success("Logout successful. See you next time!")
       }

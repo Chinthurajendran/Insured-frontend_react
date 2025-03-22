@@ -1,95 +1,103 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { FiAlertCircle } from "react-icons/fi";
-import axiosInstance from "../../Interceptors/admin";
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
+import { FiAlertCircle, FiX } from "react-icons/fi"
+import axiosInstance from "../../Interceptors/admin"
 
 function Agent_approval_rejection_page() {
-  const [gender, setGender] = useState("male");
-  const [rejectionReason, setRejectionReason] = useState("");
-  const [formError, setFormError] = useState("");
-  const location = useLocation();
-  const agentId = location.state?.agentId;
-  const [agent, setAgent] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [gender, setGender] = useState("male")
+  const [rejectionReason, setRejectionReason] = useState("")
+  const [formError, setFormError] = useState("")
+  const location = useLocation()
+  const agentId = location.state?.agentId
+  const [agent, setAgent] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [popupImage, setPopupImage] = useState(null)
+  const navigate = useNavigate()
 
   const handleReject = async () => {
     try {
-      const formData = new URLSearchParams();
-      formData.append("reason", rejectionReason);
-      console.log("Rejection Reason:", rejectionReason);
+      const formData = new URLSearchParams()
+      formData.append("reason", rejectionReason)
+      console.log("Rejection Reason:", rejectionReason)
       const response = await axiosInstance.put(
         `agent_rejected/${agentId}`,
         formData,
         {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/x-www-form-urlencoded",
           },
         }
-      );
+      )
 
       if (response.status === 200) {
-        toast.success("Agent rejected successfully.");
-        navigate("/Admin_home/agentmanagement");
+        toast.success("Agent rejected successfully.")
+        navigate("/Admin_home/agentmanagement")
       }
     } catch (error) {
-      console.error("Error details:", error.response);
-      const errorMessage = error.response?.data?.detail || "Failed to reject agent.";
+      console.error("Error details:", error.response)
+      const errorMessage =
+        error.response?.data?.detail || "Failed to reject agent."
       if (typeof errorMessage === "object") {
-        setFormError(JSON.stringify(errorMessage));
+        setFormError(JSON.stringify(errorMessage))
       } else {
-        setFormError(errorMessage);
+        setFormError(errorMessage)
       }
     }
-  };
+  }
 
   const handleApproved = async () => {
     try {
-      const response = await axiosInstance.put(
-        `agent_approved/${agentId}`
-      );
+      const response = await axiosInstance.put(`agent_approved/${agentId}`)
 
       if (response.status === 200) {
-        toast.success("Agent approved successfully.");
-        navigate("/Admin_home/agentmanagement");
+        toast.success("Agent approved successfully.")
+        navigate("/Admin_home/agentmanagement")
       }
     } catch (error) {
-      toast.error("Failed to approve agent. Please try again later.");
+      toast.error("Failed to approve agent. Please try again later.")
     }
-  };
+  }
 
   useEffect(() => {
-    if (!agentId) return;
+    if (!agentId) return
 
     const fetchData = async () => {
       try {
         const res = await axiosInstance.get(
           `agent_approval_and_rejection/${agentId}`
-        );
+        )
 
         if (res.status === 200) {
-          const agentData = res.data.agents || res.data;
-          setAgent(agentData);
-          setGender(agentData.gender || "male");
+          const agentData = res.data.agents || res.data
+          setAgent(agentData)
+          setGender(agentData.gender || "male")
         }
       } catch (error) {
-        toast.error("Failed to fetch agent details. Please try again later.");
+        toast.error("Failed to fetch agent details. Please try again later.")
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchData();
-  }, [agentId]);
+    fetchData()
+  }, [agentId])
 
-  if (loading) return <div className="text-center py-10">Loading...</div>;
+  if (loading) return <div className="text-center py-10">Loading...</div>
   if (!agent)
     return (
       <div className="text-center py-10 text-red-500">Agent not found.</div>
-    );
-console.log("ID Proof URL:", agent.idproof);
+    )
+  console.log("ID Proof URL:", agent.idproof)
+
+  const openImagePopup = (imageSrc) => {
+    setPopupImage(imageSrc)
+  }
+
+  const closeImagePopup = () => {
+    setPopupImage(null)
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6 space-y-8">
@@ -98,7 +106,9 @@ console.log("ID Proof URL:", agent.idproof);
       {formError && (
         <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4 text-sm flex items-center">
           <FiAlertCircle className="mr-2" />
-          {typeof formError === "string" ? formError : JSON.stringify(formError)}
+          {typeof formError === "string"
+            ? formError
+            : JSON.stringify(formError)}
         </div>
       )}
 
@@ -177,19 +187,21 @@ console.log("ID Proof URL:", agent.idproof);
           />
         </div>
 
-        <div className="space-y-2 col-span-2">
+        <div className="space-y-2">
           <label className="block font-semibold">ID Proof</label>
           {agent.idproof ? (
-            <a href={agent.idproof} target="_blank" rel="noopener noreferrer">
+            <div
+              onClick={() => openImagePopup(agent.idproof)}
+              className="cursor-pointer"
+            >
               <img
                 src={agent.idproof}
-                alt="ID Proof"
-                className="w-full h-auto"
+                alt="Photo"
+                className="w-30 h-20 object-cover rounded border-2 border-gray-300 hover:border-blue-500 transition-colors"
               />
-              <p>View ID Proof</p>
-            </a>
+            </div>
           ) : (
-            <span className="text-gray-500">No ID Proof Uploaded</span>
+            <span className="text-gray-500">No photo Uploaded</span>
           )}
         </div>
       </div>
@@ -218,8 +230,27 @@ console.log("ID Proof URL:", agent.idproof);
           Reject
         </button>
       </div>
+
+      {popupImage && (
+        <div className="fixed inset-0 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="rounded-lg p-4 max-w-3xl max-h-3xl relative">
+            <button
+              onClick={closeImagePopup}
+              className="absolute top-2 right-2 text-gray-700 hover:text-red-500 rounded-full bg-white p-1"
+            >
+              <FiX size={24} />
+            </button>
+            <img
+              src={popupImage}
+              alt="Document"
+              className="max-w-full max-h-full object-contain"
+              style={{ maxHeight: "80vh" }}
+            />
+          </div>
+        </div>
+      )}
     </div>
-  );
+  )
 }
 
-export default Agent_approval_rejection_page;
+export default Agent_approval_rejection_page

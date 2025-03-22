@@ -5,7 +5,6 @@ import axiosInstance from "../../Interceptors/user"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useSelector } from "react-redux"
-import axiosInstanceadmin from "../../Interceptors/admin"
 
 const getStatusStyles = (status) => {
   switch (status) {
@@ -40,11 +39,10 @@ function Userpolicy() {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const response = await axiosInstanceadmin.get("PolicyDetails_list")
+        const response = await axiosInstance.get("PolicyDetails_list")
         if (response.status === 200) {
-          // Exclude policies where agent_id is "None"
           const filteredPolicies = response.data.policies.filter(
-            (policy) => policy.agent_id === "None"
+            (policy) => policy.agent_id === "None" && policy.user_id == userId
           )
           setPolicy(filteredPolicies)
         }
@@ -89,14 +87,11 @@ function Userpolicy() {
           key={index}
           className="max-w-6xl h-50% w-full bg-white rounded-lg shadow-lg p-8 pb-17 flex flex-col relative"
         >
-          {/* Title */}
           <h1 className="text-2xl font-bold text-gray-900 mb-12 -mt-2">
             {user.policy_type}
           </h1>
 
-          {/* Aligned Content */}
           <div className="flex justify-between items-center -mt-8">
-            {/* Life Cover */}
             <div className="text-center">
               <p className="text-sm text-gray-700">Life Cover</p>
               <p className="text-xl font-bold text-gray-900 flex items-center justify-center">
@@ -105,7 +100,6 @@ function Userpolicy() {
               </p>
             </div>
 
-            {/* Cover Till Age */}
             <div className="text-center">
               <p className="text-sm text-gray-700">Cover Till Age</p>
               <p className="text-xl font-bold text-gray-900">
@@ -113,7 +107,6 @@ function Userpolicy() {
               </p>
             </div>
 
-            {/* Claim Settled */}
             <div className="text-center">
               <p className="text-sm text-gray-700">Claim Settled</p>
               <p className="text-xl font-bold text-gray-900">
@@ -122,7 +115,6 @@ function Userpolicy() {
             </div>
           </div>
 
-          {/* Processing Badge at Bottom Left */}
           <div
             className={`absolute bottom-5 left-4 ml-3 px-3 py-1 rounded-lg flex items-center justify-center ${getStatusStyles(
               user.policy_status
@@ -131,7 +123,6 @@ function Userpolicy() {
             <span className="text-sm">{user.policy_status}</span>
           </div>
 
-          {/* Pay Now Button at Bottom Right */}
           {user.payment_status && (
             <div className="absolute bottom-3 right-4 pr-2">
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md">
@@ -140,7 +131,6 @@ function Userpolicy() {
             </div>
           )}
 
-          {/* Feedback Section - Properly Aligned at the Bottom */}
           {user.feedback && (
             <div className="mt-6 flex justify-start items-center">
               <span className="text-sm text-gray-700 mr-2">Feedback:</span>

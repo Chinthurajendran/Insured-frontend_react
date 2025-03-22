@@ -5,6 +5,8 @@ import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
 import axiosInstance from "../../Interceptors/user"
 import { baseURL } from "../../baseUrls/Urls"
+import { useSelector } from "react-redux"
+import axios from "axios"
 
 const Resetpassword = () => {
   const [formError, setFormError] = useState("")
@@ -23,8 +25,13 @@ const Resetpassword = () => {
       return
     }
     const email = localStorage.getItem("email_id")
+    if (!email) {
+      console.log("Email ID is missing.");
+      return;
+    }
+    
     try {
-      const res = await axiosInstance.post(`${baseURL}/auth/passwordreset`, {
+      const res = await axios.post(`${baseURL}/auth/passwordreset`, {
         password: formData.password,email,
       })
 
@@ -38,6 +45,8 @@ const Resetpassword = () => {
       } else {
         setFormError("An unexpected error occurred. Please try again.")
       }
+    }finally{
+      localStorage.removeItem("email_id")
     }
   }
 
@@ -63,7 +72,6 @@ const Resetpassword = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {/* Password Field */}
             <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-300 rounded-lg bg-white focus-within:ring-2 focus-within:ring-[#014751]">
               <input
                 type="password"
@@ -76,7 +84,6 @@ const Resetpassword = () => {
               />
             </div>
 
-            {/* Confirm Password Field */}
             <div className="w-full flex items-center gap-3 px-4 py-3 border border-gray-300 rounded-lg bg-white focus-within:ring-2 focus-within:ring-[#014751]">
               <input
                 type="password"
@@ -90,7 +97,6 @@ const Resetpassword = () => {
             </div>
           </div>
 
-          {/* Submit Button */}
           <button className="w-full mt-4 flex items-center justify-center gap-3 px-4 py-3 text-white bg-[#014751] hover:bg-[#013a41] rounded-lg font-bold transition duration-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"

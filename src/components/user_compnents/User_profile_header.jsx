@@ -1,9 +1,10 @@
 import React from "react"
 import { UserIcon, BellIcon, PhoneIcon } from "@heroicons/react/20/solid"
 import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 const UserHeader = () => {
-  const userId = localStorage.getItem("user_id")
+  const isAuthenticated = useSelector((state) => state.userAuth.isAuthenticated)
 
   return (
     <header
@@ -53,7 +54,7 @@ const UserHeader = () => {
               <PhoneIcon className="w-6 h-6" />
             </button>
 
-            {userId ? (
+            {isAuthenticated ? (
               <>
                 <button
                   className="transition-all duration-300 hover:text-[#0A4528] hover:scale-110"

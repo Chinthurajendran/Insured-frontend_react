@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../Interceptors/admin";
+import axios from "axios";
+import { baseURL } from "../../baseUrls/Urls";
 
 const PolicyCard = ({ image, title, description, onClick }) => (
   <div
@@ -27,7 +28,7 @@ function Browsepolicies() {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const response = await axiosInstance.get("Policyinfo_list");
+        const response = await axios.get(`${baseURL}/auth/Policyinfo_list`);
         if (response.status === 200) {
           const policies = response.data?.policies || response.data;
           const approvedPolicies = policies.filter(
@@ -47,6 +48,8 @@ function Browsepolicies() {
   const handleCardClick = (policyId) => {
     navigate(`/Policyinformation`, { state: { policyinfo_uid: policyId } });
   };
+  
+  console.log(policy);
   
 
   return (

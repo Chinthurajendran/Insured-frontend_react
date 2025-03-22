@@ -13,29 +13,37 @@ import Resetpassword from "../page/user/Resetpassword.jsx"
 import PolicyDocumentUpload from "../page/user/PolicyDocumentUpload.jsx"
 import Browsepolicies from "../page/user/Browsepolicies.jsx"
 import Policyinformation from "../page/user/Policyinformation.jsx"
+import UserRouter from "../PrivateRoute/UserRouter.jsx"
+import Plandetails from "../page/user/Plandetails.jsx"
+// import Notification from "../page/user/Notification.jsx"
 
 function Userside() {
   return (
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route
             path="/Loginpage_with_google"
             element={<Login_page_with_google />}
           />
           <Route path="/Login_page" element={<Login_page />} />
           <Route path="/Sign_up_pag" element={<Sign_up />} />
-          <Route path="/Userpage" element={<Userpage />}>
-            <Route path="Userprofile" element={<Userprofile />} />
-            <Route path="Userpolicy" element={<Userpolicy />} />
+          <Route path="/" element={<Home />} />
+          
+          <Route element={<UserRouter />}>
+              <Route path="/Userpage" element={<Userpage />}>
+                <Route path="Userprofile" element={<Userprofile />} />
+                <Route path="Userpolicy" element={<Userpolicy />} />
+              </Route>
+            <Route path="/Policypage" element={<Policypage />} />
+            <Route path="/PolicyDocumentUpload" element={<PolicyDocumentUpload />}/>
+            <Route path="/Browsepolicies" element={<Browsepolicies />} />
+            <Route path="/Policyinformation" element={<Policyinformation />} />
+            <Route path="/Plandetails" element={<Plandetails />} />
+            {/* <Route path="/Notification" element={<Notification />} /> */}
           </Route>
-          <Route path="/Policypage" element={<Policypage />} />
           <Route path="/Passwordrecovery" element={<Passwordrecovery />} />
           <Route path="/Resetpassword" element={<Resetpassword />} />
-          <Route path="/PolicyDocumentUpload" element={<PolicyDocumentUpload />} />
-          <Route path="/Browsepolicies" element={<Browsepolicies />} />
-          <Route path="/Policyinformation" element={<Policyinformation />} />
         </Routes>
       </BrowserRouter>
     </div>

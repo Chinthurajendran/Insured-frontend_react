@@ -1,70 +1,125 @@
-// import React from 'react'
-
-// function CustomerSearch() {
-//   return (
-//     <div>
-      
-//     </div>
-//   )
-// }
-
-// export default CustomerSearch
-
-
-
-// "use client"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Search } from "lucide-react"
+import axiosInstance from "../../Interceptors/agent"
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 function CustomerSearch() {
   const [query, setQuery] = useState("")
-  const [isFocused, setIsFocused] = useState(false)
+  const [suggestions, setSuggestions] = useState([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
 
-  const handleSearch = (e) => {
+  // Fetch suggestions based on input query
+  useEffect(() => {
+    if (!query) {
+      setSuggestions([])
+      return
+    }
+
+    const fetchSuggestions = async () => {
+      setIsLoading(true)
+      try {
+        const res = await axiosInstance.get(
+          `/search-suggestions?query=${query}`
+        )
+        if (res.status === 200) {
+          const uniqueSuggestions = [...new Set(res.data)]
+          setSuggestions(uniqueSuggestions)
+        }
+      } catch (error) {
+        console.error("Error fetching suggestions:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    const debounce = setTimeout(() => fetchSuggestions(), 300)
+    return () => clearTimeout(debounce)
+  }, [query])
+
+  const handleSearch = async (e) => {
     e.preventDefault()
-    console.log("Searching for:", query)
-    // Implement your search functionality here
+
+    try {
+      const res = await axiosInstance.post("/customerdata", { email: query })
+
+      if (res.status === 200) {
+        navigate("/CustomerPolicyList", {
+          state: { policies: res.data.policies },
+        })
+      }
+    } catch (error) {
+      if (error.response?.status === 404) {
+        toast.error("Customer not found. Please check the email.")
+      } else {
+        toast.error("Something went wrong. Please try again.")
+      }
+    }
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
-      <div className="w-full max-w-lg px-4">
-        <form
-          onSubmit={handleSearch}
-          className={`relative transition-all duration-300 ${isFocused ? "scale-105" : "scale-100"}`}
-        >
-          <div className="flex overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b p-8">
+      <div className="relative w-full max-w-lg pb-50">
+        <h1 className="text-2xl font-semibold text-center text-gray-800 mb-4">
+          Customer Search
+        </h1>
+        <form onSubmit={handleSearch} className="relative">
+          <div className="flex overflow-hidden rounded-lg border border-gray-300 bg-gray-50 focus-within:shadow-md">
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-              className="w-full px-6 py-4 bg-gradient-to-r from-gray-700 to-gray-600 text-white placeholder-gray-300 focus:outline-none transition-colors duration-300"
-              placeholder="Search for anything..."
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+              placeholder="Search by email..."
+              className="w-full px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:bg-white"
             />
             <button
               type="submit"
-              className="px-6 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-medium hover:from-indigo-600 hover:to-purple-700 transition-colors duration-300 flex items-center gap-2 group"
+              className="px-6 py-3 bg-green-600 text-white font-medium hover:bg-green-500 transition-colors flex items-center"
             >
-              <span>Search</span>
-              <Search className="w-4 h-4 transition-transform duration-300 group-hover:rotate-12" />
+              <Search className="w-5 h-5" />
             </button>
           </div>
-
-          {/* Decorative elements */}
-          <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-[98%] h-1 bg-gradient-to-r from-indigo-300 to-purple-300 rounded-b-lg opacity-70"></div>
         </form>
 
-        {/* Optional helper text */}
-        <p className="text-center text-gray-500 text-sm mt-4 opacity-80">
-          Try searching for products, articles, or categories
-        </p>
+        {/* Suggestions Dropdown */}
+        {showSuggestions && suggestions.length > 0 && (
+          <ul
+            className="absolute top-full left-0 right-0 -mt-49 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-40 overflow-y-auto text-sm"
+            onMouseDown={(e) => e.preventDefault()} // Prevent closing before selection
+          >
+            {suggestions.map((item, index) => (
+              <li
+                key={index}
+                onMouseDown={() => {
+                  setQuery(item) // Set the selected suggestion
+                  setShowSuggestions(false) // Close dropdown
+                }}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
+              >
+                <span>
+                  <strong className="text-green-600">
+                    {item.substring(0, query.length)}
+                  </strong>
+                  {item.substring(query.length)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Loading State */}
+        {isLoading && (
+          <p className="text-center text-sm text-gray-500 mt-2">
+            Loading suggestions...
+          </p>
+        )}
       </div>
     </div>
   )
 }
-
 
 export default CustomerSearch

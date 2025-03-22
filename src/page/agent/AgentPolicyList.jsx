@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from "react"
 import AdminTable from "../../components/admin_compnents/AdminTable"
-import axiosInstance from "../../Interceptors/admin"
+import axiosInstance from "../../Interceptors/agent"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 
@@ -25,13 +24,10 @@ const policyColumns = [
 const AgentPolicyList = () => {
   const [policies, setPolicies] = useState([])
   const [loading, setLoading] = useState(true)
-  const token = localStorage.getItem("agent_access_token")
+
+  const policyArray = Array.isArray(policies) ? policies : [policies];
 
   useEffect(() => {
-    if (!token) {
-      setLoading(false)
-      return
-    }
 
     const fetchpolicy = async () => {
       try {
@@ -49,13 +45,13 @@ const AgentPolicyList = () => {
     }
 
     fetchpolicy()
-  }, [token])
+  }, [])
 
 
 
   return (
     <AdminTable
-      users={policies}
+      users={policyArray}
       columns={policyColumns}
       title="Policy List"
     />

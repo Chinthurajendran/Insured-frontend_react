@@ -7,11 +7,14 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
 import axiosInstance from "../../Interceptors/user";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { clearTokens } from "../../store/slices/UserToken";
 
 
 function Sidebar() {
   const [selected, setSelected] = useState("Profile");
   const location = useLocation();
+  const user_id = useSelector((state) => state.userAuth.userid)
 
   const menuItems = [
     { name: "Profile", icon: <User className="h-5 w-5" />, link: "/Userpage/Userprofile" },
@@ -24,7 +27,7 @@ function Sidebar() {
 
 
   const handleLogoutSubmit = async () => {
-    const user_id = localStorage.getItem("user_id")
+
 
     if (!user_id) {
       toast.error("No user ID found. Please log in again.")
@@ -35,12 +38,8 @@ function Sidebar() {
       const res = await axiosInstance.put(`user_logout/${user_id}`)
 
       if (res.status === 200) {
-        localStorage.removeItem("user_id")
-        localStorage.removeItem("user_name")
-        localStorage.removeItem("user_access_token")
-        localStorage.removeItem("user_refresh_token")
-        localStorage.removeItem("user_role")
         dispatch(logout())
+        dispatch(clearTokens())
         navigate("/")
         toast.success("Logout successful. See you next time!")
       }

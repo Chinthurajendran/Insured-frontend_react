@@ -5,9 +5,11 @@ import { toast } from "react-toastify";
 import { FiAlertCircle } from "react-icons/fi";
 import axiosInstance from "../../Interceptors/user";
 import { baseURL } from "../../baseUrls/Urls";
+import { useNavigate } from "react-router-dom";
 
 const PasswordRecovery = () => {
   const location = useLocation();
+  const navigate = useNavigate()
   const message = location.state?.message;
 
   const [formError, setFormError] = useState("");
@@ -17,13 +19,15 @@ const PasswordRecovery = () => {
     e.preventDefault();
     try {
       const res = await axiosInstance.post(`${baseURL}/auth/password-recovery`, formData);
+      console.log("rrrrrrrr",res)
       if (res.status === 200) {
         localStorage.setItem("email_id", res.data.email_id)
-        navigate("/")
+        navigate("/Login_page")
         toast.success("Password reset link has been sent to your email. Please check your inbox.");
       }
     } catch (error) {
-      if (error.response && error.response.data) {
+      console.log(error)
+      if (error.response) {
         setFormError(error.response.data.detail || "An error occurred. Please try again.");
       } else {
         setFormError("An unexpected error occurred. Please try again.");

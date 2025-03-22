@@ -10,6 +10,7 @@ import axios from "axios"
 import { jwtDecode } from "jwt-decode"
 import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
+import { setTokens } from "../../store/slices/UserToken"
 
 const Login_with_google = () => {
   const navigate = useNavigate()
@@ -24,12 +25,6 @@ const Login_with_google = () => {
       })
 
       if (res.status === 200) {
-        localStorage.setItem("user_access_token", res.data.user_access_token)
-        localStorage.setItem("user_refresh_token", res.data.user_refresh_token)
-        localStorage.setItem("user_id", res.data.user_id)
-        localStorage.setItem("user_name", res.data.user_name)
-        localStorage.setItem("user_role", res.data.user_role)
-
         const decodedToken = jwtDecode(res.data.user_access_token)
         dispatch(
           login({
@@ -37,6 +32,12 @@ const Login_with_google = () => {
             username: res.data.user_name,
             user_role: res.data.user_role,
             isAuthenticated: true,
+          })
+        )
+        dispatch(
+          setTokens({
+            user_access_token: res.data.user_access_token,
+            user_refresh_token: res.data.user_refresh_token,
           })
         )
 

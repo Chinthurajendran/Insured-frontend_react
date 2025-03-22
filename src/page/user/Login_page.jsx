@@ -9,6 +9,7 @@ import { baseURL } from "../../baseUrls/Urls"
 import { useSelector, useDispatch } from "react-redux"
 import { login } from "../../store/slices/userAuthentication"
 import { jwtDecode } from "jwt-decode"
+import { setTokens } from "../../store/slices/UserToken"
 
 const Login_page = () => {
   const location = useLocation()
@@ -16,7 +17,8 @@ const Login_page = () => {
 
   const [formError, setFormError] = useState("")
   const [formData, setFormData] = useState({
-    email: ""
+    email: "",
+    password: ""
   })
 
   const navigate = useNavigate()
@@ -28,11 +30,6 @@ const Login_page = () => {
     try {
       const res = await axios.post(`${baseURL}/auth/login`, formData)
       if (res.status == 200) {
-        localStorage.setItem("user_access_token", res.data.user_access_token)
-        localStorage.setItem("user_refresh_token", res.data.user_refresh_token)
-        localStorage.setItem("user_id", res.data.user_id)
-        localStorage.setItem("user_name", res.data.user_name)
-        localStorage.setItem("user_role", res.data.user_role)
         const decodedToken = jwtDecode(res.data.user_access_token)
         dispatch(
           login({
@@ -43,6 +40,13 @@ const Login_page = () => {
             isAuthenticated: true,
           })
         )
+        dispatch(
+          setTokens({
+            user_access_token:res.data.user_access_token,
+            user_refresh_token:res.data.user_refresh_token,
+          })
+        )
+        
         navigate("/", { state: { message: "Login successful!" } })
         toast.success("Login successful!")
       }

@@ -26,19 +26,12 @@ const policyColumns = [
 const Admin_policy_list = () => {
   const [policies, setPolicies] = useState([])
   const [loading, setLoading] = useState(true)
-  const token = localStorage.getItem("admin_access_token")
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) {
-      setLoading(false)
-      return
-    }
-
     const fetchpolicy = async () => {
       try {
         const res = await axiosInstance.get(`policy_list`)
-
         if (res.status === 200) {
           setPolicies(res.data.policy || res.data)
         }
@@ -51,9 +44,8 @@ const Admin_policy_list = () => {
     }
 
     fetchpolicy()
-  }, [token])
+  }, [])
 
-console.log(policies)
   const handleDeletePolicy = async (policyId) => {
     try {
       const response = await axiosInstance.put(`policy_delete/${policyId}`)

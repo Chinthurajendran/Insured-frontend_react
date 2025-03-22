@@ -357,7 +357,6 @@ function PolicyApprovalRejection_page() {
         </button>
       </div>
 
-      {/* Image Popup */}
       {popupImage && (
         <div className="fixed inset-0 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="rounded-lg p-4 max-w-3xl max-h-3xl relative">

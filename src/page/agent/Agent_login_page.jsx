@@ -8,6 +8,7 @@ import { agent_login } from "../../store/slices/agentAuthentication"
 import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
 import axiosInstance from "../../Interceptors/agent"
+import { setagentTokens } from "../../store/slices/AgentToken"
 
 const Agent_login_page = () => {
   const [formData, setFormData] = useState({
@@ -40,17 +41,6 @@ const Agent_login_page = () => {
           })
 
           if (res.status === 200) {
-            localStorage.setItem(
-              "agent_access_token",
-              res.data.agent_access_token
-            )
-            localStorage.setItem(
-              "agent_refresh_token",
-              res.data.agent_refresh_token
-            )
-            localStorage.setItem("agent_uuid", res.data.agnet_id)
-            localStorage.setItem("agent_username ", res.data.agent_name)
-            localStorage.setItem("agent_role", res.data.agent_role)
             const decodedToken = jwtDecode(res.data.agent_access_token)
             dispatch(
               agent_login({
@@ -60,6 +50,12 @@ const Agent_login_page = () => {
                 agnet_userid: decodedToken.user.agent_userid,
                 agent_role: decodedToken.user.agent_role,
                 isAuthenticated_agent: true,
+              })
+            )
+            dispatch(
+              setagentTokens({
+                agent_access_token: res.data.agent_access_token,
+                agent_refresh_token: res.data.agent_refresh_token,
               })
             )
 

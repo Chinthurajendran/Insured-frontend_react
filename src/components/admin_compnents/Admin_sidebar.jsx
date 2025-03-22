@@ -26,7 +26,7 @@ function Admin_sidebar() {
         <ul className="space-y-2">
           <li>
             <Link
-              to="Demo"
+              to="DashboardGraph"
               className="flex items-center px-4 py-3 rounded-lg hover:bg-[#083D24]"
             >
               <Home className="h-5 w-5 mr-3" /> Dashboard

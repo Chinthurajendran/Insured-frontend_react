@@ -8,18 +8,18 @@ import { FiAlertCircle } from "react-icons/fi"
 import { useNavigate } from "react-router-dom"
 
 function AgentDocumentUpload() {
-  // States for toggling customer type and form errors
+
   const [isExistingCustomer, setIsExistingCustomer] = useState(false)
   const [policyNames, setPolicyNames] = useState([])
-  const [fieldNames, setFieldNames] = useState([]) // additional fields from policy
+  const [fieldNames, setFieldNames] = useState([])
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [formError, setFormError] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const navigate = useNavigate()
   const agentId = useSelector((state) => state.agentAuth.agent_uuid)
+ 
 
-  // State for existing customer
   const [existingCustomerData, setExistingCustomerData] = useState({
     email: "",
     insurancePlan: "",
@@ -29,7 +29,7 @@ function AgentDocumentUpload() {
     documents: {},
   })
 
-  // State for new customer
+
   const [newCustomerData, setNewCustomerData] = useState({
     gender: "",
     name: "",
@@ -46,9 +46,6 @@ function AgentDocumentUpload() {
     documents: {},
   })
 
-  // -------------------------------
-  // Handlers for form field changes
-  // -------------------------------
   const handleExistingCustomerChange = (e) => {
     const { name, value } = e.target
     setExistingCustomerData((prevData) => ({
@@ -65,9 +62,6 @@ function AgentDocumentUpload() {
     }))
   }
 
-  // -------------------------------
-  // File upload handlers
-  // -------------------------------
   const handleExistingCustomerFileUpload = (e, documentType) => {
     const file = e.target.files[0]
     if (file) {
@@ -88,9 +82,6 @@ function AgentDocumentUpload() {
     }
   }
 
-  // -------------------------------
-  // Policy selection handlers
-  // -------------------------------
   const handlePolicySelectionExisting = (e) => {
     const { name, value } = e.target
     const index = policyNames.findIndex((policy) => policy === value)
@@ -111,15 +102,11 @@ function AgentDocumentUpload() {
     }))
   }
 
-  // -------------------------------
-  // Utility: Check if a document is uploaded
-  // -------------------------------
+
   const isDocumentUploaded = (customerData, documentType) =>
     customerData.documents && customerData.documents[documentType]
 
-  // -------------------------------
-  // Reusable Upload Field Component
-  // -------------------------------
+
   const UploadField = ({ label, onChange, customerData, required = false }) => {
     const isUploaded = isDocumentUploaded(customerData, label)
     return (
@@ -155,9 +142,6 @@ function AgentDocumentUpload() {
     )
   }
 
-  // -------------------------------
-  // Fetch policy names and additional fields on mount
-  // -------------------------------
   useEffect(() => {
     const fetchPolicy = async () => {
       try {
@@ -173,12 +157,9 @@ function AgentDocumentUpload() {
     fetchPolicy()
   }, [])
 
-  // -------------------------------
-  // New Customer Submission Handler
-  // -------------------------------
   const handleNewCustomerSubmit = async (e) => {
     e.preventDefault()
-    // Basic validations
+
     if (newCustomerData.phone && newCustomerData.phone.length > 10) {
       setFormError("Phone number cannot exceed 10 digits")
       return
@@ -224,13 +205,13 @@ function AgentDocumentUpload() {
     try {
       setIsSubmitting(true)
       const formData = new FormData()
-      // Append basic info
+
       Object.entries(newCustomerData).forEach(([key, value]) => {
         if (key !== "documents") {
           formData.append(key, value)
         }
       })
-      // Append documents
+
       formData.append("id_proof", newCustomerData.documents["Id Proof"])
       formData.append("passbook", newCustomerData.documents["Passbook"])
       formData.append("income_proof", newCustomerData.documents["Income Proof"])
@@ -268,9 +249,6 @@ function AgentDocumentUpload() {
     }
   }
 
-  // -------------------------------
-  // Existing Customer Submission Handler
-  // -------------------------------
   const handleExistingCustomerSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -319,9 +297,6 @@ function AgentDocumentUpload() {
     }
   }
 
-  // -------------------------------
-  // Render Component
-  // -------------------------------
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="bg-white p-6 shadow-md">
