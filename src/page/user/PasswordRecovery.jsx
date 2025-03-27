@@ -19,7 +19,7 @@ const PasswordRecovery = () => {
     e.preventDefault();
     try {
       const res = await axiosInstance.post(`${baseURL}/auth/password-recovery`, formData);
-      console.log("rrrrrrrr",res)
+
       if (res.status === 200) {
         localStorage.setItem("email_id", res.data.email_id)
         navigate("/Login_page")

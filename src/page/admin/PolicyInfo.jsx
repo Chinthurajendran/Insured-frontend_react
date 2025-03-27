@@ -23,7 +23,7 @@ const PolicyInfo = () => {
           const savedPage = sessionStorage.getItem("currentPage")
           if (savedPage) {
             setCurrentPage(Number(savedPage))
-            sessionStorage.removeItem("currentPage") // Clear after use
+            sessionStorage.removeItem("currentPage") 
           }
         }
       } catch (error) {
@@ -126,9 +126,8 @@ const PolicyInfo = () => {
         </table>
       </div>
 
-      {/* Pagination Controls */}
       <div className="flex justify-center items-center mt-6 space-x-2">
-        {/* Previous Button */}
+
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
@@ -142,12 +141,10 @@ const PolicyInfo = () => {
           ← Previous
         </button>
 
-        {/* Page Number Display */}
         <span className="px-5 py-2 text-lg font-bold text-gray-800 bg-gray-200 rounded-md shadow-sm">
           Page {currentPage} of {totalPages}
         </span>
 
-        {/* Next Button */}
         <button
           onClick={() =>
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))

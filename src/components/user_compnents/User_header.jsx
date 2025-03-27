@@ -1,33 +1,60 @@
-import React, { useEffect, useState } from "react"
-import { UserIcon, BellIcon, PhoneIcon } from "@heroicons/react/20/solid"
-import { Link } from "react-router-dom"
-import { useSelector } from "react-redux"
-import Notification from "../../page/user/Notification"
-import axiosInstance from "../../Interceptors/user"
+import React, { useEffect, useState } from "react";
+import { UserIcon, BellIcon, PhoneIcon } from "@heroicons/react/20/solid";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Notification from "../../page/user/Notification";
+import axiosInstance from "../../Interceptors/user";
+import Chat from "../../page/user/Chat";
 
 const UserHeader = () => {
-  const user_token = useSelector((state) => state.userAuth.isAuthenticated)
-  const userId = useSelector((state) => state.userAuth.userid)
-  const [isNotificationOpen, setIsNotificationOpen] = useState(false)
-  const [message, setMessage] = useState([])
+  const user_token = useSelector((state) => state.userAuth.isAuthenticated);
+  const userId = useSelector((state) => state.userAuth.userid);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [message, setMessage] = useState([]);
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+
+  const handleChatToggle = () => {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+
+        setLocation({latitude, longitude});
+
+        setIsChatOpen(true);
+      },
+      (error) => {
+        console.error("Failed to retrieve location:", error.message);
+        alert("Unable to fetch location. Please enable location access.");
+      }
+    );
+  } else {
+    console.error("Geolocation is not supported by your browser.");
+    alert("Geolocation is not supported by your browser.");
+  }
+  };
+
+  
 
   const handleNotificationToggle = async () => {
-    setIsNotificationOpen((prev) => !prev)
-  }
+    setIsNotificationOpen((prev) => !prev);
+  };
+
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await axiosInstance.get(`Getnotification/${userId}`)
+        const res = await axiosInstance.get(`Getnotification/${userId}`);
         if (res.status === 200) {
-          setMessage(res.data.message)
+          setMessage(res.data.message);
         }
       } catch (error) {
-        console.log("Failed to fetch notifications.", error)
+        console.log("Failed to fetch notifications.", error);
       }
-    }
+    };
 
-    fetchNotifications()
-  }, [userId])
+    fetchNotifications();
+  }, [userId]);
 
   return (
     <header
@@ -53,9 +80,10 @@ const UserHeader = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <button className="text-white hover:text-gray-300">
+            <button className="text-white hover:text-gray-300" onClick={handleChatToggle}>
               <PhoneIcon className="w-6 h-6" />
             </button>
+            {isChatOpen && <Chat userId={userId} setIsChatOpen={setIsChatOpen} sendChatWithLocation={location} />}
 
             {user_token ? (
               <>
@@ -94,7 +122,7 @@ const UserHeader = () => {
         </div>
       </nav>
     </header>
-  )
-}
+  );
+};
 
-export default UserHeader
+export default UserHeader;

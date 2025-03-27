@@ -5,6 +5,8 @@ import axiosInstance from "../../Interceptors/user"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useSelector } from "react-redux"
+import razorpay from "../../assets/razorpay.png"
+import Apple_Wallet_Icon from "../../assets/Apple_Wallet_Icon.svg"
 
 const getStatusStyles = (status) => {
   switch (status) {
@@ -24,6 +26,8 @@ function Userpolicy() {
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
   const userId = useSelector((state) => state.userAuth.userid)
+  const [showModal, setShowModal] = useState(false)
+  const [selectedPayment, setSelectedPayment] = useState("razorpay")
 
   const policylist = async () => {
     try {
@@ -57,9 +61,23 @@ function Userpolicy() {
     fetchPolicies()
   }, [])
 
+  const PaymentHandler = (amount, policy_id) => {
+    navigate("/RazorpayPayment", { state: { amount, policy_id } })
+  }
+
+  const handleSubmit = (paymentMethod, amount, policy_id) => {
+    if (paymentMethod === "razorpay") {
+      navigate("/RazorpayPayment", { state: { amount, policy_id } });
+    } else if (paymentMethod === "wallet_policy") {
+      navigate("/RazorpayPaymentWallet", { state: { amount,transactionType: paymentMethod } });
+    }
+    setShowModal(false);
+  };
+  
+
+  console.log(policy)
   return (
     <div className="h-full w-full flex flex-col items-center justify-center bg-gray-100 space-y-6 overflow-hidden">
-      {/* First Card */}
       <div className="max-w-6xl w-full bg-white rounded-lg shadow-lg p-8 flex items-center space-x-6">
         <div className="flex-shrink-0">
           <PlusSquare className="w-16 h-16 text-gray-400" />
@@ -123,11 +141,102 @@ function Userpolicy() {
             <span className="text-sm">{user.policy_status}</span>
           </div>
 
-          {user.payment_status && (
+          {!user.payment_status && (
             <div className="absolute bottom-3 right-4 pr-2">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md">
+              <button
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md"
+                onClick={() => setShowModal(true)}
+              >
                 Pay Now
               </button>
+            </div>
+          )}
+
+          {showModal && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-lg w-full h-full">
+              <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-200">
+                {/* Modal Header */}
+                <h2 className="text-2xl font-semibold text-gray-900 text-center mb-6">
+                  Choose Payment Method
+                </h2>
+
+                {/* Payment Options */}
+                <div className="flex flex-col gap-4">
+                  {/* Razorpay Option */}
+                  <button
+                    className={`flex items-center justify-between border-2 ${
+                      selectedPayment === "razorpay"
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-300 bg-white"
+                    } hover:border-blue-500 hover:bg-blue-50 rounded-lg shadow-sm p-4 transition-all`}
+                    onClick={() => setSelectedPayment("razorpay")}
+                  >
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={razorpay}
+                        alt="Razorpay"
+                        className="w-10 h-10"
+                      />
+                      <span className="font-medium text-lg text-gray-800">
+                        Razorpay
+                      </span>
+                    </div>
+                    {selectedPayment === "razorpay" && (
+                      <span className="text-blue-600 font-semibold text-lg">
+                        ✔
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Wallet Option */}
+                  <button
+                    className={`flex items-center justify-between border-2 ${
+                      selectedPayment === "wallet_policy"
+                        ? "border-green-500 bg-green-50"
+                        : "border-gray-300 bg-white"
+                    } hover:border-green-500 hover:bg-green-50 rounded-lg shadow-sm p-4 transition-all`}
+                    onClick={() => setSelectedPayment("wallet_policy")}
+                  >
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={Apple_Wallet_Icon}
+                        alt="Wallet"
+                        className="w-10 h-10"
+                      />
+                      <span className="font-medium text-lg text-gray-800">
+                        Wallet
+                      </span>
+                    </div>
+                    {selectedPayment === "wallet_policy" && (
+                      <span className="text-green-600 font-semibold text-lg">
+                        ✔
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                {/* Submit & Cancel Buttons */}
+                <div className="mt-6 flex gap-4">
+                  <button
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-3 font-semibold transition-all"
+                    onClick={() =>
+                      handleSubmit(
+                        selectedPayment,
+                        user.monthly_amount,
+                        user.policydetails_uid
+                      )
+                    }
+                  >
+                    Continue
+                  </button>
+                  <button
+                    className="w-full bg-gray-300 hover:bg-gray-400 text-gray-900 rounded-lg py-3 font-semibold transition-all"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 

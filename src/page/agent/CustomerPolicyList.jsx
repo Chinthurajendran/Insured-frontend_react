@@ -35,7 +35,7 @@ const CustomerPolicyList = () => {
                   className={`${
                     index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"
                   } hover:bg-gray-300 cursor-pointer transition duration-200`} 
-                  onClick={() => handleRowClick(policy.policydetails_uid)} // ✅ Fixed click handler
+                  onClick={() => handleRowClick(policy.policydetails_uid)}
                 >
                   <td className="p-3 pl-6 text-left">{index + 1}</td>
                   <td className="p-3 text-left">{policy.policy_holder}</td>

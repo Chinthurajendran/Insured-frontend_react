@@ -30,7 +30,7 @@ function PolicyInfoCreate() {
   }
 
   const Policy_info_create = async (e) => {
-    e.preventDefault() // Prevent form reload
+    e.preventDefault()
 
     if (!policyName || !titleDescription || !photo || !description) {
       setFormError("All fields are required")
@@ -62,7 +62,7 @@ function PolicyInfoCreate() {
   }
 
   const Policy_info_edite = async (e) => {
-    e.preventDefault() // Prevent form reload
+    e.preventDefault()
 
     if (!policyName || !titleDescription || !photo || !description) {
       setFormError("All fields are required")
@@ -79,7 +79,7 @@ function PolicyInfoCreate() {
         formData.append("photo", photo);
       }
       
-      console.log("Sending FormData:", Object.fromEntries(formData)); // Debugging output
+      console.log("Sending FormData:", Object.fromEntries(formData)); 
       const response = await axiosInstance.put(`policy_info_update/${policyId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })

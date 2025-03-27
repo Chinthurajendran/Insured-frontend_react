@@ -42,7 +42,7 @@ const Notification = ({ messages }) => {
                   key={note.notification_uid}
                   initial={{ opacity: 1, x: 0 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 100 }} // Slide out animation
+                  exit={{ opacity: 0, x: 100 }} 
                   transition={{ duration: 0.4 }}
                   className="p-2 flex justify-between items-center hover:bg-gray-100 cursor-pointer"
                 >
@@ -60,7 +60,7 @@ const Notification = ({ messages }) => {
               ))}
             </AnimatePresence>
           </ul>
-          {/* Clear All Button */}
+
           <button
             className={`w-full mt-2 bg-green-900 text-white py-1 rounded-md transition ${
               removing ? "opacity-50 cursor-not-allowed" : "hover:bg-green-800"

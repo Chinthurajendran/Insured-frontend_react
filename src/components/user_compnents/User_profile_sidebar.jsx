@@ -19,7 +19,7 @@ function Sidebar() {
   const menuItems = [
     { name: "Profile", icon: <User className="h-5 w-5" />, link: "/Userpage/Userprofile" },
     { name: "Your Policies", icon: <FileText className="h-5 w-5" />, link: "/Userpage/Userpolicy" },
-    { name: "Wallet", icon: <Wallet className="h-5 w-5" />, link: "" },
+    { name: "Wallet", icon: <Wallet className="h-5 w-5" />, link: "/Userpage/Walletpage" },
   ];
 
   const dispatch = useDispatch();

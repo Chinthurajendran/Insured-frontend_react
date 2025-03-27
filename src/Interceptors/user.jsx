@@ -75,8 +75,8 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest)
       } catch (refreshError) {
         // console.error("Refresh Token Expired or Invalid!")
-        // store.dispatch(logout())
-        // window.location.assign("/Login_page")
+        store.dispatch(logout())
+        window.location.assign("/Login_page")
         return Promise.reject(refreshError)
       }
     }

@@ -50,7 +50,7 @@ function AgentSidebar() {
             </Link>
           </li>
           <li>
-            <Link to="demo" className="flex items-center px-4 py-3 rounded-lg hover:bg-[#083D24]">
+            <Link to="CustomerAssistance" className="flex items-center px-4 py-3 rounded-lg hover:bg-[#083D24]">
               <HelpCircle className="h-5 w-5 mr-3" /> Customer Assistance
             </Link>
           </li>

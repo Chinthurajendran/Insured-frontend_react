@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import axios from "axios"
 import { baseURL } from "../../baseUrls/Urls"
-// Removed UI library imports
 import {
   Shield,
   Home,
@@ -89,7 +88,7 @@ function PolicyInformation() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Hero Section */}
+    
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/40 z-10"></div>
         {photo ? (
@@ -128,7 +127,7 @@ function PolicyInformation() {
         </div>
       </div>
 
-      {/* Content Section */}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-30 pb-20">
         <div className="shadow-xl border-0 overflow-hidden bg-white rounded-lg">
           <div className="p-0">

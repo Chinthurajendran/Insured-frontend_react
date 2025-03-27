@@ -15,7 +15,10 @@ import Browsepolicies from "../page/user/Browsepolicies.jsx"
 import Policyinformation from "../page/user/Policyinformation.jsx"
 import UserRouter from "../PrivateRoute/UserRouter.jsx"
 import Plandetails from "../page/user/Plandetails.jsx"
-// import Notification from "../page/user/Notification.jsx"
+import RazorpayPayment from "../page/user/RazorpayPayment.jsx"
+import Walletpage from "../page/user/Walletpage.jsx"
+import RazorpayPaymentWallet from "../page/user/RazorpayPaymentWallet.jsx"
+import useWebSocket from "../page/user/useWebSocket.jsx"
 
 function Userside() {
   return (
@@ -34,16 +37,19 @@ function Userside() {
               <Route path="/Userpage" element={<Userpage />}>
                 <Route path="Userprofile" element={<Userprofile />} />
                 <Route path="Userpolicy" element={<Userpolicy />} />
+                <Route path="Walletpage" element={<Walletpage />} />
               </Route>
             <Route path="/Policypage" element={<Policypage />} />
             <Route path="/PolicyDocumentUpload" element={<PolicyDocumentUpload />}/>
             <Route path="/Browsepolicies" element={<Browsepolicies />} />
             <Route path="/Policyinformation" element={<Policyinformation />} />
             <Route path="/Plandetails" element={<Plandetails />} />
-            {/* <Route path="/Notification" element={<Notification />} /> */}
+            <Route path="/RazorpayPayment" element={<RazorpayPayment />} />
+            <Route path="/RazorpayPaymentWallet" element={<RazorpayPaymentWallet />} />
           </Route>
           <Route path="/Passwordrecovery" element={<Passwordrecovery />} />
           <Route path="/Resetpassword" element={<Resetpassword />} />
+          <Route path="/useWebSocket" element={<useWebSocket />} />
         </Routes>
       </BrowserRouter>
     </div>

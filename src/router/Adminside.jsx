@@ -20,6 +20,7 @@ import PolicyInfo from "../page/admin/PolicyInfo.jsx"
 import PolicyInfoCreate from "../page/admin/PolicyInfoCreate.jsx"
 import AdminRouter from "../PrivateRoute/AdminRouter.jsx"
 import DashboardGraph from "../page/admin/DashboardGraph.jsx"
+import CustomerAssistance from "../page/admin/CustomerAssistance.jsx"
 
 function Adminside() {
   return (
@@ -41,6 +42,7 @@ function Adminside() {
               <Route path="PolicyList" element={<PolicyList />} />
               <Route path="PolicyInfo" element={<PolicyInfo />} />
               <Route path="Demo" element={<Demo_loading_page />} />
+              <Route path="CustomerAssistance" element={<CustomerAssistance />} />
             </Route>
             <Route
               path="PolicyApprovalRejection_page"

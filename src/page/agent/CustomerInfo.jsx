@@ -47,7 +47,6 @@ function CustomerInfo() {
     if (PolicyId) fetchPolicies()
   }, [PolicyId])
 
-  // Helper function to get the appropriate icon for each field
   const getFieldIcon = (key) => {
     const iconMap = {
       policy_holder: <User className="h-5 w-5 text-green-700" />,
@@ -62,7 +61,7 @@ function CustomerInfo() {
     return iconMap[key] || <Shield className="h-5 w-5 text-green-700" />
   }
 
-  // Format field names for display
+
   const formatFieldName = (key) => {
     return key
       .split("_")

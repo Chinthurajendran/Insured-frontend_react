@@ -32,7 +32,6 @@ const Agent_login_page = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords
-        console.log(latitude)
         try {
           const res = await axiosInstance.post(`agent_login`, {
             ...formData,

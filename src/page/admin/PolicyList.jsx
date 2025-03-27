@@ -65,7 +65,7 @@ const PolicyList = () => {
     )
   }
 
-  // Pagination Logic
+ 
   const indexOfLastUser = currentPage * usersPerPage
   const indexOfFirstUser = indexOfLastUser - usersPerPage
   const currentUsers = policy.slice(indexOfFirstUser, indexOfLastUser)
@@ -118,9 +118,9 @@ const PolicyList = () => {
           </tbody>
         </table>
       </div>
-      {/* Pagination Controls */}
+
       <div className="flex justify-center items-center mt-6 space-x-2">
-        {/* Previous Button */}
+
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
@@ -134,12 +134,11 @@ const PolicyList = () => {
           ← Previous
         </button>
 
-        {/* Page Number Display */}
+
         <span className="px-5 py-2 text-lg font-bold text-gray-800 bg-gray-200 rounded-md shadow-sm">
           Page {currentPage} of {totalPages}
         </span>
 
-        {/* Next Button */}
         <button
           onClick={() =>
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))

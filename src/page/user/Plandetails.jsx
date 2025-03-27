@@ -48,7 +48,7 @@ function Plandetails() {
   return (
     <div className="min-h-screen bg-green-50 py-12 px-4">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-        {/* Header Section */}
+
         <div className="bg-green-900 p-6 text-white text-center">
           <h1 className="text-3xl font-bold flex justify-center items-center">
             <FaShieldAlt className="mr-2" /> Insurance Plan Details
@@ -56,13 +56,13 @@ function Plandetails() {
           <p className="text-sm opacity-80">Your personalized insurance plan information.</p>
         </div>
 
-        {/* Content Section */}
+
         <div className="p-8">
           {loading ? (
             <div className="text-center text-gray-600">Loading plan details...</div>
           ) : policyDetails ? (
             <>
-              {/* Plan Overview */}
+
               <div className="mb-6">
                 <h2 className="text-2xl font-semibold text-green-900 flex items-center">
                   <FaInfoCircle className="mr-2" /> Plan Overview
@@ -76,7 +76,6 @@ function Plandetails() {
                 </div>
               </div>
 
-              {/* Key Details Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div className="bg-white rounded-lg shadow-md p-5 border border-gray-300 flex items-center">
                   <FaMoneyBillWave className="text-green-900 text-3xl mr-4" />
@@ -108,7 +107,7 @@ function Plandetails() {
                 </div>
               </div>
 
-              {/* Required Documents */}
+  
               <div>
                 <h3 className="text-xl font-semibold text-green-900 mb-4 flex items-center">
                   <FaFileAlt className="mr-2" /> Required Documents

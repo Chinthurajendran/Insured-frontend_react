@@ -11,7 +11,6 @@ function CustomerSearch() {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
-  // Fetch suggestions based on input query
   useEffect(() => {
     if (!query) {
       setSuggestions([])
@@ -85,18 +84,17 @@ function CustomerSearch() {
           </div>
         </form>
 
-        {/* Suggestions Dropdown */}
         {showSuggestions && suggestions.length > 0 && (
           <ul
             className="absolute top-full left-0 right-0 -mt-49 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-40 overflow-y-auto text-sm"
-            onMouseDown={(e) => e.preventDefault()} // Prevent closing before selection
+            onMouseDown={(e) => e.preventDefault()} 
           >
             {suggestions.map((item, index) => (
               <li
                 key={index}
                 onMouseDown={() => {
-                  setQuery(item) // Set the selected suggestion
-                  setShowSuggestions(false) // Close dropdown
+                  setQuery(item) 
+                  setShowSuggestions(false) 
                 }}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
               >

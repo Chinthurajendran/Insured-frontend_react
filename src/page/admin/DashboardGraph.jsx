@@ -5,15 +5,14 @@ import axiosInstance from "../../Interceptors/admin";
 function DashboardGraph() {
   const [chartData, setChartData] = useState([]);
 
-  // Function to process data and include projections
   const processData = (data) => {
     const currentYear = new Date().getFullYear();
     const months = Array.from({ length: 12 }, (_, i) => ({
-      month: new Date(currentYear, i).toISOString().slice(0, 7), // YYYY-MM
+      month: new Date(currentYear, i).toISOString().slice(0, 7),
       count: 0,
     }));
 
-    // Count policies per month
+
     data.forEach(({ create_at }) => {
       const policyDate = new Date(create_at);
       if (policyDate.getFullYear() === currentYear) {
