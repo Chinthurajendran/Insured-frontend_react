@@ -4,17 +4,21 @@ import axiosInstance from "../../Interceptors/user"
 import EmojiPicker from "emoji-picker-react"
 import Image from "../../assets/happy3.png"
 import useWebRTC from "./useWebRTC"
+import useWebRTCVideocall from "./useWebRTCVideocall"
 
 const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
   const [message, setMessage] = useState("")
   const [receiver_id, Setreceiver_id] = useState(null)
   const { messages, sendMessage } = useWebSocket(userId, receiver_id)
+  const [VideoCallScreen, showVideoCallScreen] = useState(false)
   const [showCallScreen, setShowCallScreen] = useState(false)
   const { startCall, localStream, remoteStream, endCall } = useWebRTC(
     userId,
     receiver_id,
     setShowCallScreen
   )
+  const { startVideoCall, endVideoCall, localVideoRef, remoteVideoRef } =
+    useWebRTCVideocall(userId, receiver_id, setShowCallScreen)
   const messagesEndRef = useRef(null)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const handleCall = () => {
@@ -25,6 +29,16 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
   const handleEndCall = () => {
     setShowCallScreen(false) // Hide call screen
     endCall()
+  }
+
+  const handleVideoCall = () => {
+    showVideoCallScreen(true)
+    startVideoCall() // Start WebRTC call
+  }
+
+  const handleEndVideoCall = () => {
+    showVideoCallScreen(false) // Hide call screen
+    endVideoCall()
   }
 
   const handleSend = () => {
@@ -44,7 +58,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
-  
+
   useEffect(() => {
     const fetchPolicy = async () => {
       try {
@@ -69,10 +83,10 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
 
   useEffect(() => {
     if (remoteStream.current) {
-      console.log("Audio element stream:", remoteStream.current);
+      console.log("Audio element stream:", remoteStream.current)
     }
-  }, [remoteStream.current]);
-  console.log("Audio element stream:", remoteStream.current);
+  }, [remoteStream.current])
+  console.log("Audio element stream:", remoteStream.current)
   return (
     <div className="fixed bottom-4 right-4 w-96 h-[450px] bg-[#0B4B2C] shadow-2xl rounded-2xl flex flex-col border border-gray-400 z-50 overflow-hidden">
       {/* Header */}
@@ -111,6 +125,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
           <button
             className="text-white hover:text-gray-300 transition-all transform hover:scale-110 p-2 rounded-full hover:bg-gray-700/20"
             aria-label="Video Call"
+            onClick={handleVideoCall}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +142,6 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
               />
             </svg>
           </button>
-
           {/* Close Button */}
           <button
             onClick={handleClose}
@@ -173,7 +187,6 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
                   50 + (msg.content?.length ?? 0) * 8, // Ensure msg.content is defined
                   window.innerWidth * 0.9
                 )}px`,
-                
               }}
             >
               {msg.content}
@@ -208,13 +221,61 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
           {/* Buttons Container */}
           <div className="flex items-center gap-6">
             {/* End Call Button */}
-            <button className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-700 text-white text-lg font-semibold rounded-full shadow-lg hover:shadow-2xl transition-transform transform hover:scale-110 focus:outline-none"
-            onClick={handleEndCall}>
+            <button
+              className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-700 text-white text-lg font-semibold rounded-full shadow-lg hover:shadow-2xl transition-transform transform hover:scale-110 focus:outline-none"
+              onClick={handleEndCall}
+            >
               End Call
             </button>
           </div>
 
           {/* Participants & Settings */}
+        </div>
+      )}
+
+      {/* Video Call Screen */}
+      {VideoCallScreen && (
+        <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800 bg-opacity-95 flex flex-col items-center justify-center z-50">
+          {/* Video Feeds */}
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-6 w-full h-full">
+            {/* Local Video */}
+            <div className="relative w-40 h-40 lg:w-64 lg:h-64 bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+              <video
+                ref={localVideoRef}
+                autoPlay
+                muted
+                playsInline
+                className="w-full h-full object-cover"
+              ></video>
+              <p className="absolute bottom-2 left-2 text-white text-xs bg-black bg-opacity-50 px-2 py-1 rounded">
+                You
+              </p>
+            </div>
+
+            {/* Remote Video */}
+            <div className="relative w-64 h-64 lg:w-[75%] lg:h-[75%] bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+              <video
+                ref={remoteVideoRef}
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover"
+              ></video>
+              <p className="absolute bottom-2 left-2 text-white text-xs bg-black bg-opacity-50 px-2 py-1 rounded">
+                Caller
+              </p>
+            </div>
+          </div>
+
+          {/* Buttons Container */}
+          <div className="mt-6 flex items-center gap-6">
+            {/* End Video Call Button */}
+            <button
+              className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-700 text-white text-lg font-semibold rounded-full shadow-lg hover:shadow-2xl transition-transform transform hover:scale-110 focus:outline-none"
+              onClick={handleEndVideoCall}
+            >
+              End Call
+            </button>
+          </div>
         </div>
       )}
 

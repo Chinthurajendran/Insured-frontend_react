@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 
-const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
+const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
   const [socket, setSocket] = useState(null);
   const peerConnection = useRef(null);
   const localStream = useRef(null);
   const remoteStream = useRef(null);
-  const remoteAudioRef = useRef(null);
+  const localVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
 
   // **WebSocket Setup**
   useEffect(() => {
     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/webrtc/${userId}`);
-
     ws.onopen = () => console.log("✅ WebSocket connected (user)");
     ws.onmessage = async (event) => {
       const message = JSON.parse(event.data);
@@ -32,15 +32,22 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
             break;
           case "candidate":
             console.log("📡 Handling candidate:", message);
-            if (peerConnection.current) {
-              await peerConnection.current.addIceCandidate(
-                new RTCIceCandidate(message.candidate)
-              );
+            try {
+              if (peerConnection.current) {
+                await peerConnection.current.addIceCandidate(
+                  new RTCIceCandidate(message.candidate)
+                );
+                console.log("✅ ICE candidate added successfully.");
+              } else {
+                console.warn("⚠️ PeerConnection is not initialized.");
+              }
+            } catch (error) {
+              console.error("❌ Failed to add ICE candidate:", error);
             }
             break;
           case "call-ended":
             console.log("📴 Call ended:", message);
-            endCall();
+            endVideoCall();
             setShowCallScreen(false);
             break;
           default:
@@ -63,10 +70,11 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
     };
   }, [userId]);
 
-  // **Start Call**
-  const startCall = async () => {
+  // **Start Video Call**
+  const startVideoCall = async () => {
     try {
       localStream.current = await navigator.mediaDevices.getUserMedia({
+        video: true,
         audio: true,
       });
       remoteStream.current = new MediaStream();
@@ -90,8 +98,8 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
 
       peer.ontrack = (event) => {
         remoteStream.current.addTrack(event.track);
-        if (remoteAudioRef.current) {
-          remoteAudioRef.current.srcObject = remoteStream.current;
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = remoteStream.current;
         }
       };
 
@@ -107,8 +115,12 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
       socket.send(
         JSON.stringify({ type: "offer", target_id: targetUserId, offer })
       );
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = localStream.current;
+      }
     } catch (error) {
-      console.error("Error starting call:", error);
+      console.error("Error starting video call:", error);
     }
   };
 
@@ -136,13 +148,14 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
 
       peer.ontrack = (event) => {
         remoteStream.current.addTrack(event.track);
-        if (remoteAudioRef.current) {
-          remoteAudioRef.current.srcObject = remoteStream.current;
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = remoteStream.current;
         }
       };
 
       if (!localStream.current) {
         localStream.current = await navigator.mediaDevices.getUserMedia({
+          video: true,
           audio: true,
         });
       }
@@ -160,13 +173,17 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
       socket.send(
         JSON.stringify({ type: "answer", target_id: targetUserId, answer })
       );
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = localStream.current;
+      }
     } catch (error) {
       console.error("Error handling offer:", error);
     }
   };
 
-  // **End Call**
-  const endCall = () => {
+  // **End Video Call**
+  const endVideoCall = () => {
     if (peerConnection.current) {
       peerConnection.current.close();
       peerConnection.current = null;
@@ -186,7 +203,7 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
     }
   };
 
-  return { startCall, endCall, localStream, remoteStream, remoteAudioRef };
+  return { startVideoCall, endVideoCall, localStream, remoteStream, localVideoRef, remoteVideoRef };
 };
 
-export default useWebRTC;
+export default useWebRTCVideocall;

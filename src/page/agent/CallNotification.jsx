@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import useWebRTCAgent from "../agent/useWebRTCAgent";
@@ -6,7 +6,15 @@ import useWebRTCAgent from "../agent/useWebRTCAgent";
 function CallNotification() {
   const agentId = useSelector((state) => state.agentAuth.agent_uuid);
   const [showCallScreen, setShowCallScreen] = useState(false);
-  const { acceptCall, endCall, incomingCall, callerId } = useWebRTCAgent(agentId, setShowCallScreen);
+  const localAudioRef = useRef(null);
+  const remoteAudioRef = useRef(null);
+
+  const { acceptCall, endCall, incomingCall, callerId } = useWebRTCAgent(
+    agentId,
+    setShowCallScreen,
+    localAudioRef,
+    remoteAudioRef
+  )
 
   const AnswerCall = useCallback(() => {
     if (!acceptCall) return;
@@ -85,6 +93,8 @@ function CallNotification() {
                   />
                 </svg>
               </div>
+              <audio ref={localAudioRef} autoPlay muted />
+              <audio ref={remoteAudioRef} autoPlay />
             </div>
 
             {/* End Call Button */}

@@ -5,6 +5,7 @@ import Agent_sidebar from "../../components/adent_compnents/Agent_sidebar";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import CallNotification from "./CallNotification";
+import VideoCallNotification from "./VideoCallNotification";
 
 function AgentHome() {
   const agent_authenticated = useSelector((state) => state.agentAuth.isAuthenticated_agent)
@@ -29,6 +30,7 @@ function AgentHome() {
         <Agent_sidebar />
         <div className="w-5/6 p-6">
         <CallNotification />
+        {/* <VideoCallNotification /> */}
           <Outlet />
         </div>
       </div>
