@@ -1,6 +1,4 @@
 import React, { useState } from "react"
-import { baseURL } from "../../baseUrls/Urls"
-import axios from "axios"
 import { useDispatch } from "react-redux"
 import { useNavigate, Link } from "react-router-dom"
 import { jwtDecode } from "jwt-decode"

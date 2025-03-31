@@ -18,7 +18,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = store.getState().agentToken.agent_access_token
-    console.log("Sending1 Authorization Header:", token)
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`
     }

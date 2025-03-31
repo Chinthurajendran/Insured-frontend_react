@@ -18,7 +18,7 @@ const useWebSocket = (userId,receiver_id) => {
     const fetchChatHistory = async () => {
       try {
         const response = await axios.get(`${baseURL}/message_auth/messages/${receiver_id}?sender_id=${userId}`);
-        console.log("📜 Chat history:", response.data);
+
         setMessages(response.data);
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -27,9 +27,6 @@ const useWebSocket = (userId,receiver_id) => {
     };
 
     fetchChatHistory();
-    console.log("user",userId)
-    console.log("user_sender_id",userId)
-    console.log("agent_receiver_id",receiver_id)
 
     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${userId}`);
 

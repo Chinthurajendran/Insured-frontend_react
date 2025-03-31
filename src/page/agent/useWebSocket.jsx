@@ -6,7 +6,6 @@ import { baseURL } from "../../baseUrls/Urls";
 const useWebSocket = (sender_id,receiver_id) => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
-  const token = useSelector((state) => state.userToken.user_access_token)
   const agentId = useSelector((state) => state.agentAuth.agent_uuid);
 
 
@@ -28,24 +27,16 @@ const useWebSocket = (sender_id,receiver_id) => {
     };
 
     fetchChatHistory();
-    // console.log("11111111111",sender_id)
-    // console.log("22222222222",receiver_id)
     console.log("agent",agentId)
     console.log("agent_sender_id",sender_id)
     console.log("user_receiver_id",receiver_id)
 
     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${sender_id}`);
 
-    // is an event handler that runs when the WebSocket connection is successfully opened.
     ws.onopen = () => {
       console.log("✅ Connected to WebSocket");
     };
 
-    // is triggered whenever the WebSocket receives a new message from the server.
-    // ws.onmessage = (event) => {
-    //   console.log("📩 Received:", event.data);
-    //   setMessages((prev) => [...prev, event.data]);
-    // };
 
     ws.onmessage = (event) => {
       try {
@@ -57,13 +48,7 @@ const useWebSocket = (sender_id,receiver_id) => {
       }
     };
 
-    // is triggered whenever the WebSocket connection is closed.
-    // ws.onclose = () => {
-    //   console.warn("⚠️ WebSocket closed. Attempting to reconnect...");
-    //   setTimeout(() => {
-    //     setSocket(new WebSocket(`ws://127.0.0.1:8000/ws/${userId}`)); // Reconnect
-    //   }, 3000);
-    // };
+
 
     ws.onclose = () => {
       console.warn("⚠️ WebSocket closed. Attempting to reconnect...");
@@ -87,11 +72,10 @@ const useWebSocket = (sender_id,receiver_id) => {
       console.warn("⚠️ WebSocket is not ready yet. Retrying...");
       return;
     }
-    // socket.send(message);
     const payload = {
       content: message,
       receiver_id: receiver_id,
-      sender_id: sender_id, // Include receiver_id in the payload
+      sender_id: sender_id,
     };
     socket.send(JSON.stringify(payload));
   };

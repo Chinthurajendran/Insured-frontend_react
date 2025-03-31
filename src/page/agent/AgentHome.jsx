@@ -4,6 +4,7 @@ import Agent_header from "../../components/adent_compnents/Agent_header";
 import Agent_sidebar from "../../components/adent_compnents/Agent_sidebar";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import CallNotification from "./CallNotification";
 
 function AgentHome() {
   const agent_authenticated = useSelector((state) => state.agentAuth.isAuthenticated_agent)
@@ -27,6 +28,7 @@ function AgentHome() {
       <div className="flex h-full">
         <Agent_sidebar />
         <div className="w-5/6 p-6">
+        <CallNotification />
           <Outlet />
         </div>
       </div>

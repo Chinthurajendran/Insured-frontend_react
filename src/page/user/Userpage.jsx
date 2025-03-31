@@ -1,13 +1,13 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import User_profile_header from "../../components/user_compnents/User_profile_header";
 import User_profile_sidebar from "../../components/user_compnents/User_profile_sidebar";
-
+import UserHeader from "../../components/user_compnents/User_header";
 function Userpage() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
 
-      <User_profile_header />
+      <UserHeader />
+      
 
       <div className="flex mt-20">
 
