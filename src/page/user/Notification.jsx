@@ -4,12 +4,12 @@ import { useSelector } from "react-redux"
 import axiosInstance from "../../Interceptors/user"
 
 const Notification = ({ messages }) => {
-  const [notifications, setNotifications] = useState([])
+  const [notifications, setNotifications] = useState(messages || []) // Directly initialize state
   const userId = useSelector((state) => state.userAuth.userid)
   const [removing, setRemoving] = useState(false)
 
   useEffect(() => {
-    if (messages) {
+    if (messages?.length) {
       setNotifications(messages)
     }
   }, [messages])
@@ -19,13 +19,13 @@ const Notification = ({ messages }) => {
     setRemoving(true)
 
     try {
-      const res = await axiosInstance.put(`Clearnotification/${userId}`)
+      const res = await axiosInstance.put(`/Clearnotification/${userId}`)
       if (res.status === 200) {
-        console.log(res)
-        setNotifications([])
+        console.log("Notifications cleared successfully")
+        setNotifications([]) // Directly clear notifications
       }
     } catch (error) {
-      console.error("Failed to clear notifications:", error)
+      console.error("Error clearing notifications:", error?.response?.data || error.message)
     } finally {
       setRemoving(false)
     }
@@ -67,7 +67,7 @@ const Notification = ({ messages }) => {
             }`}
             onClick={!removing ? clearNotifications : undefined}
           >
-            Clear All
+            {removing ? "Clearing..." : "Clear All"}
           </button>
         </>
       ) : (

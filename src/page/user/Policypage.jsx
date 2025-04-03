@@ -36,7 +36,8 @@ function Policypage() {
 
     fetchData()
   }, [userId])
-
+  console.log("1111111111", additionalPolicyData)
+  console.log("2222222222222222", policyData)
   return (
     <div className="max-w-6xl mx-auto p-2">
       {policyData.length > 0 ? (
@@ -88,19 +89,35 @@ function Policypage() {
 
                 <button
                   className={`px-4 py-2 rounded-md font-bold text-sm transition duration-200 
-                  ${
-                    additionalPolicyData
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-gray-200 text-red-600 hover:bg-gray-300 hover:text-red-700"
-                  }`}
+    ${
+      additionalPolicyData.some(
+        (p) =>
+          p.policy_id === policy.policy_id &&
+          (p.policy_status === "approved" || p.policy_status === "processing")
+      )
+        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+        : "bg-gray-200 text-red-600 hover:bg-gray-300 hover:text-red-700"
+    }`}
                   onClick={() => {
-                    if (!additionalPolicyData) {
+                    if (
+                      !additionalPolicyData.some(
+                        (p) =>
+                          p.policy_id === policy.policy_id &&
+                          (p.policy_status === "approved" ||
+                            p.policy_status === "processing")
+                      )
+                    ) {
                       navigate("/PolicyDocumentUpload", {
                         state: { userId, policyId: policy.policy_id },
                       })
                     }
                   }}
-                  disabled={additionalPolicyData}
+                  disabled={additionalPolicyData.some(
+                    (p) =>
+                      p.policy_id === policy.policy_id &&
+                      (p.policy_status === "approved" ||
+                        p.policy_status === "processing")
+                  )}
                 >
                   ₹{policy.monthly_payment}/month
                 </button>

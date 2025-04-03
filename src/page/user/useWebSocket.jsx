@@ -15,6 +15,7 @@ const useWebSocket = (userId,receiver_id) => {
       console.warn("Receiver ID is not set. Skipping WebSocket initialization.");
       return;
     }
+    
     const fetchChatHistory = async () => {
       try {
         const response = await axios.get(`${baseURL}/message_auth/messages/${receiver_id}?sender_id=${userId}`);
@@ -34,12 +35,7 @@ const useWebSocket = (userId,receiver_id) => {
     ws.onopen = () => {
       console.log("✅ Connected to WebSocket");
     };
-
-    // is triggered whenever the WebSocket receives a new message from the server.
-    // ws.onmessage = (event) => {
-    //   console.log("📩 Received:", event.data);
-    //   setMessages((prev) => [...prev, event.data]);
-    // };
+;
 
     ws.onmessage = (event) => {
       try {
@@ -50,14 +46,6 @@ const useWebSocket = (userId,receiver_id) => {
         console.error("❌ Error parsing WebSocket message:", error);
       }
     };
-
-    // is triggered whenever the WebSocket connection is closed.
-    // ws.onclose = () => {
-    //   console.warn("⚠️ WebSocket closed. Attempting to reconnect...");
-    //   setTimeout(() => {
-    //     setSocket(new WebSocket(`ws://127.0.0.1:8000/ws/${userId}`)); // Reconnect
-    //   }, 3000);
-    // };
 
     ws.onclose = () => {
       console.warn("⚠️ WebSocket closed. Attempting to reconnect...");

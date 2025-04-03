@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../Interceptors/admin";
+import axiosInstance from "../../Interceptors/agent";
 
 const getStatusStyles = (status) => {
   switch (status) {
@@ -32,7 +32,6 @@ const PolicyStatus = () => {
         }
       } catch (error) {
         console.error("Error fetching policies:", error);
-        alert("Failed to fetch policies. Please try again later.");
       } finally {
         setLoading(false);
       }

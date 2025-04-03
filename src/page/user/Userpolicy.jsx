@@ -141,7 +141,7 @@ function Userpolicy() {
             <span className="text-sm">{user.policy_status}</span>
           </div>
 
-          {!user.payment_status && (
+          {user.payment_status && (
             <div className="absolute bottom-3 right-4 pr-2">
               <button
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md"

@@ -9,27 +9,23 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { PieChart, Pie, Cell, Legend } from "recharts";
-import axiosInstance from "../../Interceptors/admin";
+import axiosInstance from "../../Interceptors/agent";
 
 function DashboardGraph() {
   const [chartData, setChartData] = useState([]);
-  const [agentPolicyCount, setAgentPolicyCount] = useState(0);
-  const [nonAgentPolicyCount, setNonAgentPolicyCount] = useState(0);
   const [policyStatusCounts, setPolicyStatusCounts] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [policyStatusVisible, setPolicyStatusVisible] = useState(false);  // New state for delayed rendering
+  const [policyStatusVisible, setPolicyStatusVisible] = useState(false);
 
   useEffect(() => {
     const fetchPolicyData = async () => {
       try {
-        const [policiesRes, agentRes, paymentRes] = await Promise.all([
+        const [policiesRes, paymentRes] = await Promise.all([
           axiosInstance.get("policiespermonth"),
-          axiosInstance.get("policytakenbyagent"),
           axiosInstance.get("policypaymentinfo"),
         ]);
 
         const policies = policiesRes.data.policies || [];
-        const agentPolicies = agentRes.data.policies || [];
         const allPolicies = paymentRes.data.policies || [];
 
         const currentYear = new Date().getFullYear();
@@ -48,17 +44,6 @@ function DashboardGraph() {
         setChartData(months);
 
         const currentMonth = new Date().toISOString().slice(0, 7);
-        const totalPoliciesThisMonth = policies.filter((policy) =>
-          policy.create_at.startsWith(currentMonth)
-        ).length;
-        const agentPoliciesThisMonth = agentPolicies.filter((policy) =>
-          policy.create_at.startsWith(currentMonth)
-        ).length;
-
-        setAgentPolicyCount(agentPoliciesThisMonth);
-        setNonAgentPolicyCount(
-          Math.max(totalPoliciesThisMonth - agentPoliciesThisMonth, 0)
-        );
 
         setPolicyStatusCounts({
           approved: allPolicies.filter(
@@ -77,12 +62,10 @@ function DashboardGraph() {
               policy.policy_status.toLowerCase() === "rejected"
           ).length,
         });
-        
-        // Delay the rendering of the Policy Status chart
+
         setTimeout(() => {
           setPolicyStatusVisible(true);
-        }, 1000);  // Delay of 1 second (1000 ms)
-
+        }, 400);
       } catch (error) {
         console.error("Error fetching policy data:", error);
       } finally {
@@ -92,14 +75,6 @@ function DashboardGraph() {
 
     fetchPolicyData();
   }, []);
-
-  const pieData = useMemo(
-    () => [
-      { name: "Agent Policies", value: agentPolicyCount },
-      { name: "Non-Agent Policies", value: nonAgentPolicyCount },
-    ],
-    [agentPolicyCount, nonAgentPolicyCount]
-  );
 
   const statusData = useMemo(
     () =>
@@ -114,9 +89,8 @@ function DashboardGraph() {
   );
 
   return (
-    <div className="w-full h-auto flex flex-col items-center gap-8">
+    <div className="w-full h-auto flex flex-col items-center gap-8 mt-20">
       {loading ? (
-        // Placeholder or skeleton loader
         <div className="w-full h-96 flex items-center justify-center">
           <div className="animate-pulse">
             <div className="w-1/2 h-8 bg-gray-300 mb-4"></div>
@@ -124,9 +98,10 @@ function DashboardGraph() {
           </div>
         </div>
       ) : (
-        <>
-          <div className="w-full h-96">
-            <h2 className="text-xl font-semibold text-center mb-4">
+        <div className="flex flex-col md:flex-row items-center justify-between w-full">
+          {/* Bar Chart */}
+          <div className="w-full md:w-2/3 h-96">
+            <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">
               Policies Per Month (Current Year)
             </h2>
             <ResponsiveContainer width="100%" height="100%">
@@ -145,41 +120,24 @@ function DashboardGraph() {
             </ResponsiveContainer>
           </div>
 
-          <div className="w-full flex flex-row justify-center gap-16">
-            <div className="flex flex-col items-center">
+          {/* Pie Chart (Right Side) */}
+          {policyStatusVisible && (
+            <div className="w-full md:w-1/3 flex flex-col items-center">
               <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">
-                Agent vs Direct Policies (Monthly Overview)
+                Policy Status (Current Month)
               </h2>
               <PieChart width={400} height={300}>
-                <Pie data={pieData} dataKey="value" cx="50%" cy="50%" outerRadius={110}>
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={["#4F46E5", "#E53935"][index]} />
+                <Pie data={statusData} dataKey="value" cx="50%" cy="50%" outerRadius={110}>
+                  {statusData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={["#28a745", "#ffc107", "#dc3545"][index]} />
                   ))}
                 </Pie>
                 <Tooltip />
                 <Legend />
               </PieChart>
             </div>
-
-            {/* This part now renders with a delay */}
-            {policyStatusVisible && (
-              <div className="flex flex-col items-center">
-                <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">
-                  Policy Status (Current Month)
-                </h2>
-                <PieChart width={400} height={300}>
-                  <Pie data={statusData} dataKey="value" cx="50%" cy="50%" outerRadius={110}>
-                    {statusData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={["#28a745", "#ffc107", "#dc3545"][index]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </div>
-            )}
-          </div>
-        </>
+          )}
+        </div>
       )}
     </div>
   );

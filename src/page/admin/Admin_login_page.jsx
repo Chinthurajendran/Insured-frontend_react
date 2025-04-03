@@ -23,7 +23,7 @@ const AdminLoginPage = () => {
 
   useEffect(() => {
     if (admin_token) {
-      navigate("/Admin_home")
+      navigate("/Admin_home/DashboardGraph")
     }
   }, [admin_token, navigate])
 
@@ -47,7 +47,7 @@ const AdminLoginPage = () => {
             admin_refresh_token: res.data.admin_refresh_token,
           })
         )
-        navigate("/Admin_home/Demo", {
+        navigate("/Admin_home/DashboardGraph", {
           state: { message: "Login successful!" },
         })
         toast.success("Login successful! Welcome back.")

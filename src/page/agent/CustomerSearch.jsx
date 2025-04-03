@@ -3,6 +3,7 @@ import { Search } from "lucide-react"
 import axiosInstance from "../../Interceptors/agent"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import { useSelector } from "react-redux"
 
 function CustomerSearch() {
   const [query, setQuery] = useState("")
@@ -10,33 +11,119 @@ function CustomerSearch() {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const [socket, setSocket] = useState(null);
+  const agentId = useSelector((state) => state.agentAuth.agent_uuid)
 
+  // useEffect(() => {
+  //   if (!query) {
+  //     setSuggestions([])
+  //     return
+  //   }
+
+  //   const fetchSuggestions = async () => {
+  //     setIsLoading(true)
+  //     try {
+  //       const res = await axiosInstance.get(
+  //         `/search-suggestions?query=${query}`
+  //       )
+  //       if (res.status === 200) {
+  //         const uniqueSuggestions = [...new Set(res.data)]
+  //         setSuggestions(uniqueSuggestions)
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching suggestions:", error)
+  //     } finally {
+  //       setIsLoading(false)
+  //     }
+  //   }
+
+  //   const debounce = setTimeout(() => fetchSuggestions(), 300)
+  //   return () => clearTimeout(debounce)
+  // }, [query])
+
+  
   useEffect(() => {
-    if (!query) {
-      setSuggestions([])
-      return
-    }
 
-    const fetchSuggestions = async () => {
-      setIsLoading(true)
-      try {
-        const res = await axiosInstance.get(
-          `/search-suggestions?query=${query}`
-        )
-        if (res.status === 200) {
-          const uniqueSuggestions = [...new Set(res.data)]
-          setSuggestions(uniqueSuggestions)
-        }
-      } catch (error) {
-        console.error("Error fetching suggestions:", error)
-      } finally {
-        setIsLoading(false)
+    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/search/${agentId}`);
+
+    // is an event handler that runs when the WebSocket connection is successfully opened.
+    ws.onopen = () => {
+      console.log("✅ Connected to WebSocket");
+    
+      if (query.trim()) {
+        const payload = { content: query };
+        console.log("📩 Sending payload:", payload);
+        ws.send(JSON.stringify(payload));  // ✅ Use `ws`, not `socket`
+      } else {
+        console.log("⚠️ No query to send.");
       }
-    }
+    };
+    
+;
 
-    const debounce = setTimeout(() => fetchSuggestions(), 300)
-    return () => clearTimeout(debounce)
-  }, [query])
+ws.onmessage = (event) => {
+  try {
+    const message = JSON.parse(event.data);
+    console.log("📩 Received:", message);
+
+    if (message.suggestions) {
+      setSuggestions((prev) => {
+        // 🔥 Merge old & new suggestions, remove duplicates
+        const mergedSuggestions = [...new Set([...prev, ...message.suggestions])];
+        return mergedSuggestions;
+      });
+    }
+  } catch (error) {
+    console.error("❌ Error parsing WebSocket message:", error);
+  }
+};
+
+
+    ws.onclose = () => {
+      console.warn("⚠️ WebSocket closed. Attempting to reconnect...");
+      setTimeout(() => {
+        const newSocket = new WebSocket(`ws://127.0.0.1:8000/ws/search/${agentId}`);
+        setSocket(newSocket);
+      }, 3000);
+    };
+
+    setSocket(ws);
+
+    return () => {
+      console.log("🛑 Closing WebSocket connection");
+      ws.close();
+    };
+
+  }, [query]);;
+
+
+  // const sendMessage = (query) => {
+  //   if (!socket || socket.readyState !== WebSocket.OPEN) {
+  //     console.warn("⚠️ WebSocket is not ready yet. Retrying...");
+  //     return;
+  //   }
+  //   // socket.send(message);
+  //   const payload = {
+  //     content: query,
+  //   };
+  //   console.log("111111111",query)
+  //   socket.send(JSON.stringify(payload));
+  // };
+
+
+  // const sendMessage = (query) => {
+  //   if (!socket || socket.readyState !== WebSocket.OPEN) {
+  //     console.warn("⚠️ WebSocket is not ready yet.");
+  //     return;
+  //   }
+  //   const payload = { content: query };
+  //   console.log("11111111111111111111",payload)
+  //   socket.send(JSON.stringify(payload));
+  // };
+  // console.log("7777777777777",query)
+  
+  
+
 
   const handleSearch = async (e) => {
     e.preventDefault()

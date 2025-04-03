@@ -18,6 +18,7 @@ import CustomerPolicyList from "../page/agent/CustomerPolicyList.jsx"
 import CustomerInfo from "../page/agent/CustomerInfo.jsx"
 import CustomerAssistance from "../page/agent/CustomerAssistance.jsx"
 import CallNotification from "../page/agent/CallNotification.jsx"
+import DashboardGraph from "../page/agent/DashboardGraph.jsx"
 
 function Agentside() {
   return (
@@ -37,6 +38,7 @@ function Agentside() {
             <Route path="PolicyStatus" element={<PolicyStatus />} />
             <Route path="CustomerSearch" element={<CustomerSearch />} />
             <Route path="CustomerAssistance" element={<CustomerAssistance />} />
+            <Route path="DashboardGraph" element={<DashboardGraph />} />
           </Route>
           <Route path="/PolicyResubmit" element={<PolicyResubmit />} />
           <Route path="/CustomerPolicyList" element={<CustomerPolicyList />} />

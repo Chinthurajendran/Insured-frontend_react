@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Home, FileText, ChevronDown, ChevronRight, List, Upload, CheckCircle, Database, HelpCircle } from 'lucide-react';
+import { Home,Users, FileText, ChevronDown, ChevronRight, List, Upload, CheckCircle, Database, HelpCircle } from 'lucide-react';
 
 function AgentSidebar() {
   const [isPoliciesOpen, setIsPoliciesOpen] = useState(false);
@@ -9,9 +9,14 @@ function AgentSidebar() {
     <aside className="w-1/6 bg-[#0B4D2E] text-white min-h-screen p-4 shadow-lg">
       <nav>
         <ul className="space-y-2">
+        <li>
+            <Link to="DashboardGraph" className="flex items-center px-4 py-3 rounded-lg hover:bg-[#083D24]">
+              <Home className="h-5 w-5 mr-3" /> Dashboard
+            </Link>
+          </li>
           <li>
             <Link to="AgentProfle" className="flex items-center px-4 py-3 rounded-lg hover:bg-[#083D24]">
-              <Home className="h-5 w-5 mr-3" /> Profile
+              <Users className="h-5 w-5 mr-3" /> Profile
             </Link>
           </li>
           <li>
