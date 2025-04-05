@@ -22,22 +22,22 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
   const messagesEndRef = useRef(null)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const handleCall = () => {
-    setShowCallScreen(true) // Show call screen
-    startCall() // Start WebRTC call
+    setShowCallScreen(true)
+    startCall() 
   }
 
   const handleEndCall = () => {
-    setShowCallScreen(false) // Hide call screen
+    setShowCallScreen(false)
     endCall()
   }
 
   const handleVideoCall = () => {
     showVideoCallScreen(true)
-    startVideoCall() // Start WebRTC call
+    startVideoCall()
   }
 
   const handleEndVideoCall = () => {
-    showVideoCallScreen(false) // Hide call screen
+    showVideoCallScreen(false)
     endVideoCall()
   }
 
@@ -69,7 +69,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
         if (response.status === 200) {
           const agents = response.data?.agents || response.data
           if (Array.isArray(agents) && agents.length > 0) {
-            Setreceiver_id(agents[0].id) // Update with nearest agent's ID
+            Setreceiver_id(agents[0].id)
           } else {
             console.warn("No agents found.")
           }
@@ -89,13 +89,9 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
   console.log("Audio element stream:", remoteStream.current)
   return (
     <div className="fixed bottom-4 right-4 w-96 h-[450px] bg-[#0B4B2C] shadow-2xl rounded-2xl flex flex-col border border-gray-400 z-50 overflow-hidden">
-      {/* Header */}
       <div className="flex justify-between items-center bg-[#0B4B2C] text-white p-4 rounded-t-2xl border-b border-gray-400 shadow-md">
         <h2 className="text-lg font-semibold">Chat</h2>
-
-        {/* Button Group - Aligned Right */}
         <div className="flex items-center gap-3 ml-auto">
-          {/* Phone Call Button */}
           <button
             className="text-white hover:text-gray-300 transition-all transform hover:scale-110 p-2 rounded-full hover:bg-gray-700/20"
             aria-label="Phone Call"
@@ -110,7 +106,6 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
               <path d="M6.6,10.8c1.2,2.6,3.1,4.7,5.7,5.7l2-2c0.3-0.3,0.7-0.4,1.1-0.3c1,0.3,2.1,0.5,3.1,0.5c0.6,0,1,0.4,1,1v3.2 c0,0.6-0.4,1-1,1c-8.3,0-15-6.7-15-15c0-0.6,0.4-1,1-1h3.2c0.6,0,1,0.4,1,1c0,1.1,0.2,2.1,0.5,3.1c0.1,0.4,0,0.8-0.3,1.1 L6.6,10.8z" />
             </svg>
           </button>
-          {/* Audio Elements */}
           <audio
             ref={(ref) => ref && (ref.srcObject = localStream.current)}
             autoPlay
@@ -120,8 +115,6 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
             ref={(ref) => ref && (ref.srcObject = remoteStream.current)}
             autoPlay
           />
-
-          {/* Video Call Button */}
           <button
             className="text-white hover:text-gray-300 transition-all transform hover:scale-110 p-2 rounded-full hover:bg-gray-700/20"
             aria-label="Video Call"
@@ -142,7 +135,6 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
               />
             </svg>
           </button>
-          {/* Close Button */}
           <button
             onClick={handleClose}
             className="text-white hover:text-gray-300 transition-all transform hover:scale-110 p-2 rounded-full hover:bg-gray-700/20"
@@ -166,7 +158,6 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
         </div>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 bg-gray-100 text-gray-900 space-y-2">
         {messages?.map((msg, index) => {
           const isUserMessage = msg.sender_id === userId
@@ -184,7 +175,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
                 wordWrap: "break-word",
                 whiteSpace: "pre-wrap",
                 maxWidth: `${Math.min(
-                  50 + (msg.content?.length ?? 0) * 8, // Ensure msg.content is defined
+                  50 + (msg.content?.length ?? 0) * 8,
                   window.innerWidth * 0.9
                 )}px`,
               }}
@@ -195,10 +186,8 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
         })}
         <div ref={messagesEndRef} />
       </div>
-      {/* Call Screen */}
       {showCallScreen && (
         <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800 bg-opacity-95 flex flex-col items-center justify-center z-50">
-          {/* User Icon */}
           <div className="mb-6 animate-pulse">
             <div className="flex items-center justify-center w-32 h-32 bg-gray-800 rounded-full border-2 border-blue-500">
               <svg
@@ -218,9 +207,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
             </div>
           </div>
 
-          {/* Buttons Container */}
           <div className="flex items-center gap-6">
-            {/* End Call Button */}
             <button
               className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-700 text-white text-lg font-semibold rounded-full shadow-lg hover:shadow-2xl transition-transform transform hover:scale-110 focus:outline-none"
               onClick={handleEndCall}
@@ -228,17 +215,12 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
               End Call
             </button>
           </div>
-
-          {/* Participants & Settings */}
         </div>
       )}
 
-      {/* Video Call Screen */}
       {VideoCallScreen && (
         <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800 bg-opacity-95 flex flex-col items-center justify-center z-50">
-          {/* Video Feeds */}
           <div className="flex flex-col lg:flex-row items-center justify-center gap-6 w-full h-full">
-            {/* Local Video */}
             <div className="relative w-40 h-40 lg:w-64 lg:h-64 bg-gray-800 rounded-lg overflow-hidden shadow-lg">
               <video
                 ref={localVideoRef}
@@ -251,8 +233,6 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
                 You
               </p>
             </div>
-
-            {/* Remote Video */}
             <div className="relative w-64 h-64 lg:w-[75%] lg:h-[75%] bg-gray-800 rounded-lg overflow-hidden shadow-lg">
               <video
                 ref={remoteVideoRef}
@@ -266,9 +246,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
             </div>
           </div>
 
-          {/* Buttons Container */}
           <div className="mt-6 flex items-center gap-6">
-            {/* End Video Call Button */}
             <button
               className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-700 text-white text-lg font-semibold rounded-full shadow-lg hover:shadow-2xl transition-transform transform hover:scale-110 focus:outline-none"
               onClick={handleEndVideoCall}
@@ -279,14 +257,12 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
         </div>
       )}
 
-      {/* Emoji Picker */}
       {showEmojiPicker && (
         <div className="absolute bottom-16 left-2 bg-white border rounded-lg shadow-lg z-10">
           <EmojiPicker onEmojiClick={handleEmojiClick} />
         </div>
       )}
 
-      {/* Input and Send Button */}
       <div className="p-2 flex items-center space-x-2 border-t bg-white">
         <div className="relative flex-1">
           <input
@@ -297,7 +273,6 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
             placeholder="Type a message..."
           />
 
-          {/* Emoji Button (inside input field) */}
           <button
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
             className="absolute left-3 top-1/2 transform -translate-y-1/2 hover:scale-110 transition-all"

@@ -17,7 +17,7 @@ function DashboardGraph() {
   const [nonAgentPolicyCount, setNonAgentPolicyCount] = useState(0);
   const [policyStatusCounts, setPolicyStatusCounts] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [policyStatusVisible, setPolicyStatusVisible] = useState(false);  // New state for delayed rendering
+  const [policyStatusVisible, setPolicyStatusVisible] = useState(false); 
 
   useEffect(() => {
     const fetchPolicyData = async () => {
@@ -78,10 +78,9 @@ function DashboardGraph() {
           ).length,
         });
         
-        // Delay the rendering of the Policy Status chart
         setTimeout(() => {
           setPolicyStatusVisible(true);
-        }, 1000);  // Delay of 1 second (1000 ms)
+        }, 1000);
 
       } catch (error) {
         console.error("Error fetching policy data:", error);
@@ -116,7 +115,6 @@ function DashboardGraph() {
   return (
     <div className="w-full h-auto flex flex-col items-center gap-8">
       {loading ? (
-        // Placeholder or skeleton loader
         <div className="w-full h-96 flex items-center justify-center">
           <div className="animate-pulse">
             <div className="w-1/2 h-8 bg-gray-300 mb-4"></div>
@@ -161,7 +159,6 @@ function DashboardGraph() {
               </PieChart>
             </div>
 
-            {/* This part now renders with a delay */}
             {policyStatusVisible && (
               <div className="flex flex-col items-center">
                 <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">

@@ -8,7 +8,7 @@ const CustomerPolicyList = () => {
   const policyArray = Array.isArray(policies) ? policies : [policies];
 
   const handleRowClick = (policyId) => {
-    navigate("/CustomerInfo", { state: { policies: policyId } });
+    navigate("/CustomerInfo", { state: { policyId: policyId } });
   };
 
   return (

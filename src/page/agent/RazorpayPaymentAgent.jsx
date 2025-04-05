@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
-import axiosInstance from "../../Interceptors/user"
+import axiosInstance from "../../Interceptors/agent"
 import { useLocation } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
-const RazorpayPayment = () => {
+const RazorpayPaymentAgent = () => {
   const [loading, setLoading] = useState(false)
   const location = useLocation()
   const amount = Math.round(location.state?.amount || 0)
@@ -44,10 +44,10 @@ const RazorpayPayment = () => {
                 signature: response.razorpay_signature,
               }
             )
-            navigate("/Userpage/Userpolicy")
+            navigate("/Agent_home/CustomerSearch",{ state: {policyId } })
             toast.success("Payment successful!");
           } catch (error) {
-            navigate("/Userpage/Userpolicy")
+            navigate("/Agent_home/CustomerSearch",{ state: {policyId } })
             console.error("Payment verification failed:", error)
             toast.error("Payment verification failed. Please try again.");
           }
@@ -56,7 +56,7 @@ const RazorpayPayment = () => {
           escape: false,
           ondismiss: function () {
             console.warn("User exited the Razorpay modal")
-            navigate("/Userpage/Userpolicy") 
+            navigate("/Agent_home/CustomerSearch",{ state: {policyId } }) 
           },
         },
         prefill: {
@@ -101,4 +101,5 @@ const RazorpayPayment = () => {
   )
 }
 
-export default RazorpayPayment
+export default RazorpayPaymentAgent
+

@@ -38,7 +38,6 @@ function WalletPage() {
 
   return (
     <div className="h-[80vh] w-full flex flex-col items-center justify-center  bg-gray-100 space-y-6 overflow-hidden">
-      {/* Wallet Card */}
       <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-xl text-center">
         <h2 className="text-3xl font-bold text-gray-800">Your Wallet</h2>
         <p className="text-4xl font-semibold text-green-600 mt-3">
@@ -69,7 +68,6 @@ function WalletPage() {
         </div>
       </div>
 
-      {/* Transaction History */}
       <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-xl">
         <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
           Transaction History

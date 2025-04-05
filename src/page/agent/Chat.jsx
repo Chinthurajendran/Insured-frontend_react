@@ -30,7 +30,6 @@ const Chat = ({ setIsChatOpen, sender_id, receiver_id }) => {
 
   return (
     <div className="fixed bottom-4 right-4 w-96 h-[450px] bg-[#0B4B2C] shadow-2xl rounded-2xl flex flex-col border border-gray-400 z-50 overflow-hidden">
-      {/* Header */}
       <div className="flex justify-between items-center bg-[#0B4B2C] text-white p-4 rounded-t-2xl border-b border-gray-400 shadow-md">
         <h2 className="text-lg font-semibold">Chat</h2>
         <button
@@ -54,7 +53,6 @@ const Chat = ({ setIsChatOpen, sender_id, receiver_id }) => {
         </button>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 bg-gray-100 text-gray-900 space-y-2">
         {messages.map((msg, index) => {
           const isUserMessage = msg.sender_id === sender_id
@@ -83,16 +81,13 @@ const Chat = ({ setIsChatOpen, sender_id, receiver_id }) => {
         })}
         <div ref={messagesEndRef} />
       </div>
-      {/* Emoji Picker */}
       {showEmojiPicker && (
         <div className="absolute bottom-16 left-2 bg-white border rounded-lg shadow-lg z-10">
           <EmojiPicker onEmojiClick={handleEmojiClick} />
         </div>
       )}
 
-      {/* Input and Send Button */}
       <div className="p-3 flex items-center space-x-2 border-t bg-white shadow-md rounded-b-2xl">
-        {/* Input Container */}
         <div className="relative flex-1">
           <input
             type="text"
@@ -102,7 +97,6 @@ const Chat = ({ setIsChatOpen, sender_id, receiver_id }) => {
             placeholder="Type a message..."
           />
 
-          {/* Emoji Button (inside input field) */}
           <button
             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
             className="absolute left-3 top-1/2 transform -translate-y-1/2 hover:scale-110 transition-all"
@@ -111,7 +105,6 @@ const Chat = ({ setIsChatOpen, sender_id, receiver_id }) => {
           </button>
         </div>
 
-        {/* Send Button */}
         <button
           onClick={() => {
             handleSend()

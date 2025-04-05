@@ -7,10 +7,10 @@ function CustomerAssistance() {
   const [Assistance, SetAssistance] = useState([]);
   const agentId = useSelector((state) => state.agentAuth.agent_uuid);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [selectedAssistance, setSelectedAssistance] = useState(null); // Track the selected assistance row
+  const [selectedAssistance, setSelectedAssistance] = useState(null);
 
   useEffect(() => {
-    if (!agentId) return; // Prevent API call if agentId is missing
+    if (!agentId) return;
 
     const fetchCustomerCare = async () => {
       try {
@@ -30,7 +30,7 @@ function CustomerAssistance() {
   const handleRowClick = (assistance) => {
     console.log(`Row clicked with UID: ${assistance.uid}`);
     setIsChatOpen(true);
-    setSelectedAssistance(assistance); // Pass the clicked assistance to Chat
+    setSelectedAssistance(assistance);
   };
 
   return (

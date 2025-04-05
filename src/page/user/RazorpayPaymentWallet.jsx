@@ -8,7 +8,7 @@ const RazorpayPaymentWallet = () => {
   const [loading, setLoading] = useState(false)
   const location = useLocation()
   const amount = Math.round(location.state?.amount || 0)
-  const type = location.state?.transactionType // "add" or "withdraw"
+  const type = location.state?.transactionType
   const userId = useSelector((state) => state.userAuth.userid)
   const navigate = useNavigate()
 
@@ -21,7 +21,6 @@ const RazorpayPaymentWallet = () => {
     setLoading(true)
 
     try {
-      // Step 1: Create Order from Backend
       const { data } = await axiosInstance.post(`RazorpayPaymentCreation`, {
         amount: amount,
         currency: "INR",
@@ -29,12 +28,12 @@ const RazorpayPaymentWallet = () => {
       })
 
       const options = {
-        key: "rzp_test_BhE5b4CmcXMLSs", // Replace with your Razorpay Key ID
+        key: "rzp_test_BhE5b4CmcXMLSs",
         amount: data.amount,
         currency: data.currency,
         name: "Insured+",
         description: type === "add" ? "Wallet Top-up" : "Wallet Withdrawal",
-        order_id: data.order_id, // Razorpay Order ID
+        order_id: data.order_id,
         handler: async function (response) {
           try {
             const endpoint =

@@ -99,7 +99,6 @@ function DashboardGraph() {
         </div>
       ) : (
         <div className="flex flex-col md:flex-row items-center justify-between w-full">
-          {/* Bar Chart */}
           <div className="w-full md:w-2/3 h-96">
             <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">
               Policies Per Month (Current Year)
@@ -120,7 +119,6 @@ function DashboardGraph() {
             </ResponsiveContainer>
           </div>
 
-          {/* Pie Chart (Right Side) */}
           {policyStatusVisible && (
             <div className="w-full md:w-1/3 flex flex-col items-center">
               <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">

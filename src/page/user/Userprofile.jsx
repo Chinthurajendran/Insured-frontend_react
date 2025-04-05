@@ -112,6 +112,7 @@ function Userprofile() {
       toast.error("Failed to update profile.")
     }
   }
+  console.log(user)
 
   return (
     <div className="h-96 bg-gray-100">

@@ -14,48 +14,17 @@ function CustomerSearch() {
   const [socket, setSocket] = useState(null);
   const agentId = useSelector((state) => state.agentAuth.agent_uuid)
 
-  // useEffect(() => {
-  //   if (!query) {
-  //     setSuggestions([])
-  //     return
-  //   }
-
-  //   const fetchSuggestions = async () => {
-  //     setIsLoading(true)
-  //     try {
-  //       const res = await axiosInstance.get(
-  //         `/search-suggestions?query=${query}`
-  //       )
-  //       if (res.status === 200) {
-  //         const uniqueSuggestions = [...new Set(res.data)]
-  //         setSuggestions(uniqueSuggestions)
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching suggestions:", error)
-  //     } finally {
-  //       setIsLoading(false)
-  //     }
-  //   }
-
-  //   const debounce = setTimeout(() => fetchSuggestions(), 300)
-  //   return () => clearTimeout(debounce)
-  // }, [query])
-
   
   useEffect(() => {
 
     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/search/${agentId}`);
 
-    // is an event handler that runs when the WebSocket connection is successfully opened.
     ws.onopen = () => {
-      console.log("✅ Connected to WebSocket");
-    
       if (query.trim()) {
         const payload = { content: query };
-        console.log("📩 Sending payload:", payload);
-        ws.send(JSON.stringify(payload));  // ✅ Use `ws`, not `socket`
+        ws.send(JSON.stringify(payload)); 
       } else {
-        console.log("⚠️ No query to send.");
+        console.log("No query to send.");
       }
     };
     
@@ -64,23 +33,24 @@ function CustomerSearch() {
 ws.onmessage = (event) => {
   try {
     const message = JSON.parse(event.data);
-    console.log("📩 Received:", message);
 
-    if (message.suggestions) {
-      setSuggestions((prev) => {
-        // 🔥 Merge old & new suggestions, remove duplicates
-        const mergedSuggestions = [...new Set([...prev, ...message.suggestions])];
+    if (message.suggestions)  {
+      setSuggestions(() => {
+        const mergedSuggestions = [...new Set([...message.suggestions])];
         return mergedSuggestions;
       });
     }
+    else{
+      setSuggestions([]);
+    }
   } catch (error) {
-    console.error("❌ Error parsing WebSocket message:", error);
+    console.error("Error parsing WebSocket message:", error);
   }
 };
 
 
     ws.onclose = () => {
-      console.warn("⚠️ WebSocket closed. Attempting to reconnect...");
+      console.warn(" WebSocket closed. Attempting to reconnect...");
       setTimeout(() => {
         const newSocket = new WebSocket(`ws://127.0.0.1:8000/ws/search/${agentId}`);
         setSocket(newSocket);
@@ -90,41 +60,12 @@ ws.onmessage = (event) => {
     setSocket(ws);
 
     return () => {
-      console.log("🛑 Closing WebSocket connection");
       ws.close();
     };
 
   }, [query]);;
 
-
-  // const sendMessage = (query) => {
-  //   if (!socket || socket.readyState !== WebSocket.OPEN) {
-  //     console.warn("⚠️ WebSocket is not ready yet. Retrying...");
-  //     return;
-  //   }
-  //   // socket.send(message);
-  //   const payload = {
-  //     content: query,
-  //   };
-  //   console.log("111111111",query)
-  //   socket.send(JSON.stringify(payload));
-  // };
-
-
-  // const sendMessage = (query) => {
-  //   if (!socket || socket.readyState !== WebSocket.OPEN) {
-  //     console.warn("⚠️ WebSocket is not ready yet.");
-  //     return;
-  //   }
-  //   const payload = { content: query };
-  //   console.log("11111111111111111111",payload)
-  //   socket.send(JSON.stringify(payload));
-  // };
-  // console.log("7777777777777",query)
   
-  
-
-
   const handleSearch = async (e) => {
     e.preventDefault()
 
@@ -196,7 +137,6 @@ ws.onmessage = (event) => {
           </ul>
         )}
 
-        {/* Loading State */}
         {isLoading && (
           <p className="text-center text-sm text-gray-500 mt-2">
             Loading suggestions...

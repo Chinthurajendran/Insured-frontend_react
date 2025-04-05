@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const useWebRTCAgent = (agentId,setShowCallScreen) => {
   const [socket, setSocket] = useState(null);
@@ -9,6 +10,8 @@ const useWebRTCAgent = (agentId,setShowCallScreen) => {
   const callerIdRef = useRef(null);
   const [incomingCall, setIncomingCall] = useState(false);
   const offerRef = useRef(null); // Store the received offer
+  const callerId = useSelector((state) => state.agentAuth.agent_username)
+
 
   useEffect(() => {
     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/webrtc/${agentId}`);
@@ -138,7 +141,7 @@ const useWebRTCAgent = (agentId,setShowCallScreen) => {
     }
   };
 
-  return { acceptCall, endCall, incomingCall, localStream, remoteStream };
+  return { acceptCall, endCall, incomingCall, localStream, remoteStream ,callerId};
 };
 
 export default useWebRTCAgent;

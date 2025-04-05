@@ -11,13 +11,29 @@ import {
   Shield,
   User,
 } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 function CustomerInfo() {
   const location = useLocation()
-  const PolicyId = location.state?.policies
+  const PolicyId = location.state?.policyId
+  const navigate = useNavigate()
 
   const [policy, setPolicy] = useState(null)
   const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    document.body.style.overflow = "auto";
+    document.documentElement.style.overflow = "auto";
+  
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
+  }, []);
+  
+  
 
   useEffect(() => {
     const fetchPolicies = async () => {
@@ -46,6 +62,11 @@ function CustomerInfo() {
 
     if (PolicyId) fetchPolicies()
   }, [PolicyId])
+
+
+  const handleSubmit =(amount, policy_id)=>{
+    navigate("/RazorpayPaymentAgent", { state: { amount, policy_id } });
+  }
 
   const getFieldIcon = (key) => {
     const iconMap = {
@@ -118,7 +139,7 @@ function CustomerInfo() {
                         : "bg-gray-100 text-gray-800"
                     }`}
                   >
-                    {policy.payment_status ? "Payment Required" : "Paid"}
+                    {!policy.payment_status ? "Payment Required" : "Paid"}
                   </span>
                 </div>
               </div>
@@ -135,7 +156,7 @@ function CustomerInfo() {
                       return null
 
                     return (
-                      <div className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 transition-all hover:bg-gray-100">
+                      <div key={key} className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 transition-all hover:bg-gray-100">
                         {getFieldIcon(key)}
                         <div>
                           <p className="text-sm font-medium text-gray-500">
@@ -154,7 +175,7 @@ function CustomerInfo() {
                   })}
                 </div>
               </div>
-              {policy.payment_status && (
+              {!policy.payment_status && (
                 <div className="px-6 py-4 mt-2">
                   <div className="h-px w-full bg-gray-200 my-4"></div>
                   <div className="flex items-center justify-between w-full">
@@ -166,7 +187,7 @@ function CustomerInfo() {
                     </div>
                     <button
                       className="px-8 py-3 bg-green-800 text-white rounded-lg font-medium transition-all hover:bg-green-700 hover:scale-105"
-                      onClick={() => toast.success("Redirecting to payment...")}
+                      onClick={()=>handleSubmit(policy.monthly_amount,policy.policydetails_uid)}
                     >
                       Make Payment
                     </button>

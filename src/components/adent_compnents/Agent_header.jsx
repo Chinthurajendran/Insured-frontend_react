@@ -22,8 +22,6 @@ function Agent_header() {
   }, [agent_authenticated, navigate])
 
   const handleLogoutSubmit = async () => {
-    // const agentId = localStorage.getItem("agent_uuid")
-    console.log(agentId)
 
     if (!agentId) {
       toast.error("No agent ID found. Please log in again.")

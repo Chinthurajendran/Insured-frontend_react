@@ -19,7 +19,6 @@ const Chat = ({setIsChatOpen,sender_id,receiver_id}) => {
 
   return (
     <div className="fixed bottom-4 right-4 w-80 h-96 bg-[#0B4B2C] shadow-lg rounded-lg flex flex-col border border-gray-300 z-50">
-      {/* Header */}
       <div className="flex justify-between items-center bg-[#0B4B2C] text-white p-3 rounded-t-lg border-b border-gray-300">
         <h2 className="text-lg font-semibold">Chat</h2>
         <button
@@ -30,10 +29,9 @@ const Chat = ({setIsChatOpen,sender_id,receiver_id}) => {
         </button>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 bg-white text-gray-800">
         {messages.map((msg, index) => {
-          let isUserMessage = false // Set to true for user messages, false for incoming messages
+          let isUserMessage = false 
           return (
             <div
               key={index}
@@ -51,7 +49,6 @@ const Chat = ({setIsChatOpen,sender_id,receiver_id}) => {
                 )}px`,
               }}
             >
-              {/* Speech bubble pointer */}
               <span
                 className={`absolute ${
                   isUserMessage

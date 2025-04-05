@@ -12,17 +12,19 @@ import { useRef } from "react"
 const UserHeader = () => {
   const user_token = useSelector((state) => state.userAuth.isAuthenticated)
   const userId = useSelector((state) => state.userAuth.userid)
-  const location = useLocation() // Get current route
+  const location = useLocation()
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [locations, setLocation] = useState({ latitude: null, longitude: null })
   const [message, setMessage] = useState([])
-  const [socket, setSocket] = useState(null);
+  const [socket, setSocket] = useState(null)
   const websocketUrl = `ws://localhost:8000/ws/notification/${userId}`
   const wsRef = useRef(null)
 
-  // Check if the user is on the profile page
-  const isProfilePage = location.pathname.includes("/Userpage/Userprofile")
+  const isProfilePage =
+    location.pathname.includes("/Userpage/Userprofile") ||
+    location.pathname.includes("/Userpage/Userpolicy") ||
+    location.pathname.includes("/Userpage/Walletpage")
 
   const handleNotificationToggle = async () => {
     setIsNotificationOpen((prev) => !prev)
@@ -49,68 +51,6 @@ const UserHeader = () => {
     }
   }
 
-  // useEffect(() => {
-  //   const fetchNotifications = async () => {
-  //     try {
-  //       const res = await axiosInstance.get(`Getnotification/${userId}`)
-  //       if (res.status === 200) {
-  //         setMessage(res.data.message)
-  //       }
-  //     } catch (error) {
-  //       console.log("Failed to fetch notifications.", error)
-  //     }
-  //   }
-
-  //   fetchNotifications()
-  // }, [userId])
-
-  // useEffect(() => {
-  //   const ws = new WebSocket(websocketUrl)
-
-  //   ws.onopen = () => {
-  //     console.log("WebSocket Connected")
-  //   }
-
-    
-
-  //   // ws.onmessage = (event) => {
-  //   //   const newNotification = JSON.parse(event.data)
-  //   //   console.log("111111111111111",newNotification)
-  //   //   setMessage([newNotification])
-  //   // }
-
-  //   ws.onmessage = (event) => {
-  //     const newNotification = JSON.parse(event.data)
-  //     console.log("Received notification:", newNotification)
-    
-  //     setMessage((prevMessages) => [...prevMessages, newNotification])
-  //   }
-    
-  //   return () => {
-  //     ws.onclose = () => {
-  //       console.warn("⚠️ WebSocket closed. Attempting to reconnect...")
-  //       setTimeout(() => {
-  //         const newSocket = new WebSocket(websocketUrl)
-  //         setSocket(newSocket)
-  //       }, 3000)
-  //     }
-  //   }
-  // }, [userId])
-
-  // const [notifications, setNotifications] = useState([])
-  // const userId = useSelector((state) => state.userAuth.userid)
-
-  // useEffect(() => {
-  //   const ws = new WebSocket(`ws://localhost:8000/ws/${userId}`)
-
-  //   ws.onmessage = (event) => {
-  //     const data = JSON.parse(event.data)
-  //     setNotifications((prev) => [...prev, data])  // Append new notifications
-  //   }
-
-  //   return () => ws.close()
-  // }, [userId])
-
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -127,36 +67,33 @@ const UserHeader = () => {
     fetchNotifications()
   }, [userId])
 
-  // 🔹 WebSocket connection logic
   useEffect(() => {
     if (wsRef.current) {
-      wsRef.current.close() // Close previous WebSocket connection
+      wsRef.current.close()
     }
 
     const ws = new WebSocket(websocketUrl)
-    wsRef.current = ws // Store WebSocket instance
+    wsRef.current = ws 
 
     ws.onopen = () => console.log("✅ WebSocket Connected")
 
     ws.onmessage = (event) => {
-      const newNotification = JSON.parse(event.data);
-      console.log("📩 New Notification:", newNotification);
-    
+      const newNotification = JSON.parse(event.data)
+
       if (newNotification.action === "DELETE") {
-        setMessage([]); // Clear all messages on DELETE action
+        setMessage([])
       } else {
-        // 🔹 Avoid duplicate messages
         setMessage((prevMessages) => {
           const exists = prevMessages.some(
             (msg) => msg.notification_uid === newNotification.notification_uid
-          );
-          return exists ? prevMessages : [...prevMessages, newNotification];
-        });
+          )
+          return exists ? prevMessages : [...prevMessages, newNotification]
+        })
       }
-    };
-    
+    }
+
     ws.onclose = () => {
-      console.warn("⚠️ WebSocket Disconnected. Reconnecting in 3s...")
+      console.warn(" WebSocket Disconnected. Reconnecting in 3s...")
       setTimeout(() => {
         wsRef.current = new WebSocket(websocketUrl)
       }, 3000)
@@ -164,7 +101,7 @@ const UserHeader = () => {
 
     return () => {
       if (wsRef.current) {
-        wsRef.current.close() // Cleanup on unmount
+        wsRef.current.close()
       }
     }
   }, [userId, websocketUrl])
@@ -244,14 +181,11 @@ const UserHeader = () => {
                 >
                   <div className="relative">
                     <BellIcon className="w-6 h-6" />
-                    {/* Notification count badge */}
                     {message.length > 0 && (
                       <span className="absolute -top-2 -right-1 bg-red-600 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
                         {message.length}
                       </span>
                     )}
-
-                    {/* {isNotificationOpen && <Notification />} */}
                   </div>
                   {isNotificationOpen && <Notification messages={message} />}
                 </button>

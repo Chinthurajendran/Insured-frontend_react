@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import axiosInstance from "../../Interceptors/user"
 
 const Notification = ({ messages }) => {
-  const [notifications, setNotifications] = useState(messages || []) // Directly initialize state
+  const [notifications, setNotifications] = useState(messages || []) 
   const userId = useSelector((state) => state.userAuth.userid)
   const [removing, setRemoving] = useState(false)
 
@@ -22,7 +22,7 @@ const Notification = ({ messages }) => {
       const res = await axiosInstance.put(`/Clearnotification/${userId}`)
       if (res.status === 200) {
         console.log("Notifications cleared successfully")
-        setNotifications([]) // Directly clear notifications
+        setNotifications([])
       }
     } catch (error) {
       console.error("Error clearing notifications:", error?.response?.data || error.message)

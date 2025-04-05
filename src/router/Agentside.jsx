@@ -19,6 +19,7 @@ import CustomerInfo from "../page/agent/CustomerInfo.jsx"
 import CustomerAssistance from "../page/agent/CustomerAssistance.jsx"
 import CallNotification from "../page/agent/CallNotification.jsx"
 import DashboardGraph from "../page/agent/DashboardGraph.jsx"
+import RazorpayPaymentAgent from "../page/agent/RazorpayPaymentAgent.jsx"
 
 function Agentside() {
   return (
@@ -43,6 +44,7 @@ function Agentside() {
           <Route path="/PolicyResubmit" element={<PolicyResubmit />} />
           <Route path="/CustomerPolicyList" element={<CustomerPolicyList />} />
           <Route path="/CustomerInfo" element={<CustomerInfo />} />
+          <Route path="/RazorpayPaymentAgent" element={<RazorpayPaymentAgent />} />
           <Route path="/CallNotification" element={<CallNotification />} />
         </Route>
         <Route path="/AgentResetpassword" element={<AgentResetpassword />} />

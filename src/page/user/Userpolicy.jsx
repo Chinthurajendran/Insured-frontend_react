@@ -28,6 +28,8 @@ function Userpolicy() {
   const userId = useSelector((state) => state.userAuth.userid)
   const [showModal, setShowModal] = useState(false)
   const [selectedPayment, setSelectedPayment] = useState("razorpay")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [usersPerPage] = useState(1)
 
   const policylist = async () => {
     try {
@@ -39,6 +41,7 @@ function Userpolicy() {
       toast.error("Update the profile")
     }
   }
+
 
   useEffect(() => {
     const fetchPolicies = async () => {
@@ -67,15 +70,20 @@ function Userpolicy() {
 
   const handleSubmit = (paymentMethod, amount, policy_id) => {
     if (paymentMethod === "razorpay") {
-      navigate("/RazorpayPayment", { state: { amount, policy_id } });
+      navigate("/RazorpayPayment", { state: { amount, policy_id } })
     } else if (paymentMethod === "wallet_policy") {
-      navigate("/RazorpayPaymentWallet", { state: { amount,transactionType: paymentMethod } });
+      navigate("/RazorpayPaymentWallet", {
+        state: { amount, transactionType: paymentMethod },
+      })
     }
-    setShowModal(false);
-  };
-  
+    setShowModal(false)
+  }
 
-  console.log(policy)
+  const indexOfLastUser = currentPage * usersPerPage
+  const indexOfFirstUser = indexOfLastUser - usersPerPage
+  const currentUsers = policy.slice(indexOfFirstUser, indexOfLastUser)
+  const totalPages = Math.ceil(policy.length / usersPerPage)
+
   return (
     <div className="h-full w-full flex flex-col items-center justify-center bg-gray-100 space-y-6 overflow-hidden">
       <div className="max-w-6xl w-full bg-white rounded-lg shadow-lg p-8 flex items-center space-x-6">
@@ -100,7 +108,7 @@ function Userpolicy() {
         </div>
       </div>
 
-      {policy.map((user, index) => (
+      {currentUsers.map((user, index) => (
         <div
           key={index}
           className="max-w-6xl h-50% w-full bg-white rounded-lg shadow-lg p-8 pb-17 flex flex-col relative"
@@ -141,7 +149,7 @@ function Userpolicy() {
             <span className="text-sm">{user.policy_status}</span>
           </div>
 
-          {user.payment_status && (
+          {!user.payment_status && (
             <div className="absolute bottom-3 right-4 pr-2">
               <button
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md"
@@ -155,14 +163,10 @@ function Userpolicy() {
           {showModal && (
             <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-lg w-full h-full">
               <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-200">
-                {/* Modal Header */}
                 <h2 className="text-2xl font-semibold text-gray-900 text-center mb-6">
                   Choose Payment Method
                 </h2>
-
-                {/* Payment Options */}
                 <div className="flex flex-col gap-4">
-                  {/* Razorpay Option */}
                   <button
                     className={`flex items-center justify-between border-2 ${
                       selectedPayment === "razorpay"
@@ -188,7 +192,6 @@ function Userpolicy() {
                     )}
                   </button>
 
-                  {/* Wallet Option */}
                   <button
                     className={`flex items-center justify-between border-2 ${
                       selectedPayment === "wallet_policy"
@@ -214,8 +217,6 @@ function Userpolicy() {
                     )}
                   </button>
                 </div>
-
-                {/* Submit & Cancel Buttons */}
                 <div className="mt-6 flex gap-4">
                   <button
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-lg py-3 font-semibold transition-all"
@@ -250,6 +251,40 @@ function Userpolicy() {
           )}
         </div>
       ))}
+
+      <div className="flex justify-center items-center mt-6 space-x-2">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 rounded-lg font-semibold transition-all 
+${
+  currentPage === 1
+    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+    : "bg-blue-600 text-white hover:bg-blue-700"
+}`}
+        >
+          ← Previous
+        </button>
+
+        <span className="px-5 py-2 text-lg font-bold text-gray-800 bg-gray-200 rounded-md shadow-sm">
+          Page {currentPage} of {totalPages}
+        </span>
+
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2 rounded-lg font-semibold transition-all 
+${
+  currentPage === totalPages
+    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+    : "bg-blue-600 text-white hover:bg-blue-700"
+}`}
+        >
+          Next →
+        </button>
+      </div>
     </div>
   )
 }
