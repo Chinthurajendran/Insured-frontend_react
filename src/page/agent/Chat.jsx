@@ -56,11 +56,15 @@ const Chat = ({ setIsChatOpen, sender_id, receiver_id }) => {
       <div className="flex-1 overflow-y-auto p-4 bg-gray-100 text-gray-900 space-y-2">
         {messages.map((msg, index) => {
           const isUserMessage = msg.sender_id === sender_id
+          const time = new Date(msg.created_at).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
 
           return (
             <div
               key={index}
-              className={`p-3 rounded-lg shadow-md max-w-xs text-sm ${
+              className={`relative p-3 rounded-lg shadow-md text-sm ${
                 isUserMessage
                   ? "bg-[#0B4B2C] text-white ml-auto rounded-br-none"
                   : "bg-[#1E88E5] text-white mr-auto rounded-bl-none"
@@ -70,17 +74,21 @@ const Chat = ({ setIsChatOpen, sender_id, receiver_id }) => {
                 wordWrap: "break-word",
                 whiteSpace: "pre-wrap",
                 maxWidth: `${Math.min(
-                  50 + msg.content.length * 8,
+                  80 + msg.content.length * 8,
                   window.innerWidth * 0.9
                 )}px`,
               }}
             >
-              {msg.content}
+              <div className="pr-10">{msg.content}</div>
+              <span className="absolute bottom-1 right-2 text-[10px] text-white/60">
+                {time}
+              </span>
             </div>
           )
         })}
         <div ref={messagesEndRef} />
       </div>
+
       {showEmojiPicker && (
         <div className="absolute bottom-16 left-2 bg-white border rounded-lg shadow-lg z-10">
           <EmojiPicker onEmojiClick={handleEmojiClick} />

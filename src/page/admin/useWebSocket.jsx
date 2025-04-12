@@ -29,6 +29,7 @@ const useWebSocket = (sender_id,receiver_id) => {
     fetchChatHistory();
 
     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${sender_id}`);
+
     ws.onopen = () => {
     };
 

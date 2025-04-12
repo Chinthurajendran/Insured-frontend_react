@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { baseURL } from "../../baseUrls/Urls"
 
-
 const PolicyCard = ({ image, title, description }) => (
   <div className="max-w-sm overflow-hidden bg-white rounded-lg shadow-md">
     <img src={image} alt={title} className="w-full h-48 object-cover" />
@@ -30,7 +29,6 @@ const User_body = () => {
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        
         const response = await axios.get(`${baseURL}/auth/Policyinfo_list`)
         if (response.status === 200) {
           const policies = response.data.policies || response.data
@@ -73,13 +71,21 @@ const User_body = () => {
                 unexpected—ensure your security today with our trusted insurance
                 options for home, life, and auto.
               </p>
-              <div className="flex space-x-4">
-                <button className="bg-yellow-400 text-black px-6 py-3 rounded-lg font-medium hover:bg-yellow-500 transition-colors">
+              <div className="flex space-x-4 ">
+                <button className="bg-yellow-400 text-black px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:bg-yellow-500 hover:scale-105 hover:shadow-lg">
                   GET STARTED
                 </button>
-                <button className="text-white border border-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors">
-                  WATCH THE VIDEO
-                </button>
+              </div>
+              <div className="flex space-x-4">
+                <a
+                  href="https://youtu.be/EW7T1mqO4Lk?si=SbbLC8ZHa01CrPZf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button className="text-white border border-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:bg-white/10 hover:scale-105 hover:shadow-lg">
+                    WATCH THE VIDEO
+                  </button>
+                </a>
               </div>
             </div>
 

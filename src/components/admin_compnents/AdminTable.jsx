@@ -13,7 +13,7 @@ const AdminTable = ({
   buttonlink,
 }) => {
   const [currentPage, setCurrentPage] = useState(1)
-  const usersPerPage = 10
+  const usersPerPage = 5
 
   const indexOfLastUser = currentPage * usersPerPage
   const indexOfFirstUser = indexOfLastUser - usersPerPage

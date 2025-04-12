@@ -8,7 +8,7 @@ import { setAdminTokens } from "../store/slices/AdminToken"
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/admin_auth`,
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -80,11 +80,14 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(refreshError)
       }
     }
+    const adminAuthenticated = store.getState().adminAuth.isAuthenticated_admin
     if (error.response.status === 403) {
       toast.error("Permission Denied!")
     } else if (error.response.status === 404) {
+      window.location.assign(`/404?Authenticated=${encodeURIComponent(Authenticated)}`);
       toast.error("The requested resource was not found!")
     } else if (error.response.status >= 500) {
+      window.location.assign(`/InternalServerError?Authenticated=${encodeURIComponent(adminAuthenticated)}`);
       toast.error("Something went wrong. Please try again later.")
     }
 

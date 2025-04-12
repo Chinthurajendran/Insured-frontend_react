@@ -10,7 +10,9 @@ const RazorpayPaymentWallet = () => {
   const amount = Math.round(location.state?.amount || 0)
   const type = location.state?.transactionType
   const userId = useSelector((state) => state.userAuth.userid)
+  const policyId = location.state?.policy_id ?? '00000000-0000-0000-0000-000000000000';
   const navigate = useNavigate()
+  console.log("111111111111111",policyId)
 
   const handlePayment = async () => {
     if (!window.Razorpay) {
@@ -39,7 +41,7 @@ const RazorpayPaymentWallet = () => {
             const endpoint =
               type === "add"
                 ? `wallet-verify-payment_add/${userId}`
-                : `wallet-verify-payment-withdraw/${userId}?type=${type}`
+                : `wallet-verify-payment-withdraw/${userId}?type=${type}&policy_id=${policyId}`
 
             const verificationResponse = await axiosInstance.post(endpoint, {
               order_id: data.order_id,

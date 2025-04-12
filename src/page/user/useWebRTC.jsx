@@ -7,23 +7,19 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
   const remoteStream = useRef(null);
   const remoteAudioRef = useRef(null);
 
-  // **WebSocket Setup**
   useEffect(() => {
     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/webrtc/${userId}`);
 
-    ws.onopen = () => console.log("✅ WebSocket connected (user)");
+    ws.onopen = () => console.log("WebSocket connected (user)");
     ws.onmessage = async (event) => {
       const message = JSON.parse(event.data);
-      console.log("📬 Received message:", message);
 
       try {
         switch (message.type) {
           case "offer":
-            console.log("🤝 Handling offer:", message);
             await handleOffer(message);
             break;
           case "answer":
-            console.log("✅ Handling answer:", message);
             if (peerConnection.current) {
               await peerConnection.current.setRemoteDescription(
                 new RTCSessionDescription(message.answer)
@@ -31,7 +27,6 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
             }
             break;
           case "candidate":
-            console.log("📡 Handling candidate:", message);
             if (peerConnection.current) {
               await peerConnection.current.addIceCandidate(
                 new RTCIceCandidate(message.candidate)
@@ -39,31 +34,28 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
             }
             break;
           case "call-ended":
-            console.log("📴 Call ended:", message);
             endCall();
             setShowCallScreen(false);
             break;
           default:
-            console.warn("⚠️ Unknown message type:", message.type);
+            console.warn("Unknown message type:", message.type);
         }
       } catch (error) {
         console.error("Error handling WebSocket message:", error);
       }
     };
 
-    ws.onerror = (event) => console.error("❌ WebSocket error:", event);
+    ws.onerror = (event) => console.error("WebSocket error:", event);
     ws.onclose = (event) =>
-      console.log("🔌 WebSocket connection closed:", event);
+      console.log("WebSocket connection closed:", event);
 
     setSocket(ws);
 
     return () => {
-      console.log("🚪 Cleaning up WebSocket connection");
       ws.close();
     };
   }, [userId]);
 
-  // **Start Call**
   const startCall = async () => {
     try {
       localStream.current = await navigator.mediaDevices.getUserMedia({
@@ -112,7 +104,6 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
     }
   };
 
-  // **Handle Incoming WebRTC Offer**
   const handleOffer = async ({ offer }) => {
     try {
       const peer = new RTCPeerConnection({
@@ -165,7 +156,6 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
     }
   };
 
-  // **End Call**
   const endCall = () => {
     if (peerConnection.current) {
       peerConnection.current.close();

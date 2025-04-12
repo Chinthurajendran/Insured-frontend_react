@@ -16,6 +16,7 @@ function PolicyDocumentUpload() {
   const [uploadPermissions, setUploadPermissions] = useState({})
   const [documents, setDocuments] = useState({})
   const [formError, setFormError] = useState("")
+  const [loading, setLoading] = useState(false)
   const [nomineeDetails, setNomineeDetails] = useState({
     fullName: "",
     relationship: "",
@@ -148,7 +149,7 @@ function PolicyDocumentUpload() {
           </div>
           <div className="bg-gray-100 p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold text-gray-700">Life Cover</h2>
-            <p className="text-2xl font-bold text-red-600">₹ 50,000,000</p>
+            <p className="text-2xl font-bold text-red-600">₹ {policyDetails.premium_amount}</p>
           </div>
           <div className="bg-gray-100 p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold text-gray-700">

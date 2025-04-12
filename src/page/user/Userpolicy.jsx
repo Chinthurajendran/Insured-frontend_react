@@ -73,7 +73,7 @@ function Userpolicy() {
       navigate("/RazorpayPayment", { state: { amount, policy_id } })
     } else if (paymentMethod === "wallet_policy") {
       navigate("/RazorpayPaymentWallet", {
-        state: { amount, transactionType: paymentMethod },
+        state: { amount, transactionType: paymentMethod,policy_id },
       })
     }
     setShowModal(false)
@@ -83,6 +83,7 @@ function Userpolicy() {
   const indexOfFirstUser = indexOfLastUser - usersPerPage
   const currentUsers = policy.slice(indexOfFirstUser, indexOfLastUser)
   const totalPages = Math.ceil(policy.length / usersPerPage)
+  console.log(policy)
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-center bg-gray-100 space-y-6 overflow-hidden">
@@ -149,7 +150,7 @@ function Userpolicy() {
             <span className="text-sm">{user.policy_status}</span>
           </div>
 
-          {!user.payment_status && (
+          {!user.payment_status && user.policy_status === "approved" && (
             <div className="absolute bottom-3 right-4 pr-2">
               <button
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md"

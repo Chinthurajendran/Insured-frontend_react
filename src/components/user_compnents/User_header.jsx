@@ -51,7 +51,6 @@ const UserHeader = () => {
     }
   }
 
-
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -73,7 +72,7 @@ const UserHeader = () => {
     }
 
     const ws = new WebSocket(websocketUrl)
-    wsRef.current = ws 
+    wsRef.current = ws
 
     ws.onopen = () => console.log("✅ WebSocket Connected")
 
@@ -151,18 +150,20 @@ const UserHeader = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <button
-              className={`transition-all duration-300 ${
-                isProfilePage ? "text-[#0e4a31]" : "text-white"
-              } hover:scale-110`}
-              onClick={handleChatToggle}
-            >
-              <img
-                src={isProfilePage ? customer_green : customer_white}
-                alt="Customer Care"
-                className="w-7 h-7"
-              />
-            </button>
+            {user_token && (
+              <button
+                className={`transition-all duration-300 ${
+                  isProfilePage ? "text-[#0e4a31]" : "text-white"
+                } hover:scale-110`}
+                onClick={handleChatToggle}
+              >
+                <img
+                  src={isProfilePage ? customer_green : customer_white}
+                  alt="Customer Care"
+                  className="w-7 h-7"
+                />
+              </button>
+            )}
             {isChatOpen && (
               <Chat
                 userId={userId}

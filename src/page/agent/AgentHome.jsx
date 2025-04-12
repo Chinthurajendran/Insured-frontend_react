@@ -29,8 +29,8 @@ function AgentHome() {
       <div className="flex h-full">
         <Agent_sidebar />
         <div className="w-5/6 p-6">
-        <CallNotification />
-        {/* <VideoCallNotification /> */}
+        {/* <CallNotification /> */}
+        <VideoCallNotification />
           <Outlet />
         </div>
       </div>

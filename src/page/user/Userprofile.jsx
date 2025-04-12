@@ -12,6 +12,7 @@ function Userprofile() {
   const [user, setUser] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [isVisible, setIsVisible] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const [formData, setFormData] = useState({
     gender: "",
@@ -26,7 +27,9 @@ function Userprofile() {
   })
 
   const userId = useSelector((state) => state.userAuth.userid)
-  const user_authenticcated = useSelector((state) => state.userAuth.isAuthenticated)
+  const user_authenticcated = useSelector(
+    (state) => state.userAuth.isAuthenticated
+  )
 
   useEffect(() => {
     if (!user_authenticcated) {
@@ -34,10 +37,9 @@ function Userprofile() {
     }
   }, [user_authenticcated, navigate])
 
-
   const fetchUserProfile = async () => {
     if (!userId) return
-    
+
     try {
       const res = await axiosInstance.get(`user_profile/${userId}`)
 
@@ -45,7 +47,7 @@ function Userprofile() {
         const userdata = res.data.user || res.data
         setUser(userdata)
         setGender(userdata.gender || "male")
-        
+
         setFormData({
           gender: userdata.gender || "",
           username: userdata.username || "",
@@ -57,7 +59,7 @@ function Userprofile() {
           city: userdata.city || "",
           image: null,
         })
-        
+
         if (isVisible) {
           setImagePreview(null)
         }
@@ -85,15 +87,16 @@ function Userprofile() {
   }
 
   const updateProfile = async () => {
+    setLoading(true)
     try {
       const formDataToSend = new FormData()
-      
-      Object.keys(formData).forEach(key => {
+
+      Object.keys(formData).forEach((key) => {
         if (formData[key] !== null && formData[key] !== undefined) {
           formDataToSend.append(key, formData[key])
         }
       })
-      
+
       const response = await axiosInstance.put(
         `profile_create/${userId}`,
         formDataToSend,
@@ -105,14 +108,15 @@ function Userprofile() {
       if (response.status === 200) {
         toast.success("Updated successfully!")
         setIsVisible(true)
-        
+
         await fetchUserProfile()
       }
     } catch (error) {
       toast.error("Failed to update profile.")
+    } finally {
+      setLoading(false)
     }
   }
-  console.log(user)
 
   return (
     <div className="h-96 bg-gray-100">
@@ -128,7 +132,6 @@ function Userprofile() {
               </button>
 
               <div className="flex items-center space-x-6 mb-6">
-
                 <img
                   src={user?.image || gallery}
                   alt="User Profile"
@@ -139,7 +142,6 @@ function Userprofile() {
                   <h2 className="text-xl font-semibold">Personal Details</h2>
 
                   <form className="space-y-6">
-
                     <div className="flex space-x-4">
                       <label className="flex items-center space-x-2 cursor-pointer">
                         <input
@@ -310,9 +312,7 @@ function Userprofile() {
                             type="radio"
                             name="gender"
                             value="Female"
-                            checked={
-                              formData.gender.toLowerCase() === "female"
-                            }
+                            checked={formData.gender.toLowerCase() === "female"}
                             onChange={handleChange}
                             className="hidden"
                           />
@@ -429,7 +429,7 @@ function Userprofile() {
                         onClick={updateProfile}
                         className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
                       >
-                        Update
+                        {loading ? "Updating..." : "Update"}
                       </button>
                     </form>
                   </div>

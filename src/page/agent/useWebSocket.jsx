@@ -18,7 +18,7 @@ const useWebSocket = (sender_id,receiver_id) => {
     const fetchChatHistory = async () => {
       try {
         const response = await axios.get(`${baseURL}/message_auth/messages/${receiver_id}?sender_id=${sender_id}`);
-        console.log("📜 Chat history:", response.data);
+
         setMessages(response.data);
       } catch (error) {
         console.error("Error fetching messages:", error);
@@ -27,31 +27,26 @@ const useWebSocket = (sender_id,receiver_id) => {
     };
 
     fetchChatHistory();
-    console.log("agent",agentId)
-    console.log("agent_sender_id",sender_id)
-    console.log("user_receiver_id",receiver_id)
 
     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${sender_id}`);
 
     ws.onopen = () => {
-      console.log("✅ Connected to WebSocket");
     };
 
 
     ws.onmessage = (event) => {
       try {
         const message = JSON.parse(event.data);
-        console.log("📩 Received:", message);
         setMessages((prev) => [...prev, message]);
       } catch (error) {
-        console.error("❌ Error parsing WebSocket message:", error);
+        console.error("Error parsing WebSocket message:", error);
       }
     };
 
 
 
     ws.onclose = () => {
-      console.warn("⚠️ WebSocket closed. Attempting to reconnect...");
+      console.warn(" WebSocket closed. Attempting to reconnect...");
       setTimeout(() => {
         const newSocket = new WebSocket(`ws://127.0.0.1:8000/ws/${sender_id}`);
         setSocket(newSocket);
@@ -61,7 +56,6 @@ const useWebSocket = (sender_id,receiver_id) => {
     setSocket(ws);
 
     return () => {
-      console.log("🛑 Closing WebSocket connection");
       ws.close();
     };
   }, [receiver_id]);
@@ -69,7 +63,7 @@ const useWebSocket = (sender_id,receiver_id) => {
 
   const sendMessage = (message) => {
     if (!socket || socket.readyState !== WebSocket.OPEN) {
-      console.warn("⚠️ WebSocket is not ready yet. Retrying...");
+      console.warn("WebSocket is not ready yet. Retrying...");
       return;
     }
     const payload = {

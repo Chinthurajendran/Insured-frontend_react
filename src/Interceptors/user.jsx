@@ -9,7 +9,7 @@ import { setTokens } from "../store/slices/UserToken"
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/auth`,
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -45,7 +45,6 @@ axiosInstance.interceptors.response.use(
       try {
         
         const refreshToken = store.getState().userToken.user_refresh_token
-        console.log("rrrrrrrr",refreshToken)
 
         if (!refreshToken) {
           console.error("No refresh token found in Redux!")
@@ -61,8 +60,6 @@ axiosInstance.interceptors.response.use(
               withCredentials: true,
           }
         )
-        console.log("New user Access Token :::", data, data.access_token)
-        console.log("New user111111 Access Token :::", data.access_token);
         
         store.dispatch(
           setTokens({
@@ -80,12 +77,14 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(refreshError)
       }
     }
-
+    const Authenticated = store.getState().userAuth.isAuthenticated
     if (error.response.status === 403) {
       toast.error("Permission Denied!")
     } else if (error.response.status === 404) {
+      window.location.assign(`/404?Authenticated=${encodeURIComponent(Authenticated)}`);
       toast.error("The requested resource was not found!")
     } else if (error.response.status >= 500) {
+      window.location.assign(`/InternalServerError?Authenticated=${encodeURIComponent(Authenticated)}`);
       toast.error("Something went wrong. Please try again later.")
     }
 

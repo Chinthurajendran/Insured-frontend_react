@@ -1,141 +1,178 @@
 import { useEffect, useRef, useState } from "react";
 
 const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
-  const [socket, setSocket] = useState(null);
-  const [peerConnection, setPeerConnection] = useState(null);
-  const localStream = useRef(null);
-  const remoteStream = useRef(null);
-  const localVideoRef = useRef(null); // Reference for local video display
-  const remoteVideoRef = useRef(null); // Reference for remote video display
-  const callerIdRef = useRef(null);
   const [incomingCalls, setIncomingCall] = useState(false);
-  const offerRef = useRef(null); // Store the received offer
+  const [socket, setSocket] = useState(null);
+  const peerConnectionRef = useRef(null);
 
+  const localStream = useRef(null);
+  const remoteStream = useRef(null); // start as null
+  const localVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
+  const callerIdRef = useRef(null);
+  const offerRef = useRef(null);
+
+  // WebSocket setup
   useEffect(() => {
-    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/webrtcvedio/${agentId}`);
+    const setupWebSocket = () => {
+      const ws = new WebSocket(`ws://127.0.0.1:8000/ws/webrtcvedio/${agentId}`);
 
-    ws.onopen = () => {
-      console.log("✅ WebSocket connected (Agent)");
+      ws.onopen = () => console.log("✅ WebSocket connected");
+
+      ws.onmessage = async (event) => {
+        const message = JSON.parse(event.data);
+        handleWebSocketMessage(message);
+      };
+
+      ws.onclose = () => {
+        console.warn("❌ WebSocket closed. Retrying...");
+        setTimeout(setupWebSocket, 3000);
+      };
+
+      setSocket(ws);
     };
 
-    ws.onmessage = async (event) => {
-      const message = JSON.parse(event.data);
-      console.log("Received message video call (Agent):", message);
-
-      if (message.type === "offer") {
-        console.log("Incoming call from:", message.sender_id);
-        callerIdRef.current = message.sender_id;
-        offerRef.current = message.offer; // Store the offer for later use
-        setIncomingCall(true);
-      } else if (message.type === "candidate") {
-        console.log("Handling candidate:", message);
-        await handleCandidate(message);
-      } else if (message.type === "call-ended") {
-        console.log("Call ended by caller:", message);
-        setIncomingCall(false);
-        showVideoCallScreen(false);
-        endCall();
-      }
-    };
-
-    setSocket(ws);
+    setupWebSocket();
 
     return () => {
-      ws.onclose = () => {
-        console.log("🔴 WebSocket disconnected. Reconnecting...");
-        setTimeout(() => {
-          setSocket(new WebSocket(`ws://127.0.0.1:8000/ws/webrtcvedio/${agentId}`));
-        }, 3000); // Reconnect after 3 seconds
-      };
+      if (socket) {
+        socket.close();
+        console.log("🔌 WebSocket closed on unmount");
+      }
     };
   }, [agentId]);
 
-  // **Accept Call (Only When Incoming Call Exists)**
+  // Handle WebSocket messages
+  const handleWebSocketMessage = async (message) => {
+    switch (message.type) {
+      case "offer":
+        callerIdRef.current = message.sender_id;
+        offerRef.current = message.offer;
+        setIncomingCall(true);
+        break;
+
+      case "candidate":
+        handleCandidate(message.candidate);
+        break;
+
+      case "call-ended":
+        console.log("📞 Call ended");
+        endCall();
+        showVideoCallScreen(false);
+        break;
+
+      case "answer":
+        if (peerConnectionRef.current) {
+          await peerConnectionRef.current.setRemoteDescription(
+            new RTCSessionDescription(message.answer)
+          );
+        }
+        break;
+
+      default:
+        console.warn("❓ Unknown message type:", message.type);
+    }
+  };
+
+  // Accept incoming call
   const acceptCall = async () => {
     setIncomingCall(false);
 
     try {
       if (!offerRef.current) {
-        console.error("Error: No offer available to accept.");
+        console.error("🚫 No offer to accept");
         return;
       }
 
-      localStream.current = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true, // Include both video and audio
-      });
-      remoteStream.current = new MediaStream();
+      // Get local media stream
+      localStream.current = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+
+      if (localVideoRef.current && localStream.current) {
+        localVideoRef.current.srcObject = localStream.current;
+        console.log("🎥 Local stream set successfully");
+      } else {
+        console.warn("⚠️ Local video ref or stream missing");
+      }
 
       const peer = new RTCPeerConnection({
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
       });
 
+      // ICE candidate handler
       peer.onicecandidate = (event) => {
-        if (event.candidate) {
-          socket.send(
-            JSON.stringify({
-              type: "candidate",
-              target_id: callerIdRef.current,
-              candidate: event.candidate,
-            })
-          );
+        if (event.candidate && socket && callerIdRef.current) {
+          socket.send(JSON.stringify({
+            type: "candidate",
+            target_id: callerIdRef.current,
+            candidate: event.candidate,
+          }));
         }
       };
 
-      // **Handle Incoming Video/Audio Tracks**
+      // Track handler
       peer.ontrack = (event) => {
-        console.log("🔊🔴 Received remote track:", event.track.kind);
-        remoteStream.current.addTrack(event.track);
+        console.log("📡 Received remote track:", event.track.kind);
 
-        if (event.track.kind === "video" && remoteVideoRef.current) {
+        if (!remoteStream.current) {
+          remoteStream.current = new MediaStream();
+        }
+
+        event.streams[0].getTracks().forEach((track) => {
+          remoteStream.current.addTrack(track);
+        });
+
+        if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = remoteStream.current;
-        } else if (event.track.kind === "audio") {
-          remoteStream.current.addTrack(event.track); // Ensure audio is added to the stream
+          console.log("📺 Remote video stream set!");
         }
       };
 
-      // Attach local video stream
-      localStream.current.getTracks().forEach((track) =>
-        peer.addTrack(track, localStream.current)
-      );
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = localStream.current;
-      }
+      // Add local tracks to peer connection
+      localStream.current.getTracks().forEach(track => {
+        peer.addTrack(track, localStream.current);
+      });
 
-      setPeerConnection(peer);
+      peerConnectionRef.current = peer;
 
       await peer.setRemoteDescription(new RTCSessionDescription(offerRef.current));
       const answer = await peer.createAnswer();
       await peer.setLocalDescription(answer);
 
-      socket.send(
-        JSON.stringify({
-          type: "answer",
-          target_id: callerIdRef.current,
-          answer,
-        })
-      );
-    } catch (error) {
-      console.error("❌ Error accepting call:", error);
+      // Send the answer
+      socket.send(JSON.stringify({
+        type: "answer",
+        target_id: callerIdRef.current,
+        answer,
+      }));
+
+    } catch (err) {
+      console.error("❌ Error accepting call:", err);
     }
   };
 
-  // **Handle ICE Candidate**
-  const handleCandidate = async ({ candidate }) => {
-    if (peerConnection) {
-      await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+  // Handle ICE candidate
+  const handleCandidate = async (candidate) => {
+    if (!peerConnectionRef.current) {
+      console.warn("⏳ PeerConnection not ready");
+      return;
+    }
+
+    try {
+      await peerConnectionRef.current.addIceCandidate(new RTCIceCandidate(candidate));
+    } catch (err) {
+      console.error("❌ Failed to add ICE candidate:", err);
     }
   };
 
-  // **End Call - Cleanup**
+  // End the call
   const endCall = () => {
-    if (peerConnection) {
-      peerConnection.close();
-      setPeerConnection(null);
+    if (peerConnectionRef.current) {
+      peerConnectionRef.current.close();
+      peerConnectionRef.current = null;
     }
 
     if (localStream.current) {
-      localStream.current.getTracks().forEach((track) => track.stop());
+      localStream.current.getTracks().forEach(track => track.stop());
       localStream.current = null;
     }
 
@@ -143,14 +180,28 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
       remoteStream.current = null;
     }
 
-    if (socket && callerIdRef.current) {
-      socket.send(
-        JSON.stringify({ type: "call-ended", target_id: callerIdRef.current })
-      );
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = null;
     }
+
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.srcObject = null;
+    }
+
+    if (socket && callerIdRef.current) {
+      socket.send(JSON.stringify({ type: "call-ended", target_id: callerIdRef.current }));
+    }
+
+    setIncomingCall(false);
   };
 
-  return { acceptCall, endCall, incomingCalls, localStream, remoteStream, localVideoRef, remoteVideoRef };
+  return {
+    acceptCall,
+    endCall,
+    incomingCalls,
+    localVideoRef,
+    remoteVideoRef,
+  };
 };
 
 export default useWebRTCAgentVideoCall;

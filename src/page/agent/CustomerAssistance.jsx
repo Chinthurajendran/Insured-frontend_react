@@ -7,6 +7,7 @@ function CustomerAssistance() {
   const [Assistance, SetAssistance] = useState([]);
   const agentId = useSelector((state) => state.agentAuth.agent_uuid);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isSeen, setisSeen] = useState(false);
   const [selectedAssistance, setSelectedAssistance] = useState(null); 
   useEffect(() => {
     if (!agentId) return; 
@@ -26,8 +27,9 @@ function CustomerAssistance() {
 
   const handleRowClick = (assistance) => {
     console.log(`Row clicked with UID: ${assistance.uid}`);
-
+    setisSeen(true)
     setIsChatOpen(true);
+    console.log(`Row clicked with UID: ${assistance.uid} and isSeen: ${isSeen}`);
     setSelectedAssistance(assistance);
   };
 

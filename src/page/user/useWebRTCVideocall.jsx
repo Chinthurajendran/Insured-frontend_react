@@ -8,22 +8,18 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
 
-  // **WebSocket Setup**
   useEffect(() => {
     const ws = new WebSocket(`ws://127.0.0.1:8000/ws/webrtc/${userId}`);
     ws.onopen = () => console.log("✅ WebSocket connected (user)");
     ws.onmessage = async (event) => {
       const message = JSON.parse(event.data);
-      console.log("📬 Received message:", message);
 
       try {
         switch (message.type) {
           case "offer":
-            console.log("🤝 Handling offer:", message);
             await handleOffer(message);
             break;
           case "answer":
-            console.log("✅ Handling answer:", message);
             if (peerConnection.current) {
               await peerConnection.current.setRemoteDescription(
                 new RTCSessionDescription(message.answer)
@@ -37,7 +33,6 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
                 await peerConnection.current.addIceCandidate(
                   new RTCIceCandidate(message.candidate)
                 );
-                console.log("✅ ICE candidate added successfully.");
               } else {
                 console.warn("⚠️ PeerConnection is not initialized.");
               }
@@ -46,7 +41,6 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
             }
             break;
           case "call-ended":
-            console.log("📴 Call ended:", message);
             endVideoCall();
             setShowCallScreen(false);
             break;
@@ -54,29 +48,44 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
             console.warn("⚠️ Unknown message type:", message.type);
         }
       } catch (error) {
-        console.error("Error handling WebSocket message:", error);
+        console.error("❌ Error handling WebSocket message:", error);
       }
     };
 
     ws.onerror = (event) => console.error("❌ WebSocket error:", event);
-    ws.onclose = (event) =>
-      console.log("🔌 WebSocket connection closed:", event);
+    ws.onclose = (event) => console.log("🔌 WebSocket closed:", event);
 
     setSocket(ws);
 
     return () => {
-      console.log("🚪 Cleaning up WebSocket connection");
       ws.close();
     };
   }, [userId]);
 
-  // **Start Video Call**
   const startVideoCall = async () => {
     try {
+      // Check camera permission
+      if (navigator.permissions) {
+        const cameraPerm = await navigator.permissions.query({ name: "camera" });
+        console.log("📷 Camera permission:", cameraPerm.state);
+      }
+
       localStream.current = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true,
       });
+
+      // Debug video tracks
+      localStream.current.getVideoTracks().forEach((track) => {
+        console.log("🎥 Local video track:", {
+          id: track.id,
+          kind: track.kind,
+          muted: track.muted,
+          enabled: track.enabled,
+          readyState: track.readyState,
+        });
+      });
+
       remoteStream.current = new MediaStream();
 
       const peer = new RTCPeerConnection({
@@ -97,9 +106,13 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
       };
 
       peer.ontrack = (event) => {
+        console.log("📹 Received remote track:", event.track);
         remoteStream.current.addTrack(event.track);
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = remoteStream.current;
+          remoteVideoRef.current.onloadedmetadata = () => {
+            remoteVideoRef.current.play().catch(console.error);
+          };
         }
       };
 
@@ -118,13 +131,15 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
 
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = localStream.current;
+        localVideoRef.current.onloadedmetadata = () => {
+          localVideoRef.current.play().catch(console.error);
+        };
       }
     } catch (error) {
-      console.error("Error starting video call:", error);
+      console.error("❌ Error starting video call:", error);
     }
   };
 
-  // **Handle Incoming WebRTC Offer**
   const handleOffer = async ({ offer }) => {
     try {
       const peer = new RTCPeerConnection({
@@ -147,9 +162,13 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
       };
 
       peer.ontrack = (event) => {
+        console.log("📹 Received remote track:", event.track);
         remoteStream.current.addTrack(event.track);
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = remoteStream.current;
+          remoteVideoRef.current.onloadedmetadata = () => {
+            remoteVideoRef.current.play().catch(console.error);
+          };
         }
       };
 
@@ -157,6 +176,17 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
         localStream.current = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true,
+        });
+
+        // Debug video tracks
+        localStream.current.getVideoTracks().forEach((track) => {
+          console.log("🎥 Local video track (receiver):", {
+            id: track.id,
+            kind: track.kind,
+            muted: track.muted,
+            enabled: track.enabled,
+            readyState: track.readyState,
+          });
         });
       }
 
@@ -176,13 +206,15 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
 
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = localStream.current;
+        localVideoRef.current.onloadedmetadata = () => {
+          localVideoRef.current.play().catch(console.error);
+        };
       }
     } catch (error) {
-      console.error("Error handling offer:", error);
+      console.error("❌ Error handling offer:", error);
     }
   };
 
-  // **End Video Call**
   const endVideoCall = () => {
     if (peerConnection.current) {
       peerConnection.current.close();
@@ -203,7 +235,14 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
     }
   };
 
-  return { startVideoCall, endVideoCall, localStream, remoteStream, localVideoRef, remoteVideoRef };
+  return {
+    startVideoCall,
+    endVideoCall,
+    localStream,
+    remoteStream,
+    localVideoRef,
+    remoteVideoRef,
+  };
 };
 
 export default useWebRTCVideocall;

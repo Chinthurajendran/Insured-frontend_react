@@ -8,7 +8,7 @@ import { setagentTokens } from "../store/slices/AgentToken"
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/agent_auth`,
-  timeout: 10000,
+  timeout: 40000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -76,12 +76,14 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(refreshError)
       }
     }
-
+    const agentAuthenticated = store.getState().agentAuth.isAuthenticated_agent
     if (error.response.status === 403) {
       toast.error("Permission Denied!")
     } else if (error.response.status === 404) {
+      window.location.assign(`/404?Authenticated=${encodeURIComponent(Authenticated)}`);
       console.error("The requested resource was not found!")
     } else if (error.response.status >= 500) {
+      window.location.assign(`/InternalServerError?Authenticated=${encodeURIComponent(agentAuthenticated)}`);
       console.error("Something went wrong. Please try again later.")
     }
 

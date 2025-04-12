@@ -10,23 +10,27 @@ import {
 } from "recharts";
 import { PieChart, Pie, Cell, Legend } from "recharts";
 import axiosInstance from "../../Interceptors/agent";
+import { useSelector } from "react-redux";
 
 function DashboardGraph() {
   const [chartData, setChartData] = useState([]);
   const [policyStatusCounts, setPolicyStatusCounts] = useState(null);
   const [loading, setLoading] = useState(true);
   const [policyStatusVisible, setPolicyStatusVisible] = useState(false);
+  const agentId = useSelector((state) => state.agentAuth.agent_uuid)
 
   useEffect(() => {
     const fetchPolicyData = async () => {
       try {
         const [policiesRes, paymentRes] = await Promise.all([
-          axiosInstance.get("policiespermonth"),
-          axiosInstance.get("policypaymentinfo"),
+          axiosInstance.get(`policiespermonth/${agentId}`),
+          axiosInstance.get(`policypaymentinfo/${agentId}`),
         ]);
 
         const policies = policiesRes.data.policies || [];
         const allPolicies = paymentRes.data.policies || [];
+        console.log("policies:",policies)
+        console.log("allPolicies:",allPolicies)
 
         const currentYear = new Date().getFullYear();
         const months = Array.from({ length: 12 }, (_, i) => ({
@@ -119,7 +123,7 @@ function DashboardGraph() {
             </ResponsiveContainer>
           </div>
 
-          {policyStatusVisible && (
+     
             <div className="w-full md:w-1/3 flex flex-col items-center">
               <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">
                 Policy Status (Current Month)
@@ -134,7 +138,7 @@ function DashboardGraph() {
                 <Legend />
               </PieChart>
             </div>
-          )}
+
         </div>
       )}
     </div>

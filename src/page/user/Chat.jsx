@@ -23,7 +23,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const handleCall = () => {
     setShowCallScreen(true)
-    startCall() 
+    startCall()
   }
 
   const handleEndCall = () => {
@@ -87,6 +87,8 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
     }
   }, [remoteStream.current])
   console.log("Audio element stream:", remoteStream.current)
+
+  console.log("111111111", messages)
   return (
     <div className="fixed bottom-4 right-4 w-96 h-[450px] bg-[#0B4B2C] shadow-2xl rounded-2xl flex flex-col border border-gray-400 z-50 overflow-hidden">
       <div className="flex justify-between items-center bg-[#0B4B2C] text-white p-4 rounded-t-2xl border-b border-gray-400 shadow-md">
@@ -161,11 +163,15 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
       <div className="flex-1 overflow-y-auto p-4 bg-gray-100 text-gray-900 space-y-2">
         {messages?.map((msg, index) => {
           const isUserMessage = msg.sender_id === userId
+          const time = new Date(msg.created_at).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
 
           return (
             <div
               key={index}
-              className={`p-3 rounded-lg shadow-md max-w-xs text-sm ${
+              className={`relative px-3 py-2 rounded-lg shadow-md max-w-xs text-sm ${
                 isUserMessage
                   ? "bg-[#0B4B2C] text-white ml-auto rounded-br-none"
                   : "bg-[#1E88E5] text-white mr-auto rounded-bl-none"
@@ -175,17 +181,21 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
                 wordWrap: "break-word",
                 whiteSpace: "pre-wrap",
                 maxWidth: `${Math.min(
-                  50 + (msg.content?.length ?? 0) * 8,
+                  80 + (msg.content?.length ?? 0) * 8,
                   window.innerWidth * 0.9
                 )}px`,
               }}
             >
-              {msg.content}
+              <div className="pr-10">{msg.content}</div>
+              <span className="absolute bottom-1 right-2 text-[10px] text-white/60">
+                {time}
+              </span>
             </div>
           )
         })}
         <div ref={messagesEndRef} />
       </div>
+
       {showCallScreen && (
         <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800 bg-opacity-95 flex flex-col items-center justify-center z-50">
           <div className="mb-6 animate-pulse">

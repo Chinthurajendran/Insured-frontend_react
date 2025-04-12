@@ -56,7 +56,7 @@ const Agent_login_page = () => {
               })
             )
 
-            navigate("/Agent_home/AgentProfle", {
+            navigate("/Agent_home/DashboardGraph", {
               state: { message: "Login successful!" },
             })
             toast.success("Login successful! Welcome back.")

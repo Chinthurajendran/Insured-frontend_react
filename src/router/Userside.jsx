@@ -40,12 +40,12 @@ function Userside() {
               </Route>
             <Route path="/Policypage" element={<Policypage />} />
             <Route path="/PolicyDocumentUpload" element={<PolicyDocumentUpload />}/>
-            <Route path="/Browsepolicies" element={<Browsepolicies />} />
-            <Route path="/Policyinformation" element={<Policyinformation />} />
             <Route path="/Plandetails" element={<Plandetails />} />
             <Route path="/RazorpayPayment" element={<RazorpayPayment />} />
             <Route path="/RazorpayPaymentWallet" element={<RazorpayPaymentWallet />} />
           </Route>
+          <Route path="/Policyinformation" element={<Policyinformation />} />
+          <Route path="/Browsepolicies" element={<Browsepolicies />} />
           <Route path="/Passwordrecovery" element={<Passwordrecovery />} />
           <Route path="/Resetpassword" element={<Resetpassword />} />
           <Route path="/useWebSocket" element={<useWebSocket />} />

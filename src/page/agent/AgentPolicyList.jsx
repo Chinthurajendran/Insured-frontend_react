@@ -46,9 +46,6 @@ const AgentPolicyList = () => {
 
     fetchpolicy()
   }, [])
-
-
-
   return (
     <AdminTable
       users={policyArray}
