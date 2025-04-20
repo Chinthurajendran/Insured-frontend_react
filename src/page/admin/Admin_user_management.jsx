@@ -41,7 +41,6 @@ const Admin_user_management = () => {
     }
     fetchUsers()
   }, [token])
-console.log(users)
   const handleBlockToggle = async (userId) => {
     try {
       const response = await axiosInstance.put(`user_block/${userId}`)

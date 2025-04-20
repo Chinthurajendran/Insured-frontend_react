@@ -19,7 +19,6 @@ function PolicyApprovalRejection_page() {
     try {
       const formData = new URLSearchParams()
       formData.append("reason", rejectionReason)
-      console.log("Rejection Reason:", rejectionReason)
       const response = await axiosInstance.put(
         `policy_rejected/${PolicyId}`,
         formData,

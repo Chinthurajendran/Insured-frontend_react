@@ -20,13 +20,11 @@ const Agent_login_page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Check if geolocation is available
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser.")
       return
     }
 
-    // Get user's latitude and longitude
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords

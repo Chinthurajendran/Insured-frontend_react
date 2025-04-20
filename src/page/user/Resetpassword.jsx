@@ -3,10 +3,10 @@ import loginpage from "../../assets/login_page_image.jpg"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
-import axiosInstance from "../../Interceptors/user"
-import { baseURL } from "../../baseUrls/Urls"
-import { useSelector } from "react-redux"
 import axios from "axios"
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const Resetpassword = () => {
   const [formError, setFormError] = useState("")

@@ -6,13 +6,12 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
   const peerConnectionRef = useRef(null);
 
   const localStream = useRef(null);
-  const remoteStream = useRef(null); // start as null
+  const remoteStream = useRef(null);
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const callerIdRef = useRef(null);
   const offerRef = useRef(null);
 
-  // WebSocket setup
   useEffect(() => {
     const setupWebSocket = () => {
       const ws = new WebSocket(`ws://127.0.0.1:8000/ws/webrtcvedio/${agentId}`);
@@ -37,7 +36,6 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
     return () => {
       if (socket) {
         socket.close();
-        console.log("🔌 WebSocket closed on unmount");
       }
     };
   }, [agentId]);
@@ -56,7 +54,6 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
         break;
 
       case "call-ended":
-        console.log("📞 Call ended");
         endCall();
         showVideoCallScreen(false);
         break;
@@ -89,7 +86,6 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
 
       if (localVideoRef.current && localStream.current) {
         localVideoRef.current.srcObject = localStream.current;
-        console.log("🎥 Local stream set successfully");
       } else {
         console.warn("⚠️ Local video ref or stream missing");
       }
@@ -111,8 +107,6 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
 
       // Track handler
       peer.ontrack = (event) => {
-        console.log("📡 Received remote track:", event.track.kind);
-
         if (!remoteStream.current) {
           remoteStream.current = new MediaStream();
         }
@@ -123,7 +117,6 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
 
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = remoteStream.current;
-          console.log("📺 Remote video stream set!");
         }
       };
 

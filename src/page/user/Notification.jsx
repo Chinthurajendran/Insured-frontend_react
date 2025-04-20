@@ -21,7 +21,6 @@ const Notification = ({ messages }) => {
     try {
       const res = await axiosInstance.put(`/Clearnotification/${userId}`)
       if (res.status === 200) {
-        console.log("Notifications cleared successfully")
         setNotifications([])
       }
     } catch (error) {

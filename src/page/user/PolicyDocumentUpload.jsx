@@ -108,7 +108,6 @@ function PolicyDocumentUpload() {
         console.log(`Unexpected response status: ${response.status}`)
       }
     } catch (error) {
-      console.log("Error:", error)
       setFormError(error)
 
       if (error.response && error.response.data && error.response.data.detail) {

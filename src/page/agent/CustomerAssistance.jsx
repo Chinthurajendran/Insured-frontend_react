@@ -26,10 +26,8 @@ function CustomerAssistance() {
   }, [agentId]);
 
   const handleRowClick = (assistance) => {
-    console.log(`Row clicked with UID: ${assistance.uid}`);
     setisSeen(true)
     setIsChatOpen(true);
-    console.log(`Row clicked with UID: ${assistance.uid} and isSeen: ${isSeen}`);
     setSelectedAssistance(assistance);
   };
 

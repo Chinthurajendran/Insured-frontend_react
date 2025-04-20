@@ -3,6 +3,9 @@ import axiosInstance from "../../Interceptors/user"
 import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useSelector } from "react-redux"
+import.meta.env
+
+const razorpayKey = import.meta.env.VITE_RAZERPAY_KEY;
 
 const RazorpayPaymentWallet = () => {
   const [loading, setLoading] = useState(false)
@@ -12,7 +15,6 @@ const RazorpayPaymentWallet = () => {
   const userId = useSelector((state) => state.userAuth.userid)
   const policyId = location.state?.policy_id ?? '00000000-0000-0000-0000-000000000000';
   const navigate = useNavigate()
-  console.log("111111111111111",policyId)
 
   const handlePayment = async () => {
     if (!window.Razorpay) {
@@ -30,7 +32,7 @@ const RazorpayPaymentWallet = () => {
       })
 
       const options = {
-        key: "rzp_test_BhE5b4CmcXMLSs",
+        key: razorpayKey,
         amount: data.amount,
         currency: data.currency,
         name: "Insured+",

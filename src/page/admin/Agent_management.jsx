@@ -1,9 +1,11 @@
 import axios from "axios"
 import React, { useEffect, useState } from "react"
-import { baseURL } from "../../baseUrls/Urls"
 import { useNavigate } from "react-router-dom"
 import axiosInstance from "../../Interceptors/admin"
 import { useSelector } from "react-redux"
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const getStatusStyles = (status) => {
   switch (status) {

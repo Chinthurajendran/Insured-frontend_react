@@ -39,8 +39,6 @@ const Admin_policy_create = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log("Form Submitted", formData)
-
     try {
       const response = await axiosInstance.post(
         `policy_create`,

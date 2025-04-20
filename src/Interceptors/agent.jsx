@@ -1,10 +1,11 @@
 import axios from "axios"
 import { toast } from "react-toastify"
-import { baseURL } from "../baseUrls/Urls"
 import store from "../store/store"
 import { agent_logout } from "../store/slices/agentAuthentication"
-import { agent_login } from "../store/slices/agentAuthentication"
 import { setagentTokens } from "../store/slices/AgentToken"
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/agent_auth`,
@@ -57,8 +58,6 @@ axiosInstance.interceptors.response.use(
               withCredentials: true,
           }
         )
-        console.log("New agent Access Token :::", data, data.access_token)
-
         store.dispatch(
           setagentTokens({
             agent_access_token: data.access_token,

@@ -22,7 +22,6 @@ const useWebRTCAgent = (agentId,setShowCallScreen) => {
       const message = JSON.parse(event.data);
  
       if (message.type === "offer") {
-        console.log("Incoming call from:", message.sender_id);
         callerIdRef.current = message.sender_id;
         offerRef.current = message.offer;
         setIncomingCall(true);
@@ -76,7 +75,6 @@ const useWebRTCAgent = (agentId,setShowCallScreen) => {
       };
 
       peer.ontrack = (event) => {
-        console.log("🔊 Received remote track:", event.track.kind);
         if (event.track.kind === "audio") {
           remoteStream.current.addTrack(event.track);
           remoteAudioRef.current.srcObject = remoteStream.current;

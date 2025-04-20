@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import loginpage from "../../assets/login_page_image.jpg"
 import { Link } from "react-router-dom"
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"
-import { baseURL } from "../../baseUrls/Urls"
+// import { baseURL } from "../../baseUrls/Urls"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { login } from "../../store/slices/userAuthentication"
@@ -11,10 +11,15 @@ import { jwtDecode } from "jwt-decode"
 import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
 import { setTokens } from "../../store/slices/UserToken"
+import.meta.env
+
+const GoogleID = import.meta.env.VITE_CLIENT_ID;
+const baseURL = import.meta.env.VITE_API_LOCAL_URL;
 
 const Login_with_google = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
   const [formError, setFormError] = useState("")
 
   const handleSuccess = async (credentialResponse) => {
@@ -45,7 +50,6 @@ const Login_with_google = () => {
         toast.success("Login successful!")
       }
     } catch (error) {
-      console.log(error)
       if (error.response && error.response.data) {
         setFormError(error.response.data.detail || "Login failed")
       } else {
@@ -73,11 +77,10 @@ const Login_with_google = () => {
         )}
 
         <div className="space-y-4">
-          <GoogleOAuthProvider clientId="270374642053-gvj2j07247e2h96gbd929oh12li1rs2l.apps.googleusercontent.com">
+          <GoogleOAuthProvider clientId = {GoogleID}>
             <GoogleLogin
               onSuccess={handleSuccess}
               onError={() => {
-                console.log("Login Failed")
                 toast.error("Login failed. Please try again.")
               }}
             />

@@ -40,9 +40,6 @@ const PolicyStatus = () => {
     fetchPolicies();
   }, []);
 
-
-console.log(policy)
-
   const handleSubmit = (id) => {
     const selectedPolicy = policy.find(({ policydetails_uid }) => policydetails_uid === id);
     if (selectedPolicy?.policy_status === "rejected") {

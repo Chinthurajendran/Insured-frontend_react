@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import axios from "axios"
-import { baseURL } from "../../baseUrls/Urls"
 import {
   Shield,
   Home,
@@ -15,8 +14,9 @@ import {
   Plane,
   Stethoscope,
 } from "lucide-react";
+import.meta.env
 
-
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 function PolicyInformation() {
   const location = useLocation()

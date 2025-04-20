@@ -29,8 +29,6 @@ function DashboardGraph() {
 
         const policies = policiesRes.data.policies || [];
         const allPolicies = paymentRes.data.policies || [];
-        console.log("policies:",policies)
-        console.log("allPolicies:",allPolicies)
 
         const currentYear = new Date().getFullYear();
         const months = Array.from({ length: 12 }, (_, i) => ({

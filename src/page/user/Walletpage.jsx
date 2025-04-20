@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import axiosInstance from "../../Interceptors/user"
 import { useSelector } from "react-redux"
-import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 
 function WalletPage() {
@@ -34,7 +33,6 @@ function WalletPage() {
       state: { amount, transactionType: type },
     })
   }
-  console.log(transactions)
 
   return (
     <div className="h-[80vh] w-full flex flex-col items-center justify-center  bg-gray-100 space-y-6 overflow-hidden">

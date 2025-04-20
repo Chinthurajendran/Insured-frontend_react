@@ -26,7 +26,6 @@ const PasswordRecovery = () => {
         toast.success("Password reset link has been sent to your email. Please check your inbox.");
       }
     } catch (error) {
-      console.log(error)
       if (error.response) {
         setFormError(error.response.data.detail || "An error occurred. Please try again.");
       } else {

@@ -74,7 +74,7 @@ const UserHeader = () => {
     const ws = new WebSocket(websocketUrl)
     wsRef.current = ws
 
-    ws.onopen = () => console.log("✅ WebSocket Connected")
+    ws.onopen = () => {console.log("✅ WebSocket Connected")}
 
     ws.onmessage = (event) => {
       const newNotification = JSON.parse(event.data)

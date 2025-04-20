@@ -83,8 +83,7 @@ function Userpolicy() {
   const indexOfFirstUser = indexOfLastUser - usersPerPage
   const currentUsers = policy.slice(indexOfFirstUser, indexOfLastUser)
   const totalPages = Math.ceil(policy.length / usersPerPage)
-  console.log(policy)
-
+  
   return (
     <div className="h-full w-full flex flex-col items-center justify-center bg-gray-100 space-y-6 overflow-hidden">
       <div className="max-w-6xl w-full bg-white rounded-lg shadow-lg p-8 flex items-center space-x-6">

@@ -21,8 +21,6 @@ function Policypage() {
           axiosInstance.get(`policydetails/${userId}`),
           axiosInstance.get(`UserPolicyStatus/${userId}`),
         ])
-        console.log("res", res)
-        console.log("res1", res1)
         if (res.status === 200 && res.data.matching_policies) {
           setPolicyData(res.data.matching_policies)
         }

@@ -3,8 +3,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FiAlertCircle } from "react-icons/fi";
 import axiosInstance from "../../Interceptors/agent";
-import { baseURL } from "../../baseUrls/Urls";
 import loginpage from "../../assets/login_page_image.jpg";
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const AgentPasswordRecovery = () => {
   const navigate = useNavigate();
@@ -31,7 +33,6 @@ const AgentPasswordRecovery = () => {
       if (error.response) {
         setFormError(error.response.data.detail || "Invalid Agent ID or Network Error.");
       } else if (error.request) {
-        console.log(error.response)
         setFormError("No response from server. Please check your connection.");
       } else {
         setFormError("Unexpected error occurred. Try again.");

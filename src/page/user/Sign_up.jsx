@@ -2,11 +2,13 @@ import React, { useState } from "react"
 import loginpage from "../../assets/login_page_image.jpg"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-import { baseURL } from "../../baseUrls/Urls"
 import axios from "axios"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { FiAlertCircle } from "react-icons/fi"
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const Sign_up = () => {
   const [formError, setFormError] = useState("")
@@ -38,7 +40,6 @@ const Sign_up = () => {
       }
     }
   }
-  console.log("rrr", formError)
   return (
     <div className="min-h-screen flex flex-col lg:flex-row-reverse items-center justify-center bg-white p-4">
       <div className="w-full lg:w-1/2 max-w-md px-5 ml-30">

@@ -86,9 +86,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
       console.log("Audio element stream:", remoteStream.current)
     }
   }, [remoteStream.current])
-  console.log("Audio element stream:", remoteStream.current)
-
-  console.log("111111111", messages)
+  
   return (
     <div className="fixed bottom-4 right-4 w-96 h-[450px] bg-[#0B4B2C] shadow-2xl rounded-2xl flex flex-col border border-gray-400 z-50 overflow-hidden">
       <div className="flex justify-between items-center bg-[#0B4B2C] text-white p-4 rounded-t-2xl border-b border-gray-400 shadow-md">
@@ -117,7 +115,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
             ref={(ref) => ref && (ref.srcObject = remoteStream.current)}
             autoPlay
           />
-          <button
+          {/* <button
             className="text-white hover:text-gray-300 transition-all transform hover:scale-110 p-2 rounded-full hover:bg-gray-700/20"
             aria-label="Video Call"
             onClick={handleVideoCall}
@@ -136,7 +134,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
                 d="M15 10l4.553-2.276A1 1 0 0121 8v8a1 1 0 01-1.447.894L15 14v2a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h8a2 2 0 012 2v2z"
               />
             </svg>
-          </button>
+          </button> */}
           <button
             onClick={handleClose}
             className="text-white hover:text-gray-300 transition-all transform hover:scale-110 p-2 rounded-full hover:bg-gray-700/20"

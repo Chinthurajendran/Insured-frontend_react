@@ -272,7 +272,6 @@ function AgentDocumentUpload() {
     fetchData()
   }, [PolicyId])
 
-  console.log("ppppppppp", policy)
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="bg-white p-6 shadow-md">

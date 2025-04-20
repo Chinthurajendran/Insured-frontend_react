@@ -1,10 +1,12 @@
 import axios from "axios"
 import { toast } from "react-toastify"
-import { baseURL } from "../baseUrls/Urls"
 import store from "../store/store"
 import { admin_logout } from "../store/slices/adminAuthentication"
 import { admin_login } from "../store/slices/adminAuthentication"
 import { setAdminTokens } from "../store/slices/AdminToken"
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/admin_auth`,
@@ -18,7 +20,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = store.getState().adminToken.admin_access_token
-    console.log("Sending11 Authorization Header:", token)
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`
     }
@@ -33,7 +34,6 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
-    console.log("rrrr", originalRequest)
     if (!error.response) {
       console.error("Network Error or No Response from Server!")
       toast.error("Network Error! Please check your internet connection.")
@@ -43,7 +43,6 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true
       try {
         const refreshToken = store.getState().adminToken.admin_refresh_token
-        console.log("Header:", refreshToken)
         if (!refreshToken) {
           console.error("No refresh token found in Redux!")
           throw new Error("No refresh token available")
@@ -59,7 +58,6 @@ axiosInstance.interceptors.response.use(
             withCredentials: true,
           }
         )
-        console.log("New agent Access Token :::",data.agent_access_token)
         store.dispatch(
           admin_login({ admin_access_token: data.admin_access_token })
         )

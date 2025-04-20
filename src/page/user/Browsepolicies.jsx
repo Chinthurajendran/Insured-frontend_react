@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { baseURL } from "../../baseUrls/Urls";
+import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const PolicyCard = ({ image, title, description, onClick }) => (
   <div
@@ -18,39 +20,36 @@ const PolicyCard = ({ image, title, description, onClick }) => (
       <p className="text-gray-700 text-sm line-clamp-3">{description}</p>
     </div>
   </div>
-);
+)
 
 function Browsepolicies() {
-  const [policy, setPolicy] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [policy, setPolicy] = useState([])
+  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchPolicies = async () => {
       try {
-        const response = await axios.get(`${baseURL}/auth/Policyinfo_list`);
+        const response = await axios.get(`${baseURL}/auth/Policyinfo_list`)
         if (response.status === 200) {
-          const policies = response.data?.policies || response.data;
+          const policies = response.data?.policies || response.data
           const approvedPolicies = policies.filter(
             (policy) => policy.delete_status === "False"
-          );
-          setPolicy(approvedPolicies);
+          )
+          setPolicy(approvedPolicies)
         }
       } catch (error) {
-        console.error("Error fetching policies:", error);
+        console.error("Error fetching policies:", error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetchPolicies();
-  }, []);
+    }
+    fetchPolicies()
+  }, [])
 
   const handleCardClick = (policyId) => {
-    navigate(`/Policyinformation`, { state: { policyinfo_uid: policyId } });
-  };
-  
-  console.log(policy);
-  
+    navigate(`/Policyinformation`, { state: { policyinfo_uid: policyId } })
+  }
 
   return (
     <div className="bg-[#0B4B2C] min-h-screen py-20 flex items-center">
@@ -79,7 +78,7 @@ function Browsepolicies() {
         </div>
       </section>
     </div>
-  );
+  )
 }
 
-export default Browsepolicies;
+export default Browsepolicies

@@ -5,11 +5,13 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { FiAlertCircle } from "react-icons/fi"
 import axios from "axios"
-import { baseURL } from "../../baseUrls/Urls"
 import { useSelector, useDispatch } from "react-redux"
 import { login } from "../../store/slices/userAuthentication"
 import { jwtDecode } from "jwt-decode"
 import { setTokens } from "../../store/slices/UserToken"
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const Login_page = () => {
   const location = useLocation()

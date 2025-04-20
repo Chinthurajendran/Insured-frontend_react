@@ -1,11 +1,13 @@
 import React, { useState } from "react"
 import loginpage from "../../assets/agent.jpg"
 import { Link, useNavigate } from "react-router-dom"
-import { baseURL } from "../../baseUrls/Urls"
 import axios from "axios"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { FiAlertCircle } from "react-icons/fi"
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const AgentSignUpPage = () => {
   const [formErrors, setFormErrors] = useState("")

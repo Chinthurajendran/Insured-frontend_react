@@ -1,7 +1,9 @@
 import {useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { baseURL } from "../../baseUrls/Urls";
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const useWebSocket = (sender_id,receiver_id) => {
   const [socket, setSocket] = useState(null);

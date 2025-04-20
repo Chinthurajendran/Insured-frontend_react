@@ -20,7 +20,6 @@ function Agent_approval_rejection_page() {
     try {
       const formData = new URLSearchParams()
       formData.append("reason", rejectionReason)
-      console.log("Rejection Reason:", rejectionReason)
       const response = await axiosInstance.put(
         `agent_rejected/${agentId}`,
         formData,
@@ -89,8 +88,7 @@ function Agent_approval_rejection_page() {
     return (
       <div className="text-center py-10 text-red-500">Agent not found.</div>
     )
-  console.log("ID Proof URL:", agent.idproof)
-
+    
   const openImagePopup = (imageSrc) => {
     setPopupImage(imageSrc)
   }

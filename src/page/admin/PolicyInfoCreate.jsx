@@ -79,7 +79,6 @@ function PolicyInfoCreate() {
         formData.append("photo", photo);
       }
       
-      console.log("Sending FormData:", Object.fromEntries(formData)); 
       const response = await axiosInstance.put(`policy_info_update/${policyId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })

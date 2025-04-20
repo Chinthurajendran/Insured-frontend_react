@@ -1,11 +1,11 @@
 import axios from "axios"
 import { toast } from "react-toastify"
-import { baseURL } from "../baseUrls/Urls"
 import store from "../store/store"
 import { logout } from "../store/slices/userAuthentication"
-import { login } from "../store/slices/userAuthentication"
-import { clearTokens } from "../store/slices/UserToken"
 import { setTokens } from "../store/slices/UserToken"
+import.meta.env
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/auth`,
@@ -18,9 +18,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = store.getState().userToken.user_access_token
-    // const authState = store.getState().userAuth
-    // const token = authState.user_access_token
-    console.log("Sending Authorization Header:", token)
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`
     }

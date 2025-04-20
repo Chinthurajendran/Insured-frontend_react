@@ -3,6 +3,9 @@ import axiosInstance from "../../Interceptors/user"
 import { useLocation } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import.meta.env
+
+const razorpayKey = import.meta.env.VITE_RAZERPAY_KEY;
 
 const RazorpayPayment = () => {
   const [loading, setLoading] = useState(false)
@@ -27,7 +30,7 @@ const RazorpayPayment = () => {
       })
 
       const options = {
-        key: "rzp_test_BhE5b4CmcXMLSs",
+        key: razorpayKey,
         amount: data.amount,
         currency: data.currency,
         name: "Insured+",
