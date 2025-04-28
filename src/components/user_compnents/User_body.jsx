@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react"
 import insuranceImage from "../../assets/3979003.png"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
-import { baseURL } from "../../baseUrls/Urls"
+// import { baseURL } from "../../baseUrls/Urls"
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL;
 
 const PolicyCard = ({ image, title, description }) => (
   <div className="max-w-sm overflow-hidden bg-white rounded-lg shadow-md">

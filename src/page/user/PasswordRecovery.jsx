@@ -4,14 +4,16 @@ import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FiAlertCircle } from "react-icons/fi";
 import axiosInstance from "../../Interceptors/user";
-import { baseURL } from "../../baseUrls/Urls";
 import { useNavigate } from "react-router-dom";
+
+
+const baseURL = import.meta.env.VITE_API_LOCAL_URL;
 
 const PasswordRecovery = () => {
   const location = useLocation();
   const navigate = useNavigate()
   const message = location.state?.message;
-
+  
   const [formError, setFormError] = useState("");
   const [formData, setFormData] = useState({ email: "" });
 
