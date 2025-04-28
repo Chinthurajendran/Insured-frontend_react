@@ -8,7 +8,7 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
   const remoteAudioRef = useRef(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/webrtc/${userId}`);
+    const ws = new WebSocket(`ws://api.insuredplus.shop/ws/webrtc/${userId}`);
 
     ws.onopen = () => console.log("WebSocket connected (user)");
     ws.onmessage = async (event) => {

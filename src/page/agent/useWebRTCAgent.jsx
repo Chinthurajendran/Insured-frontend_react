@@ -14,7 +14,7 @@ const useWebRTCAgent = (agentId,setShowCallScreen) => {
 
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/webrtc/${agentId}`);
+    const ws = new WebSocket(`ws://api.insuredplus.shop/ws/webrtc/${agentId}`);
 
     ws.onopen = () =>{ console.log("WebSocket connected (Agent)")};
 
@@ -41,7 +41,7 @@ const useWebRTCAgent = (agentId,setShowCallScreen) => {
     return () => {
       ws.onclose = () => {
         setTimeout(() => {
-          setSocket(new WebSocket(`ws://127.0.0.1:8000/ws/webrtc/${agentId}`));
+          setSocket(new WebSocket(`ws://api.insuredplus.shop/ws/webrtc/${agentId}`));
         }, 3000);
       };
       

@@ -14,7 +14,7 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
 
   useEffect(() => {
     const setupWebSocket = () => {
-      const ws = new WebSocket(`ws://127.0.0.1:8000/ws/webrtcvedio/${agentId}`);
+      const ws = new WebSocket(`ws://api.insuredplus.shop/ws/webrtcvedio/${agentId}`);
 
       ws.onopen = () => console.log("✅ WebSocket connected");
 

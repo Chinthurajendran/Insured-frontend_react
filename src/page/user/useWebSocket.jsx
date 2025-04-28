@@ -29,7 +29,7 @@ const useWebSocket = (userId,receiver_id) => {
 
     fetchChatHistory();
 
-    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/${userId}`);
+    const ws = new WebSocket(`ws://api.insuredplus.shop/ws/${userId}`);
 
     ws.onopen = () => {
     };
@@ -47,7 +47,7 @@ const useWebSocket = (userId,receiver_id) => {
     ws.onclose = () => {
       console.warn("WebSocket closed. Attempting to reconnect...");
       setTimeout(() => {
-        const newSocket = new WebSocket(`ws://127.0.0.1:8000/ws/${userId}`);
+        const newSocket = new WebSocket(`ws://api.insuredplus.shop/ws/${userId}`);
         setSocket(newSocket);
       }, 3000);
     };
