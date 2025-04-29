@@ -31,8 +31,9 @@ const useWebSocket = (userId,receiver_id) => {
     };
 
     fetchChatHistory();
-
-    const ws = new WebSocket(`ws://${socketURL}/ws/${userId}`);
+    
+    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+    const ws = new WebSocket(`${protocol}://${socketURL}/ws/${userId}`);
 
     ws.onopen = () => {
     };

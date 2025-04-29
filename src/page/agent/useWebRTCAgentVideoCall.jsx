@@ -16,7 +16,8 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
 
   useEffect(() => {
     const setupWebSocket = () => {
-      const ws = new WebSocket(`ws://${socketURL}/ws/webrtcvedio/${agentId}`);
+      const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+      const ws = new WebSocket(`${protocol}://${socketURL}/ws/webrtcvedio/${agentId}`);
 
       ws.onopen = () => console.log("✅ WebSocket connected");
 

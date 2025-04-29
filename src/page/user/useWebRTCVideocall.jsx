@@ -12,7 +12,8 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
   const remoteVideoRef = useRef(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://${socketURL}/ws/webrtc/${userId}`);
+    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+    const ws = new WebSocket(`${protocol}://${socketURL}/ws/webrtc/${userId}`);
     ws.onopen = () => console.log("✅ WebSocket connected (user)");
     ws.onmessage = async (event) => {
       const message = JSON.parse(event.data);

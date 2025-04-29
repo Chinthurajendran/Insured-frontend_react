@@ -10,7 +10,8 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
   const remoteAudioRef = useRef(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://${socketURL}/ws/webrtc/${userId}`);
+    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+    const ws = new WebSocket(`${protocol}://${socketURL}/ws/webrtc/${userId}`);
 
     ws.onopen = () => console.log("WebSocket connected (user)");
     ws.onmessage = async (event) => {
