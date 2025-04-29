@@ -21,7 +21,8 @@ const UserHeader = () => {
   const [locations, setLocation] = useState({ latitude: null, longitude: null })
   const [message, setMessage] = useState([])
   const [socket, setSocket] = useState(null)
-  const websocketUrl = `ws://${socketURL}/ws/notification/${userId}`
+  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+  const websocketUrl = `${protocol}://${socketURL}/ws/notification/${userId}`
   const wsRef = useRef(null)
 
   const isProfilePage =
