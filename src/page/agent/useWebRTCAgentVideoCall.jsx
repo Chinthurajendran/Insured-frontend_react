@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import.meta.env
+const socketURL = import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL
 
 const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
   const [incomingCalls, setIncomingCall] = useState(false);
@@ -14,7 +16,7 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
 
   useEffect(() => {
     const setupWebSocket = () => {
-      const ws = new WebSocket(`ws://api.insuredplus.shop/ws/webrtcvedio/${agentId}`);
+      const ws = new WebSocket(`ws://${socketURL}/ws/webrtcvedio/${agentId}`);
 
       ws.onopen = () => console.log("✅ WebSocket connected");
 

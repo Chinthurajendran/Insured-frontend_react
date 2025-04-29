@@ -4,6 +4,7 @@ import axios from "axios";
 import.meta.env
 
 const baseURL = import.meta.env.VITE_API_LOCAL_URL
+const socketURL = import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL
 
 const useWebSocket = (sender_id,receiver_id) => {
   const [socket, setSocket] = useState(null);
@@ -30,7 +31,7 @@ const useWebSocket = (sender_id,receiver_id) => {
 
     fetchChatHistory();
 
-    const ws = new WebSocket(`ws://api.insuredplus.shop/ws/${sender_id}`);
+    const ws = new WebSocket(`ws://${socketURL}/ws/${sender_id}`);
 
     ws.onopen = () => {
     };
@@ -50,7 +51,7 @@ const useWebSocket = (sender_id,receiver_id) => {
     ws.onclose = () => {
       console.warn(" WebSocket closed. Attempting to reconnect...");
       setTimeout(() => {
-        const newSocket = new WebSocket(`ws://api.insuredplus.shop/ws/${sender_id}`);
+        const newSocket = new WebSocket(`ws://${socketURL}/ws/${sender_id}`);
         setSocket(newSocket);
       }, 3000);
     };

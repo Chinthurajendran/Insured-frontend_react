@@ -8,6 +8,9 @@ import Chat from "../../page/user/Chat"
 import customer_white from "../../assets/customer-service-white.png"
 import customer_green from "../../assets/customer-service-green.png"
 import { useRef } from "react"
+import.meta.env
+
+const socketURL = import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL
 
 const UserHeader = () => {
   const user_token = useSelector((state) => state.userAuth.isAuthenticated)
@@ -18,7 +21,7 @@ const UserHeader = () => {
   const [locations, setLocation] = useState({ latitude: null, longitude: null })
   const [message, setMessage] = useState([])
   const [socket, setSocket] = useState(null)
-  const websocketUrl = `ws://localhost:8000/ws/notification/${userId}`
+  const websocketUrl = `ws://${socketURL}/ws/notification/${userId}`
   const wsRef = useRef(null)
 
   const isProfilePage =

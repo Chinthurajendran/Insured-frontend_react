@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import.meta.env
+const socketURL = import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL
 
 const useWebRTCAgent = (agentId,setShowCallScreen) => {
   const [socket, setSocket] = useState(null);
@@ -14,7 +16,7 @@ const useWebRTCAgent = (agentId,setShowCallScreen) => {
 
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://api.insuredplus.shop/ws/webrtc/${agentId}`);
+    const ws = new WebSocket(`ws://${socketURL}/ws/webrtc/${agentId}`);
 
     ws.onopen = () =>{ console.log("WebSocket connected (Agent)")};
 
@@ -41,7 +43,7 @@ const useWebRTCAgent = (agentId,setShowCallScreen) => {
     return () => {
       ws.onclose = () => {
         setTimeout(() => {
-          setSocket(new WebSocket(`ws://api.insuredplus.shop/ws/webrtc/${agentId}`));
+          setSocket(new WebSocket(`ws://${socketURL}/ws/webrtc/${agentId}`));
         }, 3000);
       };
       

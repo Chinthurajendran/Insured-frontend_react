@@ -1,7 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { baseURL } from "../../baseUrls/Urls";
+import.meta.env
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
+const socketURL = import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL
+
 
 const useWebSocket = (userId,receiver_id) => {
   const [socket, setSocket] = useState(null);
@@ -29,7 +32,7 @@ const useWebSocket = (userId,receiver_id) => {
 
     fetchChatHistory();
 
-    const ws = new WebSocket(`ws://api.insuredplus.shop/ws/${userId}`);
+    const ws = new WebSocket(`ws://${socketURL}/ws/${userId}`);
 
     ws.onopen = () => {
     };
@@ -47,7 +50,7 @@ const useWebSocket = (userId,receiver_id) => {
     ws.onclose = () => {
       console.warn("WebSocket closed. Attempting to reconnect...");
       setTimeout(() => {
-        const newSocket = new WebSocket(`ws://api.insuredplus.shop/ws/${userId}`);
+        const newSocket = new WebSocket(`ws://${socketURL}/ws/${userId}`);
         setSocket(newSocket);
       }, 3000);
     };

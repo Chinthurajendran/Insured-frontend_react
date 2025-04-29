@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import.meta.env
+const socketURL = import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL
 
 const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
   const [socket, setSocket] = useState(null);
@@ -8,7 +10,7 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
   const remoteAudioRef = useRef(null);
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://api.insuredplus.shop/ws/webrtc/${userId}`);
+    const ws = new WebSocket(`ws://${socketURL}/ws/webrtc/${userId}`);
 
     ws.onopen = () => console.log("WebSocket connected (user)");
     ws.onmessage = async (event) => {
