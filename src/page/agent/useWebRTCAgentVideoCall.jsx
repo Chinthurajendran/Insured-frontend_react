@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import.meta.env
-const socketURL = import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL
+
+const socketURL = import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL;
 
 const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
   const [incomingCalls, setIncomingCall] = useState(false);
@@ -37,13 +37,10 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
     setupWebSocket();
 
     return () => {
-      if (socket) {
-        socket.close();
-      }
+      if (socket) socket.close();
     };
   }, [agentId]);
 
-  // Handle WebSocket messages
   const handleWebSocketMessage = async (message) => {
     switch (message.type) {
       case "offer":
@@ -74,7 +71,6 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
     }
   };
 
-  // Accept incoming call
   const acceptCall = async () => {
     setIncomingCall(false);
 
@@ -84,8 +80,12 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
         return;
       }
 
-      // Get local media stream
       localStream.current = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+
+      localStream.current.getTracks().forEach(track => {
+        track.enabled = true;
+        console.log("🔄 Enabling and adding local track:", track.kind);
+      });
 
       if (localVideoRef.current && localStream.current) {
         localVideoRef.current.srcObject = localStream.current;
@@ -97,7 +97,6 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
         iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
       });
 
-      // ICE candidate handler
       peer.onicecandidate = (event) => {
         if (event.candidate && socket && callerIdRef.current) {
           socket.send(JSON.stringify({
@@ -108,22 +107,25 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
         }
       };
 
-      // Track handler
       peer.ontrack = (event) => {
+        console.log("📹 Received remote track:", event.track);
+        console.log("📦 Event streams:", event.streams);
+
         if (!remoteStream.current) {
           remoteStream.current = new MediaStream();
         }
 
-        event.streams[0].getTracks().forEach((track) => {
-          remoteStream.current.addTrack(track);
-        });
+        remoteStream.current.addTrack(event.track);
 
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = remoteStream.current;
+          remoteVideoRef.current.onloadedmetadata = () => {
+            remoteVideoRef.current.play();
+          };
+          console.log("✅ Set remote video srcObject");
         }
       };
 
-      // Add local tracks to peer connection
       localStream.current.getTracks().forEach(track => {
         peer.addTrack(track, localStream.current);
       });
@@ -134,7 +136,6 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
       const answer = await peer.createAnswer();
       await peer.setLocalDescription(answer);
 
-      // Send the answer
       socket.send(JSON.stringify({
         type: "answer",
         target_id: callerIdRef.current,
@@ -146,7 +147,6 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
     }
   };
 
-  // Handle ICE candidate
   const handleCandidate = async (candidate) => {
     if (!peerConnectionRef.current) {
       console.warn("⏳ PeerConnection not ready");
@@ -160,7 +160,6 @@ const useWebRTCAgentVideoCall = (agentId, showVideoCallScreen) => {
     }
   };
 
-  // End the call
   const endCall = () => {
     if (peerConnectionRef.current) {
       peerConnectionRef.current.close();

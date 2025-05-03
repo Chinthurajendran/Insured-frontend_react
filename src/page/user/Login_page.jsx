@@ -138,7 +138,7 @@ const Login_page = () => {
         <div className="w-full flex justify-center">
           <p className="text-sm text-gray-600">
             Don&apos;t have an account?{" "}
-            <Link to="/Sign_up_pag">
+            <Link to="/Emailvarfication">
               <span className="text-emerald-700 hover:text-emerald-600 font-semibold">
                 Sign up
               </span>

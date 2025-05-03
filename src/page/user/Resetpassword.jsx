@@ -20,23 +20,34 @@ const Resetpassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
+    if (!passwordRegex.test(formData.password)) {
+      setFormError(
+        "Password should be at least 8 characters long, with at least one uppercase letter, one lowercase letter, one digit, and one special character."
+      )
+      return
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setFormError("Passwords do not match!")
       return
     }
     const email = localStorage.getItem("email_id")
     if (!email) {
-      console.log("Email ID is missing.");
-      return;
+      console.log("Email ID is missing.")
+      return
     }
-    
+
     try {
       const res = await axios.post(`${baseURL}/auth/passwordreset`, {
-        password: formData.password,email,
+        password: formData.password,
+        email,
       })
 
       if (res.status === 200) {
-        navigate("/Login_page", { state: { message: "Password reset successful!" } })
+        navigate("/Login_page", {
+          state: { message: "Password reset successful!" },
+        })
         toast.success("Password reset successful!")
       }
     } catch (error) {
@@ -45,7 +56,7 @@ const Resetpassword = () => {
       } else {
         setFormError("An unexpected error occurred. Please try again.")
       }
-    }finally{
+    } finally {
       localStorage.removeItem("email_id")
     }
   }

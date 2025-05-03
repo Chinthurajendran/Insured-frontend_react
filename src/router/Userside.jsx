@@ -18,6 +18,8 @@ import Plandetails from "../page/user/Plandetails.jsx"
 import RazorpayPayment from "../page/user/RazorpayPayment.jsx"
 import Walletpage from "../page/user/Walletpage.jsx"
 import RazorpayPaymentWallet from "../page/user/RazorpayPaymentWallet.jsx"
+import Emailvarfication from "../page/user/Emailvarfication.jsx"
+import OTPvarfication from "../page/user/OTPvarfication.jsx"
 
 function Userside() {
   return (
@@ -29,7 +31,9 @@ function Userside() {
             element={<Login_page_with_google />}
           />
           <Route path="/Login_page" element={<Login_page />} />
-          <Route path="/Sign_up_pag" element={<Sign_up />} />
+          <Route path="/Sign_up_page" element={<Sign_up />} />
+          <Route path="/Emailvarfication" element={<Emailvarfication />} />
+          <Route path="/OTPvarfication" element={<OTPvarfication />} />
           <Route path="/" element={<Home />} />
 
           <Route element={<UserRouter />}>
@@ -50,6 +54,7 @@ function Userside() {
               element={<RazorpayPaymentWallet />}
             />
           </Route>
+          
           <Route path="/Policyinformation" element={<Policyinformation />} />
           <Route path="/Browsepolicies" element={<Browsepolicies />} />
           <Route path="/Passwordrecovery" element={<Passwordrecovery />} />

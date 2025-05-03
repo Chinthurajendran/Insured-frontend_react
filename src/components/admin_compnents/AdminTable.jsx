@@ -34,12 +34,12 @@ const AdminTable = ({
 
   const blockButton = (user) => {
     sessionStorage.setItem("currentPage", currentPage)
-    user.agentuid || user.user_id || user.policy_uid || null
+    return user.agentuid || user.user_id || user.policy_uid || null
   }
 
   const deleteButton = (user) => {
     sessionStorage.setItem("currentPage", currentPage)
-    user.agentuid || user.user_id || user.policy_uid || null
+    return user.agentuid || user.user_id || user.policy_uid || null
   }
 
   const editButton = (user) => {

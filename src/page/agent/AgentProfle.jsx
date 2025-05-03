@@ -269,6 +269,7 @@ function AgentProfle() {
                             checked={formData.gender.toLowerCase() === "male"}
                             onChange={handleChange}
                             className="hidden"
+                            disabled
                           />
                           <span
                             className={`px-4 py-2 rounded-md ${
@@ -290,6 +291,7 @@ function AgentProfle() {
                             }
                             onChange={handleChange}
                             className="hidden"
+                            disabled
                           />
                           <span
                             className={`px-4 py-2 rounded-md ${
@@ -334,6 +336,7 @@ function AgentProfle() {
                             className="w-full p-2 border rounded-md"
                             value={formData.email}
                             onChange={handleChange}
+                            readOnly
                           />
                         </label>
 
@@ -346,6 +349,7 @@ function AgentProfle() {
                               formData.date_of_birth
                             }
                             onChange={handleChange}
+                            readOnly
                           />
                         </label>
 
@@ -357,6 +361,7 @@ function AgentProfle() {
                             className="w-full p-2 border rounded-md"
                             value={formData.city}
                             onChange={handleChange}
+                            readOnly
                           />
                         </label>
                       </div>

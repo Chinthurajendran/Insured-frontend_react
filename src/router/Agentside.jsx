@@ -27,6 +27,7 @@ function Agentside() {
       <Routes>
         <Route path="/Agent_login_page" element={<Agent_login_page />} />
         <Route path="/Agent_sign_up_page" element={<Agent_sign_up_page />} />
+        
         <Route element={<AgentRouter />}>
           <Route path="/Agent_home" element={<AgentHome />}>
             <Route path="demo" element={<Demo />} />
@@ -44,14 +45,18 @@ function Agentside() {
           <Route path="/PolicyResubmit" element={<PolicyResubmit />} />
           <Route path="/CustomerPolicyList" element={<CustomerPolicyList />} />
           <Route path="/CustomerInfo" element={<CustomerInfo />} />
-          <Route path="/RazorpayPaymentAgent" element={<RazorpayPaymentAgent />} />
+          <Route
+            path="/RazorpayPaymentAgent"
+            element={<RazorpayPaymentAgent />}
+          />
           <Route path="/CallNotification" element={<CallNotification />} />
         </Route>
+
         <Route path="/AgentResetpassword" element={<AgentResetpassword />} />
         <Route
-            path="/AgentPasswordRecovery"
-            element={<AgentPasswordRecovery />}
-          />
+          path="/AgentPasswordRecovery"
+          element={<AgentPasswordRecovery />}
+        />
       </Routes>
     </BrowserRouter>
   )

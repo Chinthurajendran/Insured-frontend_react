@@ -28,7 +28,6 @@ function Sidebar() {
 
   const handleLogoutSubmit = async () => {
 
-
     if (!user_id) {
       toast.error("No user ID found. Please log in again.")
       return

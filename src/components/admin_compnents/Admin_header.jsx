@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { admin_logout } from "../../store/slices/adminAuthentication";
 import { toast } from "react-toastify"
 import { clearAdminTokens } from "../../store/slices/AdminToken";
+import axiosInstance from "../../Interceptors/admin";
 
 function AdminHeader() {
     const dispatch = useDispatch()

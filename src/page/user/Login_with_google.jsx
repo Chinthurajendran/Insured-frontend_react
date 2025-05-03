@@ -105,7 +105,7 @@ const Login_with_google = () => {
         <div className="mt-8 w-full flex justify-center ">
           <p className="text-sm text-gray-600">
             Don&apos;t have an account?{" "}
-            <Link to="/Sign_up_pag">
+            <Link to="/Emailvarfication">
               <a
                 href="/signup"
                 className="text-emerald-700 hover:text-emerald-600 font-semibold"
