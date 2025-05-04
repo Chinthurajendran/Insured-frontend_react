@@ -35,7 +35,6 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config
     if (!error.response) {
       console.error("Network Error or No Response from Server!")
-      toast.error("Network Error! Please check your internet connection.")
       return Promise.reject(error)
     }
     if (error.response.status === 401 && !originalRequest._retry) {
@@ -77,7 +76,7 @@ axiosInstance.interceptors.response.use(
     }
     const agentAuthenticated = store.getState().agentAuth.isAuthenticated_agent
     if (error.response.status === 403) {
-      toast.error("Permission Denied!")
+      console.log("Permission Denied!")
     } else if (error.response.status === 404) {
       window.location.assign(`/404?Authenticated=${encodeURIComponent(Authenticated)}`);
       console.error("The requested resource was not found!")

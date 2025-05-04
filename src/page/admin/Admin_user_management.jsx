@@ -83,7 +83,6 @@ const Admin_user_management = () => {
       title="User Management"
       onBlockToggle={handleBlockToggle}
       onDelete={handleDeleteUser}
-      buttonlink="/Policy_create_page"
     />
   )
 }

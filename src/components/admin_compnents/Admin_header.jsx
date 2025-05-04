@@ -9,13 +9,23 @@ import axiosInstance from "../../Interceptors/admin";
 function AdminHeader() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
-    const handleLogoutSubmit = ()=>{
+    
+    const handleLogoutSubmit = async () => {
+      try {
+        const res = await axiosInstance.put(`admin_logout`)
+  
+        if (res.status === 200) {
         dispatch(admin_logout())
         dispatch(clearAdminTokens());
         navigate("/Admin_login_page")
         toast.success("Logout successful. See you next time!",);
+        }
+      } catch (error) {
+        console.error("Logout failed:", error)
+        toast.error("Logout failed. Please try again.")
+      }
     }
+
 
   return (
     <header className="bg-[#0B4D2E] text-white px-6 py-4 flex justify-center items-center">

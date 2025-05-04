@@ -17,7 +17,7 @@ const UserRouter = () => {
 
   const handleLogoutSubmit = async () => {
     if (!isUser) {
-      toast.error("No user ID found. Please log in again.")
+      console.log("No user ID found. Please log in again.")
       return
     }
 

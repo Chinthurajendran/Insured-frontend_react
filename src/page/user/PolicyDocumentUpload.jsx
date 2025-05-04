@@ -16,7 +16,7 @@ function PolicyDocumentUpload() {
   const [uploadPermissions, setUploadPermissions] = useState({})
   const [documents, setDocuments] = useState({})
   const [formError, setFormError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [requiredFiles, setRequiredFiles] = useState({})
   const [nomineeDetails, setNomineeDetails] = useState({
     fullName: "",
     relationship: "",
@@ -30,6 +30,16 @@ function PolicyDocumentUpload() {
         const res = await axiosInstance.get(`policydocument/${policyId}`)
         if (res.status === 200) {
           setPolicyDetails(res.data.policy)
+          setRequiredFiles({
+            idProof: res.data.policy.id_proof ? true : false,
+            incomeProof: res.data.policy.income_proof ? true : false,
+            nomineeAddressProof: res.data.policy.nominee_address_proof
+              ? true
+              : false,
+            panCard: res.data.policy.pan_card ? true : false,
+            passbook: res.data.policy.passbook ? true : false,
+            photo: res.data.policy.photo ? true : false,
+          })
           setUploadPermissions({
             idProof: res.data.policy.id_proof,
             incomeProof: res.data.policy.income_proof,
@@ -78,6 +88,18 @@ function PolicyDocumentUpload() {
         alert("Please fill in all nominee details.")
         return
       }
+
+      for (const [fileType, isRequired] of Object.entries(requiredFiles)) {
+        if (isRequired && !documents[fileType]) {
+          alert(
+            `Please upload a ${fileType
+              .replace(/([A-Z])/g, " $1")
+              .toLowerCase()}.`
+          )
+          return
+        }
+      }
+
       setIsSubmitting(true)
 
       const formData = new FormData()
@@ -148,7 +170,9 @@ function PolicyDocumentUpload() {
           </div>
           <div className="bg-gray-100 p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold text-gray-700">Life Cover</h2>
-            <p className="text-2xl font-bold text-red-600">₹ {policyDetails.premium_amount}</p>
+            <p className="text-2xl font-bold text-red-600">
+              ₹ {policyDetails.premium_amount}
+            </p>
           </div>
           <div className="bg-gray-100 p-4 rounded-lg shadow">
             <h2 className="text-lg font-semibold text-gray-700">
@@ -179,7 +203,7 @@ function PolicyDocumentUpload() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {Object.entries(uploadPermissions)
-            .filter(([_, value]) => value) 
+            .filter(([_, value]) => value)
             .map(([key]) => (
               <div key={key}>
                 <label className="relative text-gray-700 font-medium capitalize block mb-1">

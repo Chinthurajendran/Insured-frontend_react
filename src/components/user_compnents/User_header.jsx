@@ -21,7 +21,7 @@ const UserHeader = () => {
   const [locations, setLocation] = useState({ latitude: null, longitude: null })
   const [message, setMessage] = useState([])
   const [socket, setSocket] = useState(null)
-  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+  const protocol = window.location.protocol === "https:" ? "wss" : "ws"
   const websocketUrl = `${protocol}://${socketURL}/ws/notification/${userId}`
   const wsRef = useRef(null)
 
@@ -33,7 +33,6 @@ const UserHeader = () => {
   const handleNotificationToggle = async () => {
     setIsNotificationOpen((prev) => !prev)
   }
-
   const handleChatToggle = () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -55,20 +54,20 @@ const UserHeader = () => {
     }
   }
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const res = await axiosInstance.get(`Getnotification/${userId}`)
-        if (res.status === 200) {
-          setMessage(res.data.message)
-        }
-      } catch (error) {
-        console.log("Failed to fetch notifications.", error)
+  const fetchNotifications = async () => {
+    try {
+      const res = await axiosInstance.get(`Getnotification/${userId}`)
+      if (res.status === 200) {
+        setMessage(res.data.message)
       }
+    } catch (error) {
+      console.log("Failed to fetch notifications.", error)
     }
+  }
 
+  useEffect(() => {
     fetchNotifications()
-  }, [userId])
+  }, [])
 
   useEffect(() => {
     if (wsRef.current) {
@@ -78,7 +77,9 @@ const UserHeader = () => {
     const ws = new WebSocket(websocketUrl)
     wsRef.current = ws
 
-    ws.onopen = () => {console.log("✅ WebSocket Connected")}
+    ws.onopen = () => {
+      console.log("WebSocket Connected")
+    }
 
     ws.onmessage = (event) => {
       const newNotification = JSON.parse(event.data)
@@ -107,7 +108,7 @@ const UserHeader = () => {
         wsRef.current.close()
       }
     }
-  }, [userId, websocketUrl])
+  }, [])
 
   return (
     <header
@@ -136,20 +137,12 @@ const UserHeader = () => {
               Home
             </a>
             <a
-              href="/service"
+              href="/Browsepolicies"
               className={`font-bold transition-all duration-300 ${
                 isProfilePage ? "text-[#0e4a31]" : "text-white"
               } hover:scale-110`}
             >
               Service
-            </a>
-            <a
-              href="/insurance"
-              className={`font-bold transition-all duration-300 ${
-                isProfilePage ? "text-[#0e4a31]" : "text-white"
-              } hover:scale-110`}
-            >
-              Insurance Services
             </a>
           </div>
 
@@ -178,22 +171,28 @@ const UserHeader = () => {
 
             {user_token ? (
               <>
-                <button
-                  className={`relative transition-all duration-300 ${
-                    isProfilePage ? "text-[#0e4a31]" : "text-white"
-                  } hover:scale-110`}
-                  onClick={handleNotificationToggle}
-                >
-                  <div className="relative">
+                <div className="relative">
+                  <button
+                    className={`relative transition-all duration-300 ${
+                      isProfilePage ? "text-[#0e4a31]" : "text-white"
+                    } hover:scale-110`}
+                    onClick={handleNotificationToggle}
+                  >
                     <BellIcon className="w-6 h-6" />
                     {message.length > 0 && (
                       <span className="absolute -top-2 -right-1 bg-red-600 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
                         {message.length}
                       </span>
                     )}
-                  </div>
-                  {isNotificationOpen && <Notification messages={message} />}
-                </button>
+                  </button>
+
+                  {isNotificationOpen && (
+                    <Notification
+                      messages={message}
+                      fetchNotifications={fetchNotifications}
+                    />
+                  )}
+                </div>
 
                 <Link to={"/Userpage/Userprofile"}>
                   <button

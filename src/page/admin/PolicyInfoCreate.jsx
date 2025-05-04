@@ -31,12 +31,56 @@ function PolicyInfoCreate() {
 
   const Policy_info_create = async (e) => {
     e.preventDefault()
+    const errors = []
 
-    if (!policyName || !titleDescription || !photo || !description) {
-      setFormError("All fields are required")
+    // Validate photo
+    if (!photo) {
+      errors.push("Photo is required.")
+    } else {
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"]
+      if (!allowedTypes.includes(photo.type)) {
+        errors.push("Photo must be a JPG or PNG file.")
+      }
+
+      if (photo.size > 1024 * 1024) {
+        errors.push("Photo size must be less than 1MB.")
+      }
+    }
+
+    // Validate policyName: only letters and spaces
+    if (!/^[A-Za-z\s]+$/.test(policyName.trim())) {
+      errors.push("Policy name should contain only letters and spaces.")
+    }
+
+    // Validate titleDescription: should contain at least 20 words
+    const titleWords = titleDescription.trim().split(/\s+/)
+    if (titleWords.length < 20) {
+      errors.push("Title description should have at least 20 words.")
+    }
+
+    // Validate description: allow symbols inside text, and at least 50 words
+    const descWords = description.trim().split(/\s+/)
+    if (descWords.length < 50) {
+      errors.push("Description should have at least 50 words.")
+    }
+
+    // If errors exist, set formError and return
+    if (errors.length > 0) {
+      setFormError(errors.join(" "))
       return
     }
+
     setIsSubmitting(true)
+    setFormError("")
+    // Final error check
+
+    if (errors.length > 0) {
+      setFormError(errors.join(" "))
+      return
+    }
+
+    setIsSubmitting(true)
+    setFormError("")
 
     try {
       const formData = new FormData()
@@ -64,11 +108,42 @@ function PolicyInfoCreate() {
   const Policy_info_edite = async (e) => {
     e.preventDefault()
 
-    if (!policyName || !titleDescription || !photo || !description) {
-      setFormError("All fields are required")
+    const errors = []
+
+    if (!photo) {
+      errors.push("Photo is required.")
+    } else {
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"]
+      if (!allowedTypes.includes(photo.type)) {
+        errors.push("Photo must be a JPG or PNG file.")
+      }
+
+      if (photo.size > 1024 * 1024) {
+        errors.push("Photo size must be less than 1MB.")
+      }
+    }
+
+    if (!/^[A-Za-z\s]+$/.test(policyName.trim())) {
+      errors.push("Policy name should contain only letters and spaces.")
+    }
+
+    const titleWords = titleDescription.trim().split(/\s+/)
+    if (titleWords.length < 20) {
+      errors.push("Title description should have at least 20 words.")
+    }
+
+    const descWords = description.trim().split(/\s+/)
+    if (descWords.length < 50) {
+      errors.push("Description should have at least 50 words.")
+    }
+
+    if (errors.length > 0) {
+      setFormError(errors.join(" "))
       return
     }
+
     setIsSubmitting(true)
+    setFormError("")
 
     try {
       const formData = new FormData()
@@ -76,12 +151,16 @@ function PolicyInfoCreate() {
       formData.append("titledescription", titleDescription)
       formData.append("description", description)
       if (photoPreview) {
-        formData.append("photo", photo);
+        formData.append("photo", photo)
       }
-      
-      const response = await axiosInstance.put(`policy_info_update/${policyId}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+
+      const response = await axiosInstance.put(
+        `policy_info_update/${policyId}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      )
 
       if (response.status === 200) {
         toast.success("Policy info Updated successfully")

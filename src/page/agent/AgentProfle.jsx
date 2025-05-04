@@ -22,13 +22,15 @@ function AgentProfle() {
     city: "",
     image: null,
   })
-  
+
   const agentId = useSelector((state) => state.agentAuth.agent_uuid)
-  const agent_authenticated = useSelector((state) => state.agentAuth.isAuthenticated_agent)
+  const agent_authenticated = useSelector(
+    (state) => state.agentAuth.isAuthenticated_agent
+  )
 
   const fetchAgentProfile = async () => {
     if (!agentId) return
-    
+
     try {
       const res = await axiosInstance.get(`agent_profile/${agentId}`)
 
@@ -36,7 +38,7 @@ function AgentProfle() {
         const agentdata = res.data.agent || res.data
         setUser(agentdata)
         setGender(agentdata.gender || "none")
-        
+
         setFormData({
           gender: agentdata.gender || "",
           username: agentdata.username || "",
@@ -46,7 +48,7 @@ function AgentProfle() {
           city: agentdata.city || "",
           image: null,
         })
-        
+
         if (isVisible) {
           setImagePreview(null)
         }
@@ -80,17 +82,36 @@ function AgentProfle() {
   }
 
   const updateProfile = async () => {
+    const phoneRegex = /^[0-9]{10}$/
+    if (!phoneRegex.test(formData.phone) || formData.phone === "0000000000") {
+      toast.error("Phone number should be 10 digits and not all zeros.")
+      return
+    }
+
+    if (formData.image) {
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"]
+      const fileSizeLimit = 1 * 1024 * 1024 // 1 MB
+
+      if (!allowedTypes.includes(formData.image.type)) {
+        toast.error("Only JPG and PNG files are allowed for the photo.")
+        return
+      }
+
+      if (formData.image.size > fileSizeLimit) {
+        toast.error("The photo file size should not exceed 1MB.")
+        return
+      }
+    }
+
     try {
-
       const formDataToSend = new FormData()
-      
 
-      Object.keys(formData).forEach(key => {
+      Object.keys(formData).forEach((key) => {
         if (formData[key] !== null && formData[key] !== undefined) {
           formDataToSend.append(key, formData[key])
         }
       })
-      
+
       const response = await axiosInstance.put(
         `AgentProfileUpdate/${agentId}`,
         formDataToSend,
@@ -102,11 +123,12 @@ function AgentProfle() {
       if (response.status === 200) {
         toast.success("Updated successfully!")
         setIsVisible(true)
-        
+
         await fetchAgentProfile()
       }
     } catch (error) {
-      toast.error("Failed to update profile.")
+      console.error("Update profile error:", error.response?.data || error.message);
+      toast.error(error.response?.data?.detail || "Failed to update profile.");
     }
   }
 
@@ -134,7 +156,6 @@ function AgentProfle() {
                   <h2 className="text-xl font-semibold">Personal Details</h2>
 
                   <form className="space-y-6">
-
                     <div className="flex space-x-4">
                       <label className="flex items-center space-x-2 cursor-pointer">
                         <input
@@ -286,9 +307,7 @@ function AgentProfle() {
                             type="radio"
                             name="gender"
                             value="Female"
-                            checked={
-                              formData.gender.toLowerCase() === "female"
-                            }
+                            checked={formData.gender.toLowerCase() === "female"}
                             onChange={handleChange}
                             className="hidden"
                             disabled
@@ -345,9 +364,7 @@ function AgentProfle() {
                             type="date"
                             name="date_of_birth"
                             className="w-full p-2 border rounded-md"
-                            value={
-                              formData.date_of_birth
-                            }
+                            value={formData.date_of_birth}
                             onChange={handleChange}
                             readOnly
                           />

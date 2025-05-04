@@ -251,6 +251,7 @@ function AgentDocumentUpload() {
 
   const handleExistingCustomerSubmit = async (e) => {
     e.preventDefault()
+    
     try {
       setIsSubmitting(true)
       const formData = new FormData()
@@ -362,7 +363,7 @@ function AgentDocumentUpload() {
                     required
                   >
                     <option value="">Select Insurance Type</option>
-                    <option value="Term Insurance">Term Insurance</option>
+                    <option value="Term Insurance">Life Insurance</option>
                   </select>
                   <select
                     name="insuranceType"
@@ -559,7 +560,7 @@ function AgentDocumentUpload() {
                     required
                   >
                     <option value="">Select Insurance Type</option>
-                    <option value="Term Insurance">Term Insurance</option>
+                    <option value="Term Insurance">Life Insurance</option>
                   </select>
                   <select
                     name="insuranceType"

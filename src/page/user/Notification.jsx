@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useSelector } from "react-redux"
 import axiosInstance from "../../Interceptors/user"
 
-const Notification = ({ messages }) => {
+const Notification = ({ messages,fetchNotifications  }) => {
   const [notifications, setNotifications] = useState(messages || []) 
   const userId = useSelector((state) => state.userAuth.userid)
   const [removing, setRemoving] = useState(false)
@@ -22,6 +22,7 @@ const Notification = ({ messages }) => {
       const res = await axiosInstance.put(`/Clearnotification/${userId}`)
       if (res.status === 200) {
         setNotifications([])
+        fetchNotifications ()
       }
     } catch (error) {
       console.error("Error clearing notifications:", error?.response?.data || error.message)

@@ -39,6 +39,32 @@ const Admin_policy_create = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    const errors = [];
+
+    if (!/^[A-Za-z\s]+$/.test(formData.policy_name)) {
+      errors.push("Policy name should contain only letters and spaces.");
+    }
+  
+    const coverageAge = parseInt(formData.coverage);
+    if (isNaN(coverageAge) || coverageAge <= 18) {
+      errors.push("Coverage should be a number above 18.");
+    }
+  
+    const settlementValue = parseFloat(formData.settlement);
+    if (isNaN(settlementValue) || settlementValue === 0) {
+      errors.push("Settlement should be a valid number greater than 0.");
+    }
+  
+    const wordCount = formData.description.trim().split(/\s+/);
+    if (wordCount.length < 50) {
+      errors.push("Description should have at least 50 words.");
+    }
+
+    if (errors.length > 0) {
+      setFormError(errors);
+      return;
+    }
+
     try {
       const response = await axiosInstance.post(
         `policy_create`,

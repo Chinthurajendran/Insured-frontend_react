@@ -37,6 +37,9 @@ function Userprofile() {
     }
   }, [user_authenticcated, navigate])
 
+
+  
+
   const fetchUserProfile = async () => {
     if (!userId) return
 
@@ -46,7 +49,7 @@ function Userprofile() {
       if (res.status === 200) {
         const userdata = res.data.user || res.data
         setUser(userdata)
-        setGender(userdata.gender || "male")
+        setGender(userdata.gender || "malee")
 
         setFormData({
           gender: userdata.gender || "",
@@ -78,6 +81,26 @@ function Userprofile() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
+    // Validation Functions
+    const validateUsername = (username) => /^[A-Za-z\s]+$/.test(username)
+
+    const validatePhone = (phone) => /^\d{10}$/.test(phone) && phone !== "0000000000"
+    const validateAge = (dob) => {
+      const birthDate = new Date(dob)
+      const age = new Date().getFullYear() - birthDate.getFullYear()
+      return age >= 18
+    }
+    const validateCity = (city) => /^[A-Za-z\s]+$/.test(city)
+    const validateImage = (file) => {
+      const allowedTypes = ["image/jpeg", "image/png"]
+      const maxSize = 1 * 1024 * 1024 // 1MB
+      return (
+        file &&
+        allowedTypes.includes(file.type) &&
+        file.size <= maxSize
+      )
+    }
+
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -86,7 +109,35 @@ function Userprofile() {
     }
   }
 
+
   const updateProfile = async () => {
+
+    console.log(formData.image)
+    if (!validateUsername(formData.username)) {
+      toast.error("Username should only contain letters.")
+      return
+    }
+
+    if (!validatePhone(formData.phone)) {
+      toast.error("Phone number should be 10 digits and not all zeros.")
+      return
+    }
+
+    if (!validateAge(formData.date_of_birth)) {
+      toast.error("You must be over 18 years old.")
+      return
+    }
+
+    if (!validateCity(formData.city)) {
+      toast.error("City name should only contain letters and spaces.")
+      return
+    }
+
+    if (formData.image && !validateImage(formData.image)) {
+      toast.error("Invalid image. Only JPG and PNG images are allowed, and file size must not exceed 1MB.")
+      return
+    }
+
     setLoading(true)
     try {
       const formDataToSend = new FormData()
@@ -112,7 +163,8 @@ function Userprofile() {
         await fetchUserProfile()
       }
     } catch (error) {
-      toast.error("Failed to update profile.")
+      console.error("Update profile error:", error.response?.data || error.message);
+      toast.error(error.response?.data?.detail || "Failed to update profile.");
     } finally {
       setLoading(false)
     }
@@ -359,6 +411,7 @@ function Userprofile() {
                             className="w-full p-2 border rounded-md"
                             value={formData.email}
                             onChange={handleChange}
+                            readOnly
                           />
                         </label>
 

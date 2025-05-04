@@ -43,7 +43,7 @@ function CustomerAssistance() {
             <tr className="bg-green-800 text-white rounded-t-lg">
               <th className="p-3 pl-6 text-left">ID</th>
               <th className="p-3 text-left">Customer Name</th>
-              <th className="p-3 text-left">Status</th>
+              {/* <th className="p-3 text-left">Status</th> */}
             </tr>
           </thead>
           <tbody>
@@ -58,9 +58,9 @@ function CustomerAssistance() {
                 >
                   <td className="p-3 pl-6 text-left">{index + 1}</td>
                   <td className="p-3 text-left">{assistance.sender_name}</td>
-                  <td className="p-3 text-left">
+                  {/* <td className="p-3 text-left">
                     {assistance.status || "Pending"}
-                  </td>
+                  </td> */}
                 </tr>
               ))
             ) : (

@@ -36,7 +36,6 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config
     if (!error.response) {
       console.error("Network Error or No Response from Server!")
-      toast.error("Network Error! Please check your internet connection.")
       return Promise.reject(error)
     }
     if (error.response.status === 401 && !originalRequest._retry) {
@@ -80,13 +79,13 @@ axiosInstance.interceptors.response.use(
     }
     const adminAuthenticated = store.getState().adminAuth.isAuthenticated_admin
     if (error.response.status === 403) {
-      toast.error("Permission Denied!")
+      console.log("Permission Denied!")
     } else if (error.response.status === 404) {
       window.location.assign(`/404?Authenticated=${encodeURIComponent(Authenticated)}`);
-      toast.error("The requested resource was not found!")
+      console.log("The requested resource was not found!")
     } else if (error.response.status >= 500) {
       window.location.assign(`/InternalServerError?Authenticated=${encodeURIComponent(adminAuthenticated)}`);
-      toast.error("Something went wrong. Please try again later.")
+      console.log("Something went wrong. Please try again later.")
     }
 
     return Promise.reject(error)
