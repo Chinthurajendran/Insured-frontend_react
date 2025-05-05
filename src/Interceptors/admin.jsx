@@ -10,7 +10,7 @@ const baseURL = import.meta.env.VITE_API_LOCAL_URL
 
 const axiosInstance = axios.create({
   baseURL: `${baseURL}/admin_auth`,
-  timeout: 30000,
+  timeout: 60000,
   headers: {
     "Content-Type": "application/json",
   },
