@@ -153,6 +153,10 @@ function PolicyInfoCreate() {
       if (photoPreview) {
         formData.append("photo", photo)
       }
+      console.log("policyName:", policyName);
+      console.log("titleDescription:", titleDescription);
+      console.log("description:", description);
+      console.log("photo:", photo);
 
       const response = await axiosInstance.put(
         `policy_info_update/${policyId}`,
