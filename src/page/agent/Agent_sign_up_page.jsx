@@ -67,11 +67,7 @@ const AgentSignUpPage = () => {
     if (!/^[A-Za-z\s]+$/.test(username))
       return "Username should contain only letters."
     if (!/^\S+@\S+\.\S+$/.test(email)) return "Enter a valid email."
-    if (
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-        password
-      )
-    ) {
+    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
       return "Password must be strong (8+ chars, upper, lower, digit, special)."
     }
 
