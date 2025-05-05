@@ -67,10 +67,9 @@ const AgentSignUpPage = () => {
     if (!/^[A-Za-z\s]+$/.test(username))
       return "Username should contain only letters."
     if (!/^\S+@\S+\.\S+$/.test(email)) return "Enter a valid email."
-    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
       return "Password must be strong (8+ chars, upper, lower, digit, special)."
     }
-
     if (password !== confirm_password) return "Passwords do not match."
     if (!/^[1-9]{1}[0-9]{9}$/.test(phone) || phone === "0000000000")
       return "Enter a valid 10-digit phone number."
