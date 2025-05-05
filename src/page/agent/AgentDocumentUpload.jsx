@@ -194,6 +194,7 @@ function AgentDocumentUpload() {
       "nomineeName",
       "nomineeRelation",
     ]
+    console.log(newCustomerData.income)
     for (let field of requiredFields) {
       if (!newCustomerData[field]) {
         setFormError("All fields are required")
@@ -211,7 +212,6 @@ function AgentDocumentUpload() {
           formData.append(key, value)
         }
       })
-
       formData.append("id_proof", newCustomerData.documents["Id Proof"])
       formData.append("passbook", newCustomerData.documents["Passbook"])
       formData.append("income_proof", newCustomerData.documents["Income Proof"])

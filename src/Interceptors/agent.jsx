@@ -78,10 +78,10 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 403) {
       console.log("Permission Denied!")
     } else if (error.response.status === 404) {
-      window.location.assign(`/404?Authenticated=${encodeURIComponent(Authenticated)}`);
+      window.location.assign(`/404?agentAuthenticated=${encodeURIComponent(agentAuthenticated)}`);
       console.error("The requested resource was not found!")
     } else if (error.response.status >= 500) {
-      window.location.assign(`/InternalServerError?Authenticated=${encodeURIComponent(agentAuthenticated)}`);
+      window.location.assign(`/InternalServerError?agentAuthenticated=${encodeURIComponent(agentAuthenticated)}`);
       console.error("Something went wrong. Please try again later.")
     }
 

@@ -94,7 +94,7 @@ const Chat = ({ setIsChatOpen, sender_id, receiver_id }) => {
           <EmojiPicker onEmojiClick={handleEmojiClick} />
         </div>
       )}
-
+{/* 
       <div className="p-3 flex items-center space-x-2 border-t bg-white shadow-md rounded-b-2xl">
         <div className="relative flex-1">
           <input
@@ -129,7 +129,7 @@ const Chat = ({ setIsChatOpen, sender_id, receiver_id }) => {
             <path d="M2.01 21L23 12 2.01 3v7l15 2.005L2.01 14z" />
           </svg>
         </button>
-      </div>
+      </div> */}
     </div>
   )
 }

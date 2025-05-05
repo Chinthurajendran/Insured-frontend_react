@@ -5,7 +5,7 @@ const InternalServerError = () => {
   const userAuthenticated = params.get("Authenticated");
   const agentAuthenticated = params.get("agentAuthenticated");
   const adminAuthenticated = params.get("adminAuthenticated");
-
+  
   const handleGoHome = () => {
     if (userAuthenticated) {
       window.location.href = "/";

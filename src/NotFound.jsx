@@ -5,11 +5,12 @@ const NotFoundPage = () => {
     const userAuthenticated = params.get("Authenticated");
     const agentAuthenticated = params.get("agentAuthenticated");
     const adminAuthenticated = params.get("adminAuthenticated");
+    console.log("agentAuthenticated", agentAuthenticated);
   
     const handleGoHome = () => {
       if (userAuthenticated) {
         window.location.href = "/";
-      } else if (agentAuthenticated) {
+      } else if (agent) {
         window.location.href = "/Agent_home/DashboardGraph";
       } else if (adminAuthenticated) {
         window.location.href = "/Admin_home/DashboardGraph";
