@@ -84,7 +84,7 @@ axiosInstance.interceptors.response.use(
       window.location.assign(`/404?Authenticated=${encodeURIComponent(Authenticated)}`);
       console.log("The requested resource was not found!")
     } else if (error.response.status >= 500) {
-      window.location.assign(`/InternalServerError?Authenticated=${encodeURIComponent(adminAuthenticated)}`);
+      window.location.assign(`/InternalServerError?Authenticated=${encodeURIComponent("admin")}`);
       console.log("Something went wrong. Please try again later.")
     }
 
