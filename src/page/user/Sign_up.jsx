@@ -32,7 +32,7 @@ const Sign_up = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const usernameRegex = /^[A-Za-z]+$/
+    const usernameRegex = /^[A-Za-z\s]+$/
     if (!usernameRegex.test(formData.username)) {
       setFormError("Username should only contain letters.")
       return

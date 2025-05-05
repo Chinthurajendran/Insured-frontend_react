@@ -84,6 +84,10 @@ function PolicyInfoCreate() {
 
     try {
       const formData = new FormData()
+      console.log("policyName:", policyName);
+      console.log("titleDescription:", titleDescription);
+      console.log("description:", description);
+      console.log("photo:", photo);
       formData.append("policyinfo_name", policyName)
       formData.append("titledescription", titleDescription)
       formData.append("description", description)
@@ -147,10 +151,6 @@ function PolicyInfoCreate() {
 
     try {
       const formData = new FormData()
-      console.log("policyName:", policyName);
-      console.log("titleDescription:", titleDescription);
-      console.log("description:", description);
-      console.log("photo:", photo);
       formData.append("policyinfo_name", policyName)
       formData.append("titledescription", titleDescription)
       formData.append("description", description)
