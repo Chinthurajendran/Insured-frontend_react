@@ -17,6 +17,7 @@ const Chat = ({ userId, setIsChatOpen, sendChatWithLocation }) => {
     receiver_id,
     setShowCallScreen
   )
+  console.log("111111111111",receiver_id)
   const { startVideoCall, endVideoCall, localVideoRef, remoteVideoRef } =
     useWebRTCVideocall(userId, receiver_id, setShowCallScreen)
   const messagesEndRef = useRef(null)

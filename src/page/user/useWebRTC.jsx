@@ -11,7 +11,7 @@ const useWebRTC = (userId, targetUserId, setShowCallScreen) => {
 
   useEffect(() => {
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-    const ws = new WebSocket(`${protocol}://${socketURL}/ws/webrtc/${userId}`);
+    const ws = new WebSocket(`${socketURL}/ws/webrtc/${userId}`);
 
     ws.onopen = () => console.log("WebSocket connected (user)");
     ws.onmessage = async (event) => {
