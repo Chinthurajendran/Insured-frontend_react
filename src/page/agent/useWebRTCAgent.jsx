@@ -17,7 +17,7 @@ const useWebRTCAgent = (agentId,setShowCallScreen) => {
 
   useEffect(() => {
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-    const ws = new WebSocket(`${protocol}://${socketURL}/ws/webrtc/${agentId}`);
+    const ws = new WebSocket(`${socketURL}/ws/webrtc/${agentId}`);
 
     ws.onopen = () =>{ console.log("WebSocket connected (Agent)")};
 
@@ -44,7 +44,7 @@ const useWebRTCAgent = (agentId,setShowCallScreen) => {
     return () => {
       ws.onclose = () => {
         setTimeout(() => {
-          setSocket(new WebSocket(`${protocol}://${socketURL}/ws/webrtc/${agentId}`));
+          setSocket(new WebSocket(`${socketURL}/ws/webrtc/${agentId}`));
         }, 3000);
       };
       

@@ -21,7 +21,7 @@ function CustomerSearch() {
   
   useEffect(() => {
 
-    const ws = new WebSocket(`${protocol}://${socketURL}/ws/search/${agentId}`);
+    const ws = new WebSocket(`${socketURL}/ws/search/${agentId}`);
     ws.onopen = () => {
       if (query.trim()) {
         const payload = { content: query };
