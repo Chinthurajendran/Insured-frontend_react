@@ -284,7 +284,7 @@ function AgentDocumentUpload() {
       )
 
       if (response.status === 200) {
-        toast.success("Policy Submitted for Approval")
+        toast.success(response.message)
         navigate("/Agent_home/PolicyStatus")
       } else {
         console.log(`Unexpected response status: ${response.status}`)
