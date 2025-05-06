@@ -10,7 +10,6 @@ const useWebSocket = (sender_id,receiver_id) => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const agentId = useSelector((state) => state.agentAuth.agent_uuid);
-  
   const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const useWebSocket = (sender_id,receiver_id) => {
 
     fetchChatHistory();
 
-    const ws = new WebSocket(`${socketURL}/ws/${sender_id}`);
+    const ws = new WebSocket(`${protocol}://${socketURL}/ws/${sender_id}`);
 
     ws.onopen = () => {
     };
@@ -51,7 +50,7 @@ const useWebSocket = (sender_id,receiver_id) => {
     ws.onclose = () => {
       console.warn(" WebSocket closed. Attempting to reconnect...");
       setTimeout(() => {
-        const newSocket = new WebSocket(`${socketURL}/ws/${sender_id}`);
+        const newSocket = new WebSocket(`${protocol}://${socketURL}/ws/${sender_id}`);
         setSocket(newSocket);
       }, 3000);
     };

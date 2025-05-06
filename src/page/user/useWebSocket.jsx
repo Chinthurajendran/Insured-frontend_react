@@ -33,7 +33,7 @@ const useWebSocket = (userId,receiver_id) => {
     fetchChatHistory();
     
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-    const ws = new WebSocket(`${socketURL}/ws/${userId}`);
+    const ws = new WebSocket(`${protocol}://${socketURL}/ws/${userId}`);
 
     ws.onopen = () => {
     };
@@ -51,7 +51,7 @@ const useWebSocket = (userId,receiver_id) => {
     ws.onclose = () => {
       console.warn("WebSocket closed. Attempting to reconnect...");
       setTimeout(() => {
-        const newSocket = new WebSocket(`${socketURL}/ws/${userId}`);
+        const newSocket = new WebSocket(`ws://${socketURL}/ws/${userId}`);
         setSocket(newSocket);
       }, 3000);
     };

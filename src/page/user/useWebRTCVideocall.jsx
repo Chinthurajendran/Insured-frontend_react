@@ -11,7 +11,7 @@ const useWebRTCVideocall = (userId, targetUserId, setShowCallScreen) => {
   useEffect(() => {
     const protocol = window.location.protocol === "https:" ? "wss" : "ws";
     const ws = new WebSocket(
-      `${import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL}/ws/webrtc/${userId}`
+      `${protocol}://${import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL}/ws/webrtc/${userId}`
     );
 
     ws.onopen = () => console.log("✅ WebSocket connected (user)");

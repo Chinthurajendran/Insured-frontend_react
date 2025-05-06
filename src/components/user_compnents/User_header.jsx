@@ -22,7 +22,7 @@ const UserHeader = () => {
   const [message, setMessage] = useState([])
   const [socket, setSocket] = useState(null)
   const protocol = window.location.protocol === "https:" ? "wss" : "ws"
-  const websocketUrl = `${socketURL}/ws/notification/${userId}`
+  const websocketUrl = `${protocol}://${socketURL}/ws/notification/${userId}`
   const wsRef = useRef(null)
 
   const isProfilePage =
