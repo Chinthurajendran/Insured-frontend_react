@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useSelector } from "react-redux"
 
+const baseURL = import.meta.env.VITE_API_LOCAL_URL
+const socketURL = import.meta.env.VITE_API_LOCAL_WEBSOCKET_URL
+
 function CustomerSearch() {
   const [query, setQuery] = useState("")
   const [suggestions, setSuggestions] = useState([])
@@ -13,12 +16,12 @@ function CustomerSearch() {
   const navigate = useNavigate()
   const [socket, setSocket] = useState(null);
   const agentId = useSelector((state) => state.agentAuth.agent_uuid)
+  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
   
   useEffect(() => {
 
-    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/search/${agentId}`);
-
+    const ws = new WebSocket(`${protocol}://${socketURL}/ws/search/${agentId}`);
     ws.onopen = () => {
       if (query.trim()) {
         const payload = { content: query };
