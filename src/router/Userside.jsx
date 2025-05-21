@@ -20,6 +20,7 @@ import Walletpage from "../page/user/Walletpage.jsx"
 import RazorpayPaymentWallet from "../page/user/RazorpayPaymentWallet.jsx"
 import Emailvarfication from "../page/user/Emailvarfication.jsx"
 import OTPvarfication from "../page/user/OTPvarfication.jsx"
+import NotFoundPage from "../NotFound.jsx"
 
 function Userside() {
   return (
@@ -59,6 +60,7 @@ function Userside() {
           <Route path="/Browsepolicies" element={<Browsepolicies />} />
           <Route path="/Passwordrecovery" element={<Passwordrecovery />} />
           <Route path="/Resetpassword" element={<Resetpassword />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </div>

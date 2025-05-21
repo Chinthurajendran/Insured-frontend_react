@@ -20,6 +20,8 @@ import CustomerAssistance from "../page/agent/CustomerAssistance.jsx"
 import CallNotification from "../page/agent/CallNotification.jsx"
 import DashboardGraph from "../page/agent/DashboardGraph.jsx"
 import RazorpayPaymentAgent from "../page/agent/RazorpayPaymentAgent.jsx"
+import NotFoundPage from "../NotFound.jsx"
+
 
 function Agentside() {
   return (
@@ -57,6 +59,7 @@ function Agentside() {
           path="/AgentPasswordRecovery"
           element={<AgentPasswordRecovery />}
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   )
